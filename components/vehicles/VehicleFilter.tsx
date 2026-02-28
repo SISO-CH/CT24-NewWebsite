@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Search, SlidersHorizontal, X, ArrowUpDown } from "lucide-react";
 import type { Vehicle, VehicleBody } from "@/lib/vehicles";
 
@@ -63,12 +63,58 @@ const SORT_OPTIONS = [
   { label: "Neuestes Baujahr", value: "year_desc" },
 ];
 
+const PRICE_MIN_OPTIONS = [
+  { label: "Preis ab", value: "" },
+  { label: "ab CHF 10'000", value: "10000" },
+  { label: "ab CHF 15'000", value: "15000" },
+  { label: "ab CHF 20'000", value: "20000" },
+  { label: "ab CHF 30'000", value: "30000" },
+  { label: "ab CHF 40'000", value: "40000" },
+];
+
+const YEAR_OPTIONS = Array.from({ length: 15 }, (_, i) => {
+  const year = new Date().getFullYear() - i;
+  return { label: String(year), value: String(year) };
+});
+
+const KM_OPTIONS = [
+  { label: "km max", value: "" },
+  { label: "bis 20'000 km", value: "20000" },
+  { label: "bis 50'000 km", value: "50000" },
+  { label: "bis 100'000 km", value: "100000" },
+  { label: "bis 150'000 km", value: "150000" },
+];
+
+const FUEL_OPTIONS = [
+  { label: "Treibstoff", value: "" },
+  { label: "Benzin", value: "Benzin" },
+  { label: "Diesel", value: "Diesel" },
+  { label: "Hybrid", value: "Hybrid" },
+  { label: "Elektro", value: "Elektro" },
+];
+
+const TRANSMISSION_OPTIONS = [
+  { label: "Getriebe", value: "" },
+  { label: "Automatik", value: "Automatik" },
+  { label: "Manuell", value: "Manuell" },
+];
+
+const MONTHLY_RATE_OPTIONS = [
+  { label: "Rate max", value: "" },
+  { label: "bis CHF 300/Mt.", value: "300" },
+  { label: "bis CHF 400/Mt.", value: "400" },
+  { label: "bis CHF 500/Mt.", value: "500" },
+  { label: "bis CHF 700/Mt.", value: "700" },
+];
+
 const selectClass =
   "h-9 px-3 text-sm border border-[#e5e7eb] bg-white text-[#374151] rounded-lg" +
   " focus:outline-none focus:border-ct-cyan focus:ring-1 focus:ring-[var(--ct-cyan)]/20" +
   " transition-colors cursor-pointer appearance-none pr-7";
 
 export default function VehicleFilter({ filters, onChange, resultCount, vehicles }: VehicleFilterProps) {
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
   const makes = useMemo(
     () => ["Alle Marken", ...Array.from(new Set(vehicles.map((v) => v.make))).sort()],
     [vehicles]
@@ -77,12 +123,30 @@ export default function VehicleFilter({ filters, onChange, resultCount, vehicles
     () => Array.from(new Set(vehicles.map((v) => v.body).filter(Boolean))).sort() as VehicleBody[],
     [vehicles]
   );
+  const colors = useMemo(
+    () => Array.from(new Set(vehicles.map((v) => v.color).filter(Boolean))).sort() as string[],
+    [vehicles]
+  );
+  const drivetrains = useMemo(
+    () => Array.from(new Set(vehicles.map((v) => v.drivetrain).filter(Boolean))).sort() as string[],
+    [vehicles]
+  );
 
   const activeFilters: { label: string; key: keyof FilterState }[] = [
-    ...(filters.search ? [{ label: `"${filters.search}"`, key: "search" as const }] : []),
-    ...(filters.make !== "Alle Marken" && filters.make ? [{ label: filters.make, key: "make" as const }] : []),
-    ...(filters.body ? [{ label: filters.body, key: "body" as const }] : []),
-    ...(filters.priceMax ? [{ label: `bis CHF ${parseInt(filters.priceMax).toLocaleString("de-CH")}`, key: "priceMax" as const }] : []),
+    ...(filters.search       ? [{ label: `"${filters.search}"`,                                           key: "search"         as const }] : []),
+    ...(filters.make !== "Alle Marken" && filters.make
+                             ? [{ label: filters.make,                                                     key: "make"           as const }] : []),
+    ...(filters.body         ? [{ label: filters.body,                                                     key: "body"           as const }] : []),
+    ...(filters.priceMin     ? [{ label: `ab CHF ${parseInt(filters.priceMin).toLocaleString("de-CH")}`,   key: "priceMin"       as const }] : []),
+    ...(filters.priceMax     ? [{ label: `bis CHF ${parseInt(filters.priceMax).toLocaleString("de-CH")}`,  key: "priceMax"       as const }] : []),
+    ...(filters.yearMin      ? [{ label: `ab ${filters.yearMin}`,                                          key: "yearMin"        as const }] : []),
+    ...(filters.yearMax      ? [{ label: `bis ${filters.yearMax}`,                                         key: "yearMax"        as const }] : []),
+    ...(filters.kmMax        ? [{ label: `bis ${parseInt(filters.kmMax).toLocaleString("de-CH")} km`,      key: "kmMax"          as const }] : []),
+    ...(filters.fuel         ? [{ label: filters.fuel,                                                     key: "fuel"           as const }] : []),
+    ...(filters.transmission ? [{ label: filters.transmission,                                             key: "transmission"   as const }] : []),
+    ...(filters.color        ? [{ label: filters.color,                                                    key: "color"          as const }] : []),
+    ...(filters.drivetrain   ? [{ label: filters.drivetrain,                                               key: "drivetrain"     as const }] : []),
+    ...(filters.monthlyRateMax ? [{ label: `Rate bis CHF ${filters.monthlyRateMax}/Mt.`,                   key: "monthlyRateMax" as const }] : []),
   ];
 
   const hasFilters = activeFilters.length > 0;
@@ -141,6 +205,103 @@ export default function VehicleFilter({ filters, onChange, resultCount, vehicles
           <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
         </div>
       </div>
+
+      {/* Advanced filters toggle */}
+      <div className="px-4 pb-2 border-t border-[#f5f5f5] pt-2">
+        <button
+          type="button"
+          onClick={() => setShowAdvanced((v) => !v)}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#6b7280] hover:text-ct-cyan transition-colors"
+        >
+          <SlidersHorizontal size={12} />
+          {showAdvanced ? "Weniger Filter" : "Mehr Filter"}
+          <span className="text-[10px]">{showAdvanced ? "▴" : "▾"}</span>
+        </button>
+      </div>
+
+      {showAdvanced && (
+        <div className="flex flex-wrap gap-2.5 items-center px-4 pb-3 border-t border-[#f5f5f5] pt-3">
+          {/* Preis min */}
+          <div className="relative">
+            <select value={filters.priceMin} onChange={(e) => onChange({ ...filters, priceMin: e.target.value })} className={selectClass}>
+              {PRICE_MIN_OPTIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
+
+          {/* Treibstoff */}
+          <div className="relative">
+            <select value={filters.fuel} onChange={(e) => onChange({ ...filters, fuel: e.target.value })} className={selectClass}>
+              {FUEL_OPTIONS.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
+
+          {/* Getriebe */}
+          <div className="relative">
+            <select value={filters.transmission} onChange={(e) => onChange({ ...filters, transmission: e.target.value })} className={selectClass}>
+              {TRANSMISSION_OPTIONS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
+
+          {/* Baujahr von */}
+          <div className="relative">
+            <select value={filters.yearMin} onChange={(e) => onChange({ ...filters, yearMin: e.target.value })} className={selectClass}>
+              <option value="">Jahr ab</option>
+              {YEAR_OPTIONS.map((y) => <option key={y.value} value={y.value}>{y.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
+
+          {/* Baujahr bis */}
+          <div className="relative">
+            <select value={filters.yearMax} onChange={(e) => onChange({ ...filters, yearMax: e.target.value })} className={selectClass}>
+              <option value="">Jahr bis</option>
+              {YEAR_OPTIONS.map((y) => <option key={y.value} value={y.value}>{y.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
+
+          {/* km max */}
+          <div className="relative">
+            <select value={filters.kmMax} onChange={(e) => onChange({ ...filters, kmMax: e.target.value })} className={selectClass}>
+              {KM_OPTIONS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
+
+          {/* Farbe */}
+          {colors.length > 0 && (
+            <div className="relative">
+              <select value={filters.color} onChange={(e) => onChange({ ...filters, color: e.target.value })} className={selectClass}>
+                <option value="">Farbe</option>
+                {colors.map((c) => <option key={c} value={c}>{c}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
+          )}
+
+          {/* Antrieb */}
+          {drivetrains.length > 0 && (
+            <div className="relative">
+              <select value={filters.drivetrain} onChange={(e) => onChange({ ...filters, drivetrain: e.target.value })} className={selectClass}>
+                <option value="">Antrieb</option>
+                {drivetrains.map((d) => <option key={d} value={d}>{d}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
+          )}
+
+          {/* Monatsrate max */}
+          <div className="relative">
+            <select value={filters.monthlyRateMax} onChange={(e) => onChange({ ...filters, monthlyRateMax: e.target.value })} className={selectClass}>
+              {MONTHLY_RATE_OPTIONS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-2 px-4 pb-3 border-t border-[#f5f5f5] pt-3">
         <span className={`text-xs font-semibold ${resultCount === 0 ? "text-ct-magenta" : "text-ct-cyan"}`}>
