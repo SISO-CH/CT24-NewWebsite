@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import type { Vehicle, VehicleBody } from "@/lib/vehicles";
-import VehicleFilter, { type FilterState } from "./VehicleFilter";
+import VehicleFilter, { type FilterState, DEFAULT_FILTERS } from "./VehicleFilter";
 import VehicleGrid from "./VehicleGrid";
 import VehicleCard from "./VehicleCard";
 
@@ -18,11 +18,9 @@ interface AutosContentProps {
 export default function AutosContent({ vehicles, initialMake = "", initialBody = "" }: AutosContentProps) {
   const validMakes = useMemo(() => vehicles.map((v) => v.make), [vehicles]);
   const [filters, setFilters] = useState<FilterState>({
-    search: "",
+    ...DEFAULT_FILTERS,
     make: (initialMake && validMakes.includes(initialMake)) ? initialMake : "Alle Marken",
-    priceMax: "",
     body: (VALID_BODIES.includes(initialBody as VehicleBody) ? initialBody : "") as VehicleBody | "",
-    sort: "default",
   });
 
   const filtered = useMemo(() => {
@@ -100,7 +98,7 @@ export default function AutosContent({ vehicles, initialMake = "", initialBody =
             </p>
             <button
               type="button"
-              onClick={() => setFilters({ search: "", make: "Alle Marken", priceMax: "", body: "", sort: "default" })}
+              onClick={() => setFilters({ ...DEFAULT_FILTERS })}
               className="mt-6 px-5 py-2.5 rounded-lg text-white text-sm font-semibold hover:opacity-90 transition-opacity bg-ct-cyan"
             >
               Alle Fahrzeuge anzeigen

@@ -5,12 +5,40 @@ import { Search, SlidersHorizontal, X, ArrowUpDown } from "lucide-react";
 import type { Vehicle, VehicleBody } from "@/lib/vehicles";
 
 export interface FilterState {
+  // Existing
   search: string;
   make: string;
   priceMax: string;
   body: VehicleBody | "";
   sort: "default" | "price_asc" | "price_desc" | "mileage_asc" | "year_desc";
+  // New
+  priceMin: string;       // e.g. "15000" — empty string = no lower bound
+  yearMin: string;        // e.g. "2018"  — empty = no lower bound
+  yearMax: string;        // e.g. "2024"  — empty = no upper bound
+  kmMax: string;          // e.g. "50000" — empty = no limit
+  fuel: string;           // "Elektro" | "Hybrid" | "Benzin" | "Diesel" | ""
+  transmission: string;   // "Automatik" | "Manuell" | ""
+  color: string;          // from available vehicle colors, "" = all
+  drivetrain: string;     // "Frontantrieb" | "Allrad" | "Heckantrieb" | ""
+  monthlyRateMax: string; // e.g. "500" — max leasing rate CHF/month, "" = no limit
 }
+
+export const DEFAULT_FILTERS: FilterState = {
+  search: "",
+  make: "Alle Marken",
+  priceMax: "",
+  body: "",
+  sort: "default",
+  priceMin: "",
+  yearMin: "",
+  yearMax: "",
+  kmMax: "",
+  fuel: "",
+  transmission: "",
+  color: "",
+  drivetrain: "",
+  monthlyRateMax: "",
+};
 
 interface VehicleFilterProps {
   filters: FilterState;
@@ -58,10 +86,9 @@ export default function VehicleFilter({ filters, onChange, resultCount, vehicles
   ];
 
   const hasFilters = activeFilters.length > 0;
-  const reset = () => onChange({ search: "", make: "Alle Marken", priceMax: "", body: "", sort: filters.sort });
+  const reset = () => onChange({ ...DEFAULT_FILTERS });
   const removeFilter = (key: keyof FilterState) => {
-    const defaults: FilterState = { search: "", make: "Alle Marken", priceMax: "", body: "", sort: filters.sort };
-    onChange({ ...filters, [key]: defaults[key] });
+    onChange({ ...filters, [key]: DEFAULT_FILTERS[key] });
   };
 
   return (
