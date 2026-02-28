@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5153 921" width="5153" height="921">
+  <!-- Background transparent -->
+  <!-- Car icon mark -->
+  <g transform="translate(40, 120)">
+    <!-- Body -->
+    <rect x="0" y="0" width="580" height="580" rx="60" fill="#00a0e3"/>
+    <!-- Car silhouette -->
+    <path d="M90 400 L140 240 H440 L490 400" stroke="white" stroke-width="32" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M90 400 V450 H170 V400 M410 400 V450 H490 V400" stroke="white" stroke-width="28" stroke-linecap="round" fill="none"/>
+    <circle cx="195" cy="410" r="44" fill="white"/>
+    <circle cx="385" cy="410" r="44" fill="white"/>
+    <path d="M220 240 L255 155 H325 L360 240" stroke="white" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <!-- Wordmark -->
+  <text
+    x="720"
+    y="600"
+    font-family="Montserrat, Arial, sans-serif"
+    font-weight="800"
+    font-size="480"
+    fill="#1b1b1b"
+    letter-spacing="-10"
+  >Car Trade<tspan fill="#00a0e3">24</tspan></text>
+</svg>

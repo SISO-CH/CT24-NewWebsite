@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-montserrat);
+
+  /* Brand colours */
+  --color-ct-cyan:    #00a0e3;
+  --color-ct-magenta: #e4007d;
+  --color-ct-dark:    #1b1b1b;
+  --color-ct-light:   #f4f6f8;
+  --color-ct-green:   #009640;
+  --color-ct-text:    #111111;
+}
+
+:root {
+  --ct-cyan:    #00a0e3;
+  --ct-magenta: #e4007d;
+  --ct-dark:    #1b1b1b;
+  --ct-light:   #f4f6f8;
+  --ct-green:   #009640;
+  --ct-text:    #111111;
+
+  /* EU energy-efficiency label scale */
+  --ee-a: #009640;
+  --ee-b: #50b848;
+  --ee-c: #c4d52b;
+  --ee-d: #fff200;
+  --ee-e: #fdb913;
+  --ee-f: #eb6b23;
+  --ee-g: #d41920;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-montserrat), sans-serif;
+  color: var(--ct-text);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Hero CSS Animations (plays on load, no JS required) ── */
+@keyframes heroSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.hero-slide-up {
+  animation: heroSlideUp 0.7s ease both;
+}
+.hero-fade-in {
+  animation: heroFadeIn 0.9s ease both;
+}
+
+/* ── Scroll-triggered animation classes (toggled via JS IntersectionObserver) ── */
+.animate-fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.animate-fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-fade-in {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.animate-fade-in.in-view {
+  opacity: 1;
+}
