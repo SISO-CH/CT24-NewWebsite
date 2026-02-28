@@ -8,6 +8,10 @@ import { formatCHF } from "@/lib/utils";
 // Standard Swiss leasing rate: 3.9% p.a.
 const ANNUAL_RATE = 0.039;
 
+// Note: km/year (Jahreskilometer) is shown to the user for reference and
+// displayed in the disclaimer, but does not alter the annuity calculation.
+// A full model would factor in residual value based on km — this is an
+// intentional simplification for indicative display purposes.
 function calculateRate(price: number, downPct: number, months: number): number {
   const financed = price * (1 - downPct / 100);
   const monthly = ANNUAL_RATE / 12;
@@ -38,7 +42,7 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
   const toggleBtnClass = (active: boolean) =>
     `h-8 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer
      ${active
-       ? "text-white"
+       ? "bg-ct-cyan text-white"
        : "bg-ct-light text-[#6b7280] hover:bg-[#e8eaec]"}`;
 
   return (
@@ -97,7 +101,6 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
               type="button"
               onClick={() => setMonths(t)}
               className={toggleBtnClass(months === t)}
-              style={months === t ? { backgroundColor: "var(--ct-cyan)" } : {}}
             >
               {t} Mt.
             </button>
@@ -115,7 +118,6 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
               type="button"
               onClick={() => setKm(k)}
               className={toggleBtnClass(km === k)}
-              style={km === k ? { backgroundColor: "var(--ct-cyan)" } : {}}
             >
               {k.toLocaleString("de-CH")}
             </button>
