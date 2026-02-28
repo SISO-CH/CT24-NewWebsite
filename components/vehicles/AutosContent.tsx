@@ -32,6 +32,7 @@ export default function AutosContent({ vehicles, initialMake = "", initialBody =
       if (filters.make !== "Alle Marken" && v.make !== filters.make) return false;
       if (filters.priceMax && v.price > parseInt(filters.priceMax)) return false;
       if (filters.body && v.body !== filters.body) return false;
+      // TODO Task 4: apply priceMin, yearMin, yearMax, kmMax, fuel, transmission, color, drivetrain, monthlyRateMax
       return true;
     });
 
