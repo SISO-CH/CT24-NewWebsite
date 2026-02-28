@@ -30,9 +30,17 @@ export default function AutosContent({ vehicles, initialMake = "", initialBody =
           !v.model.toLowerCase().includes(query) &&
           !(v.variant ?? "").toLowerCase().includes(query)) return false;
       if (filters.make !== "Alle Marken" && v.make !== filters.make) return false;
-      if (filters.priceMax && v.price > parseInt(filters.priceMax)) return false;
       if (filters.body && v.body !== filters.body) return false;
-      // TODO Task 4: apply priceMin, yearMin, yearMax, kmMax, fuel, transmission, color, drivetrain, monthlyRateMax
+      if (filters.priceMin && v.price < parseInt(filters.priceMin)) return false;
+      if (filters.priceMax && v.price > parseInt(filters.priceMax)) return false;
+      if (filters.yearMin && v.year < parseInt(filters.yearMin)) return false;
+      if (filters.yearMax && v.year > parseInt(filters.yearMax)) return false;
+      if (filters.kmMax && v.mileage > parseInt(filters.kmMax)) return false;
+      if (filters.fuel && v.fuel !== filters.fuel) return false;
+      if (filters.transmission && v.transmission !== filters.transmission) return false;
+      if (filters.color && v.color !== filters.color) return false;
+      if (filters.drivetrain && v.drivetrain !== filters.drivetrain) return false;
+      if (filters.monthlyRateMax && v.leasingPrice > parseInt(filters.monthlyRateMax)) return false;
       return true;
     });
 
@@ -53,6 +61,8 @@ export default function AutosContent({ vehicles, initialMake = "", initialBody =
       let score = 0;
       if (filters.make !== "Alle Marken" && v.make === filters.make) score += 3;
       if (filters.body && v.body === filters.body) score += 2;
+      if (filters.fuel && v.fuel === filters.fuel) score += 2;
+      if (filters.transmission && v.transmission === filters.transmission) score += 1;
       if (filters.priceMax) {
         const max = parseInt(filters.priceMax);
         if (v.price <= max * 1.4) score += 1;
