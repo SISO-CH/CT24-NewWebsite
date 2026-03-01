@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { CreditCard, TrendingUp, Banknote, ArrowRight } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";
+import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -150,6 +151,30 @@ export default function FinanzierungPage() {
           </div>
           <p className="text-[#9ca3af] text-xs mt-3">
             * Alle Angaben inkl. MwSt., vorbehaltlich Bonitätsprüfung durch die Leasingbank.
+          </p>
+        </div>
+      </section>
+
+      {/* Interaktiver Leasingrechner */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="mb-10">
+              <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-2"
+                 style={{ color: "var(--ct-cyan)" }}>Ihr persönlicher Rechner</p>
+              <h2 className="text-3xl font-extrabold" style={{ color: "var(--ct-dark)" }}>
+                Monatsrate berechnen
+              </h2>
+              <p className="text-[#6b7280] text-sm mt-2">
+                Stellen Sie die Parameter ein — die Rate wird sofort berechnet.
+              </p>
+            </div>
+          </FadeIn>
+          <div className="bg-white rounded-2xl border border-[#e5e7eb] p-8 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
+            <LeasingCalculator />
+          </div>
+          <p className="text-[#9ca3af] text-xs mt-4 text-center">
+            * Indikative Berechnung. Offizielle Konditionen via Cembra Money Bank oder Migros Bank nach Bonitätsprüfung.
           </p>
         </div>
       </section>
