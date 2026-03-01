@@ -6,6 +6,7 @@ import type { Vehicle, VehicleBody } from "@/lib/vehicles";
 import VehicleFilter, { type FilterState, DEFAULT_FILTERS } from "./VehicleFilter";
 import VehicleGrid from "./VehicleGrid";
 import VehicleCard from "./VehicleCard";
+import CompareBar from "./CompareBar";
 
 const VALID_BODIES: VehicleBody[] = ["Cabriolet", "Coupé", "Kombi", "Limousine", "SUV", "Van"];
 
@@ -137,6 +138,7 @@ export default function AutosContent({ vehicles, initialMake = "", initialBody =
       ) : (
         <VehicleGrid vehicles={filtered} />
       )}
+      <CompareBar vehicles={vehicles} />
     </div>
   );
 }
