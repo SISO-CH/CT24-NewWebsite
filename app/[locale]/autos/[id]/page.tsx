@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchVehicles } from "@/lib/as24";
+import { kv } from "@vercel/kv";
 import {
   ArrowLeft,
   Fuel,
@@ -15,6 +16,7 @@ import {
   PhoneCall,
   Phone,
   MessageCircle,
+  Lock,
 } from "lucide-react";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
@@ -27,6 +29,7 @@ import TestDriveTrigger from "@/components/vehicles/TestDriveTrigger";
 import VDPContactForm from "@/components/vehicles/VDPContactForm";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
+import ReserveButton from "@/components/vehicles/ReserveButton";
 
 interface Props {
   params: Promise<{ locale: string; id: string }>;
@@ -44,10 +47,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function VehicleDetailPage({ params }: Props) {
-  const { id } = await params;
+  const { locale, id } = await params;
   const vehicles = await fetchVehicles();
   const vehicle = vehicles.find((v) => v.id === Number(id));
   if (!vehicle) notFound();
+
+  const reservedData = await kv.get<{ until: number }>(`reserved:${id}`).catch(() => null);
+  const isReserved = reservedData ? reservedData.until > Date.now() : false;
 
   const allImages = vehicle.images?.length ? vehicle.images : [vehicle.image];
 
@@ -330,6 +336,14 @@ export default async function VehicleDetailPage({ params }: Props) {
                     </Link>
 
                     <TestDriveTrigger vehicleLabel={vehicleLabel} />
+
+                    {isReserved ? (
+                      <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#f3f4f6] text-[#9ca3af] text-sm font-semibold">
+                        <Lock size={14} /> Aktuell reserviert
+                      </div>
+                    ) : (
+                      <ReserveButton vehicleId={vehicle.id} vehicleLabel={vehicleLabel} locale={locale} />
+                    )}
 
                     {/* WhatsApp */}
                     <a

@@ -20,7 +20,7 @@ function Chip({ label }: { label: string }) {
   );
 }
 
-export default function VehicleCard({ vehicle, className = "" }: { vehicle: Vehicle; className?: string }) {
+export default function VehicleCard({ vehicle, className = "", reserved = false }: { vehicle: Vehicle; className?: string; reserved?: boolean }) {
   const badgeStyle = vehicle.badge ? getBadgeStyle(vehicle.badge) : null;
 
   return (
@@ -38,7 +38,12 @@ export default function VehicleCard({ vehicle, className = "" }: { vehicle: Vehi
         />
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
 
-        {vehicle.badge && badgeStyle && (
+        {reserved && (
+          <span className="absolute top-3 left-3 px-2.5 py-1 text-[0.68rem] rounded-full text-white uppercase tracking-wide font-bold shadow-sm bg-[#6b7280]">
+            Reserviert
+          </span>
+        )}
+        {!reserved && vehicle.badge && badgeStyle && (
           <span className="absolute top-3 left-3 px-2.5 py-1 text-[0.68rem] rounded-full text-white uppercase tracking-wide font-bold shadow-sm"
                 style={{ backgroundColor: badgeStyle.bg }}>
             {vehicle.badge}
