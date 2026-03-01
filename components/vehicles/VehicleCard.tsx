@@ -91,7 +91,10 @@ export default function VehicleCard({ vehicle, className = "" }: { vehicle: Vehi
             </div>
           )}
           <div className="flex items-baseline justify-between">
-            <span className="text-[0.68rem] text-[#9ca3af] font-medium">Kaufpreis</span>
+            <div>
+              <span className="text-[0.68rem] text-[#9ca3af] font-medium block">Kaufpreis</span>
+              <span className="text-[0.6rem] text-[#9ca3af]">inkl. MwSt.</span>
+            </div>
             <span className="font-bold text-sm" style={{ color: "var(--ct-dark)" }}>
               CHF {formatCHF(vehicle.price)}
             </span>

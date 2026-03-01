@@ -148,6 +148,10 @@ export default function Footer() {
                   ✉️ info@cartrade24.ch
                 </a>
               </p>
+              <p className="text-[10px] text-[#6b7280] mt-1">
+                {/* TODO: Replace with real UID from MWST-Register — mwst.admin.ch */}
+                UID: CHE-XXX.XXX.XXX MWST
+              </p>
             </div>
 
             {/* Öffnungszeiten box */}

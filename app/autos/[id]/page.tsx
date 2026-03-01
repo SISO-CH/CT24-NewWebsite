@@ -277,9 +277,17 @@ export default async function VehicleDetailPage({ params }: Props) {
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-[#9ca3af] mb-1">
                     Kaufpreis
                   </p>
-                  <p className="text-2xl font-extrabold mb-5 text-ct-dark">
-                    CHF {formatCHF(vehicle.price)}
-                  </p>
+                  <div className="mb-5">
+                    <p className="text-2xl font-extrabold text-ct-dark">
+                      CHF {formatCHF(vehicle.price)}
+                    </p>
+                    <p className="text-[10px] text-[#9ca3af] mt-0.5">
+                      inkl. 8.1% MwSt.
+                      {vehicle.condition === "Occasion" && (
+                        <> · Margenbesteuerung (fikt. Vorsteuerabzug)</>
+                      )}
+                    </p>
+                  </div>
 
                   {/* Leasingrechner-Widget */}
                   <div className="mb-5 pb-5 border-b border-[#f0f0f0]">
