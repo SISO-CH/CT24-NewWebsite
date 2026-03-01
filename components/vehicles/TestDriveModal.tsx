@@ -1,7 +1,6 @@
-// components/vehicles/TestDriveModal.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { X, Calendar, CheckCircle2 } from "lucide-react";
 
 interface TestDriveModalProps {
@@ -12,9 +11,11 @@ interface TestDriveModalProps {
 export default function TestDriveModal({ vehicleLabel, onClose }: TestDriveModalProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDate = tomorrow.toISOString().split("T")[0];
+  const minDate = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split("T")[0];
+  }, []);
   const [date, setDate] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
