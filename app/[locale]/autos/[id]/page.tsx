@@ -28,7 +28,7 @@ import VDPContactForm from "@/components/vehicles/VDPContactForm";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
