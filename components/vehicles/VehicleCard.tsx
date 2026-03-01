@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { formatCHF } from "@/lib/utils";
 import type { Vehicle } from "@/lib/vehicles";
 import EnergyLabel from "./EnergyLabel";
+import CompareToggle from "./CompareToggle";
 
 function getBadgeStyle(badge: string): { bg: string } {
   if (badge.startsWith("-")) return { bg: "var(--ct-magenta)" };
@@ -62,6 +63,9 @@ export default function VehicleCard({ vehicle, className = "" }: { vehicle: Vehi
             <EnergyLabel label={vehicle.energyLabel} size="sm" />
           </div>
         )}
+        <div className="absolute bottom-2.5 right-3">
+          <CompareToggle vehicleId={vehicle.id} />
+        </div>
       </div>
 
       <div className="flex flex-col flex-1 p-4">
