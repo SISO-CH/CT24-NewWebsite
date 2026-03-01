@@ -14,7 +14,8 @@ interface Props {
   searchParams: Promise<{ compare?: string }>;
 }
 
-export default async function VergleichPage({ searchParams }: Props) {
+export default async function VergleichPage({ params, searchParams }: Props) {
+  const { locale } = await params;
   const { compare } = await searchParams;
   const ids = (compare ?? "")
     .split(",")
@@ -60,7 +61,7 @@ export default async function VergleichPage({ searchParams }: Props) {
               </Link>
             </div>
           ) : (
-            <CompareTable vehicles={vehicles} />
+            <CompareTable vehicles={vehicles} locale={locale} />
           )}
         </div>
       </section>

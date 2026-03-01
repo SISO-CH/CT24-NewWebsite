@@ -7,6 +7,7 @@ import EnergyLabel from "./EnergyLabel";
 
 interface Props {
   vehicles: Vehicle[];
+  locale?: string;
 }
 
 type RowDef = {
@@ -36,7 +37,8 @@ function displayVal(row: RowDef, v: Vehicle): string {
   return row.format ? row.format(raw) : String(raw);
 }
 
-export default function CompareTable({ vehicles }: Props) {
+export default function CompareTable({ vehicles, locale = "de" }: Props) {
+  const localePrefix = ["fr", "it", "en"].includes(locale) ? `/${locale}` : "";
   return (
     <div className="overflow-x-auto rounded-2xl border border-[#e5e7eb]">
       <table className="w-full border-collapse">
@@ -88,7 +90,7 @@ export default function CompareTable({ vehicles }: Props) {
                     key={vehicles[vi].id}
                     className={`p-4 text-sm font-semibold border-l border-[#f0f0f0] text-center ${
                       !allSame && val !== "–"
-                        ? "bg-[var(--ct-cyan)]/10 text-[var(--ct-dark)]"
+                        ? "bg-ct-cyan/10 text-ct-dark"
                         : "text-[#374151]"
                     }`}
                   >
@@ -107,7 +109,7 @@ export default function CompareTable({ vehicles }: Props) {
             {vehicles.map((v) => (
               <td key={v.id} className="p-4 border-l border-[#e5e7eb]">
                 <Link
-                  href={`/autos/${v.id}`}
+                  href={`${localePrefix}/autos/${v.id}`}
                   className="flex items-center justify-center gap-1.5 w-full py-2.5 px-3
                              text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity"
                   style={{ backgroundColor: "var(--ct-cyan)" }}
