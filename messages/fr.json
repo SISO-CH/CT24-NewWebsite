@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "autos": "Voitures",
+    "finanzierung": "Financement",
+    "firmenkunden": "Entreprises",
+    "ueberUns": "À propos",
+    "kontakt": "Contact",
+    "inzahlungnahme": "Reprise"
+  },
+  "common": {
+    "anfragen": "Demander maintenant",
+    "probefahrt": "Essai routier",
+    "zurueck": "Retour",
+    "speichern": "Enregistrer",
+    "weiter": "Suivant",
+    "abbrechen": "Annuler",
+    "laden": "Chargement…",
+    "fehler": "Une erreur s'est produite. Veuillez réessayer.",
+    "erfolg": "Envoyé avec succès !",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "Votre voiture de rêve vous attend.",
+    "subtitle": "Occasions contrôlées et véhicules neufs — livraison dans toute la Suisse.",
+    "cta": "Découvrir tous les véhicules"
+  },
+  "vehicles": {
+    "vergleichen": "Comparer",
+    "imVergleich": "En comparaison",
+    "reservieren": "Réserver maintenant",
+    "reserviert": "Réservé",
+    "preisalarm": "Alerte de prix",
+    "preisalarmTitle": "Alerte de prix",
+    "preisalarmSubtitle": "Soyez notifié lorsqu'un véhicule correspondant est disponible.",
+    "preisalarmEmail": "Votre adresse e-mail",
+    "preisalarmButton": "Activer l'alerte",
+    "preisalarmSuccess": "Alerte activée ! Vous recevrez un e-mail de confirmation.",
+    "vergleichTitle": "Comparaison de véhicules",
+    "vergleichLeer": "Aucun véhicule sélectionné pour la comparaison.",
+    "vergleichMax": "Maximum 3 véhicules comparables.",
+    "vergleichOeffnen": "Ouvrir la comparaison",
+    "vergleichEntfernen": "Supprimer",
+    "anfragenCTA": "Demander"
+  },
+  "comparison": {
+    "preis": "Prix d'achat",
+    "baujahr": "Année",
+    "km": "Kilométrage",
+    "kraftstoff": "Carburant",
+    "getriebe": "Transmission",
+    "leistung": "Puissance",
+    "karosserie": "Carrosserie",
+    "farbe": "Couleur",
+    "antrieb": "Traction",
+    "tueren": "Portes",
+    "sitze": "Sièges",
+    "energielabel": "Étiquette énergie"
+  },
+  "reservation": {
+    "title": "Réserver un véhicule",
+    "subtitle": "Réservez ce véhicule pour 48 heures — frais de réservation CHF 200 (déduits du prix d'achat).",
+    "button": "Réserver maintenant — CHF 200",
+    "successTitle": "Réservation confirmée !",
+    "successText": "Votre véhicule est réservé pour 48 heures. Nous vous contacterons prochainement.",
+    "cancelledTitle": "Réservation annulée",
+    "cancelledText": "Votre réservation n'a pas été finalisée. Aucun montant n'a été débité."
+  },
+  "tradein": {
+    "title": "Reprendre votre véhicule",
+    "subtitle": "Obtenez une estimation gratuite en 2 minutes.",
+    "step1Title": "Données du véhicule",
+    "kontrollschild": "Plaque d'immatriculation (ex. AG 12345)",
+    "km": "Kilométrage",
+    "zustand": "État",
+    "zustandSehrGut": "Très bon",
+    "zustandGut": "Bon",
+    "zustandGebraucht": "Usagé",
+    "step2Title": "Votre estimation",
+    "schaetzungText": "Basé sur les données actuelles du marché, nous estimons votre véhicule à :",
+    "verbindlichBewerten": "Évaluation ferme — CHF 20",
+    "step3Title": "Évaluation ferme",
+    "step3Text": "Pour CHF 20, recevez une offre ferme dans les 24 heures.",
+    "successTitle": "Demande reçue !",
+    "successText": "Nous vous contacterons dans les 24h avec une offre ferme par e-mail."
+  },
+  "contact": {
+    "probefahrtTitle": "Réserver un essai routier",
+    "probefahrtSubtitle": "Réservez votre essai gratuit directement en ligne."
+  },
+  "footer": {
+    "tagline": "Votre spécialiste en occasions contrôlées en Suisse.",
+    "fahrzeuge": "Véhicules",
+    "unternehmen": "Entreprise",
+    "kontakt": "Contact",
+    "copyright": "Tous droits réservés.",
+    "madeIn": "Développé avec ❤️ en Suisse"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Occasions & Neufs Suisse",
+    "homeDescription": "Occasions contrôlées à Wohlen (Argovie). Livraison nationale, jusqu'à 7 ans de garantie."
+  }
+}

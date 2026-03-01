@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Home",
+    "autos": "Cars",
+    "finanzierung": "Financing",
+    "firmenkunden": "Business",
+    "ueberUns": "About us",
+    "kontakt": "Contact",
+    "inzahlungnahme": "Trade-in"
+  },
+  "common": {
+    "anfragen": "Enquire now",
+    "probefahrt": "Book test drive",
+    "zurueck": "Back",
+    "speichern": "Save",
+    "weiter": "Next",
+    "abbrechen": "Cancel",
+    "laden": "Loading…",
+    "fehler": "An error occurred. Please try again.",
+    "erfolg": "Successfully sent!",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "Your dream car is waiting.",
+    "subtitle": "Certified pre-owned and new cars — delivered anywhere in Switzerland.",
+    "cta": "Discover all vehicles"
+  },
+  "vehicles": {
+    "vergleichen": "Compare",
+    "imVergleich": "In comparison",
+    "reservieren": "Reserve now",
+    "reserviert": "Reserved",
+    "preisalarm": "Price alert",
+    "preisalarmTitle": "Price alert",
+    "preisalarmSubtitle": "Get notified when a matching vehicle becomes available.",
+    "preisalarmEmail": "Your email address",
+    "preisalarmButton": "Activate alert",
+    "preisalarmSuccess": "Alert activated! You will receive a confirmation email.",
+    "vergleichTitle": "Vehicle comparison",
+    "vergleichLeer": "No vehicles selected for comparison.",
+    "vergleichMax": "Maximum 3 vehicles can be compared.",
+    "vergleichOeffnen": "Open comparison",
+    "vergleichEntfernen": "Remove",
+    "anfragenCTA": "Enquire"
+  },
+  "comparison": {
+    "preis": "Purchase price",
+    "baujahr": "Year",
+    "km": "Mileage",
+    "kraftstoff": "Fuel",
+    "getriebe": "Transmission",
+    "leistung": "Power",
+    "karosserie": "Body type",
+    "farbe": "Colour",
+    "antrieb": "Drive",
+    "tueren": "Doors",
+    "sitze": "Seats",
+    "energielabel": "Energy label"
+  },
+  "reservation": {
+    "title": "Reserve vehicle",
+    "subtitle": "Hold this vehicle for 48 hours — CHF 200 reservation fee (credited against purchase price).",
+    "button": "Reserve now — CHF 200",
+    "successTitle": "Reservation confirmed!",
+    "successText": "Your vehicle is reserved for 48 hours. We will contact you shortly.",
+    "cancelledTitle": "Reservation cancelled",
+    "cancelledText": "Your reservation was not completed. No amount has been charged."
+  },
+  "tradein": {
+    "title": "Trade in your vehicle",
+    "subtitle": "Get a free instant estimate in 2 minutes.",
+    "step1Title": "Vehicle details",
+    "kontrollschild": "Number plate (e.g. AG 12345)",
+    "km": "Mileage",
+    "zustand": "Condition",
+    "zustandSehrGut": "Very good",
+    "zustandGut": "Good",
+    "zustandGebraucht": "Used",
+    "step2Title": "Your estimate",
+    "schaetzungText": "Based on current market data, we estimate your vehicle at:",
+    "verbindlichBewerten": "Binding valuation — CHF 20",
+    "step3Title": "Binding valuation",
+    "step3Text": "For CHF 20, receive a binding offer within 24 hours.",
+    "successTitle": "Request received!",
+    "successText": "We will contact you within 24h with a binding offer by email."
+  },
+  "contact": {
+    "probefahrtTitle": "Book a test drive",
+    "probefahrtSubtitle": "Book your free test drive directly online."
+  },
+  "footer": {
+    "tagline": "Your specialist for certified pre-owned vehicles in Switzerland.",
+    "fahrzeuge": "Vehicles",
+    "unternehmen": "Company",
+    "kontakt": "Contact",
+    "copyright": "All rights reserved.",
+    "madeIn": "Made with ❤️ in Switzerland"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Used & New Cars Switzerland",
+    "homeDescription": "Certified pre-owned and new cars in Wohlen (Aargau). Nationwide delivery, up to 7 years warranty."
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Home",
+    "autos": "Autos",
+    "finanzierung": "Finanzierung",
+    "firmenkunden": "Firmenkunden",
+    "ueberUns": "Über uns",
+    "kontakt": "Kontakt",
+    "inzahlungnahme": "Inzahlungnahme"
+  },
+  "common": {
+    "anfragen": "Jetzt anfragen",
+    "probefahrt": "Probefahrt buchen",
+    "zurueck": "Zurück",
+    "speichern": "Speichern",
+    "weiter": "Weiter",
+    "abbrechen": "Abbrechen",
+    "laden": "Laden…",
+    "fehler": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "erfolg": "Erfolgreich gesendet!",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "Ihr Traumauto wartet.",
+    "subtitle": "Geprüfte Occasionen und Neuwagen — schweizweit geliefert.",
+    "cta": "Alle Fahrzeuge entdecken"
+  },
+  "vehicles": {
+    "vergleichen": "Vergleichen",
+    "imVergleich": "Im Vergleich",
+    "reservieren": "Jetzt reservieren",
+    "reserviert": "Reserviert",
+    "preisalarm": "Preisalarm setzen",
+    "preisalarmTitle": "Preisalarm",
+    "preisalarmSubtitle": "Benachrichtigt werden, wenn ein passendes Fahrzeug verfügbar ist.",
+    "preisalarmEmail": "Ihre E-Mail-Adresse",
+    "preisalarmButton": "Preisalarm aktivieren",
+    "preisalarmSuccess": "Preisalarm aktiviert! Sie erhalten eine Bestätigungs-E-Mail.",
+    "vergleichTitle": "Fahrzeugvergleich",
+    "vergleichLeer": "Keine Fahrzeuge zum Vergleichen ausgewählt.",
+    "vergleichMax": "Maximal 3 Fahrzeuge vergleichbar.",
+    "vergleichOeffnen": "Vergleich öffnen",
+    "vergleichEntfernen": "Entfernen",
+    "anfragenCTA": "Anfragen"
+  },
+  "comparison": {
+    "preis": "Kaufpreis",
+    "baujahr": "Baujahr",
+    "km": "Kilometerstand",
+    "kraftstoff": "Kraftstoff",
+    "getriebe": "Getriebe",
+    "leistung": "Leistung",
+    "karosserie": "Karosserie",
+    "farbe": "Farbe",
+    "antrieb": "Antrieb",
+    "tueren": "Türen",
+    "sitze": "Sitze",
+    "energielabel": "Energielabel"
+  },
+  "reservation": {
+    "title": "Fahrzeug reservieren",
+    "subtitle": "Sichern Sie sich dieses Fahrzeug für 48 Stunden — CHF 200 Reservierungsgebühr (wird beim Kauf angerechnet).",
+    "button": "Jetzt reservieren — CHF 200",
+    "successTitle": "Reservierung bestätigt!",
+    "successText": "Ihr Fahrzeug ist für 48 Stunden reserviert. Wir melden uns in Kürze.",
+    "cancelledTitle": "Reservierung abgebrochen",
+    "cancelledText": "Ihre Reservierung wurde nicht abgeschlossen. Kein Betrag wurde belastet."
+  },
+  "tradein": {
+    "title": "Fahrzeug in Zahlung geben",
+    "subtitle": "Erhalten Sie in 2 Minuten eine kostenlose Sofortschätzung für Ihr Fahrzeug.",
+    "step1Title": "Fahrzeugdaten",
+    "kontrollschild": "Kontrollschild (z.B. AG 12345)",
+    "km": "Kilometerstand",
+    "zustand": "Zustand",
+    "zustandSehrGut": "Sehr gut",
+    "zustandGut": "Gut",
+    "zustandGebraucht": "Gebraucht",
+    "step2Title": "Ihre Sofortschätzung",
+    "schaetzungText": "Basierend auf aktuellen Marktdaten schätzen wir Ihr Fahrzeug auf:",
+    "verbindlichBewerten": "Verbindlich bewerten lassen — CHF 20",
+    "step3Title": "Verbindliche Bewertung",
+    "step3Text": "Für CHF 20 erhalten Sie ein verbindliches Angebot innerhalb von 24 Stunden.",
+    "successTitle": "Bewertungsauftrag erhalten!",
+    "successText": "Wir melden uns innert 24h mit einem verbindlichen Angebot per E-Mail."
+  },
+  "contact": {
+    "probefahrtTitle": "Probefahrt buchen",
+    "probefahrtSubtitle": "Buchen Sie Ihre kostenlose Probefahrt direkt online."
+  },
+  "footer": {
+    "tagline": "Ihr Spezialist für geprüfte Occasionen in der Schweiz.",
+    "fahrzeuge": "Fahrzeuge",
+    "unternehmen": "Unternehmen",
+    "kontakt": "Kontakt",
+    "copyright": "Alle Rechte vorbehalten.",
+    "madeIn": "Mit ❤️ entwickelt in der Schweiz"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Occasion & Neuwagen Schweiz",
+    "homeDescription": "Geprüfte Occasionen und Neuwagen in Wohlen (Aargau). Schweizweite Lieferung, bis zu 7 Jahre Garantie."
+  }
+}

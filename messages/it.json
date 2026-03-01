@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Home",
+    "autos": "Auto",
+    "finanzierung": "Finanziamento",
+    "firmenkunden": "Aziende",
+    "ueberUns": "Chi siamo",
+    "kontakt": "Contatto",
+    "inzahlungnahme": "Permuta"
+  },
+  "common": {
+    "anfragen": "Richiedi ora",
+    "probefahrt": "Prenota un test drive",
+    "zurueck": "Indietro",
+    "speichern": "Salva",
+    "weiter": "Avanti",
+    "abbrechen": "Annulla",
+    "laden": "Caricamento…",
+    "fehler": "Si è verificato un errore. Riprovare.",
+    "erfolg": "Inviato con successo!",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "La tua auto dei sogni ti aspetta.",
+    "subtitle": "Occasioni controllate e auto nuove — consegna in tutta la Svizzera.",
+    "cta": "Scopri tutti i veicoli"
+  },
+  "vehicles": {
+    "vergleichen": "Confronta",
+    "imVergleich": "Nel confronto",
+    "reservieren": "Prenota ora",
+    "reserviert": "Prenotato",
+    "preisalarm": "Allarme prezzo",
+    "preisalarmTitle": "Allarme prezzo",
+    "preisalarmSubtitle": "Ricevi una notifica quando un veicolo adatto è disponibile.",
+    "preisalarmEmail": "Il tuo indirizzo e-mail",
+    "preisalarmButton": "Attiva allarme",
+    "preisalarmSuccess": "Allarme attivato! Riceverai un'e-mail di conferma.",
+    "vergleichTitle": "Confronto veicoli",
+    "vergleichLeer": "Nessun veicolo selezionato per il confronto.",
+    "vergleichMax": "Massimo 3 veicoli confrontabili.",
+    "vergleichOeffnen": "Apri confronto",
+    "vergleichEntfernen": "Rimuovi",
+    "anfragenCTA": "Richiedi"
+  },
+  "comparison": {
+    "preis": "Prezzo",
+    "baujahr": "Anno",
+    "km": "Chilometraggio",
+    "kraftstoff": "Carburante",
+    "getriebe": "Cambio",
+    "leistung": "Potenza",
+    "karosserie": "Carrozzeria",
+    "farbe": "Colore",
+    "antrieb": "Trazione",
+    "tueren": "Porte",
+    "sitze": "Posti",
+    "energielabel": "Etichetta energetica"
+  },
+  "reservation": {
+    "title": "Prenota il veicolo",
+    "subtitle": "Prenota questo veicolo per 48 ore — tassa di prenotazione CHF 200 (dedotta dal prezzo).",
+    "button": "Prenota ora — CHF 200",
+    "successTitle": "Prenotazione confermata!",
+    "successText": "Il tuo veicolo è prenotato per 48 ore. Ti contatteremo a breve.",
+    "cancelledTitle": "Prenotazione annullata",
+    "cancelledText": "La prenotazione non è stata completata. Nessun importo è stato addebitato."
+  },
+  "tradein": {
+    "title": "Permuta il tuo veicolo",
+    "subtitle": "Ottieni una valutazione gratuita in 2 minuti.",
+    "step1Title": "Dati del veicolo",
+    "kontrollschild": "Targa (es. AG 12345)",
+    "km": "Chilometraggio",
+    "zustand": "Condizione",
+    "zustandSehrGut": "Molto buono",
+    "zustandGut": "Buono",
+    "zustandGebraucht": "Usato",
+    "step2Title": "La tua valutazione",
+    "schaetzungText": "In base ai dati attuali di mercato, stimiamo il tuo veicolo a:",
+    "verbindlichBewerten": "Valutazione vincolante — CHF 20",
+    "step3Title": "Valutazione vincolante",
+    "step3Text": "Per CHF 20, ricevi un'offerta vincolante entro 24 ore.",
+    "successTitle": "Richiesta ricevuta!",
+    "successText": "Ti contatteremo entro 24h con un'offerta vincolante via e-mail."
+  },
+  "contact": {
+    "probefahrtTitle": "Prenota un test drive",
+    "probefahrtSubtitle": "Prenota il tuo test drive gratuito direttamente online."
+  },
+  "footer": {
+    "tagline": "Il tuo specialista in occasioni controllate in Svizzera.",
+    "fahrzeuge": "Veicoli",
+    "unternehmen": "Azienda",
+    "kontakt": "Contatto",
+    "copyright": "Tutti i diritti riservati.",
+    "madeIn": "Sviluppato con ❤️ in Svizzera"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Occasioni & Nuovi Svizzera",
+    "homeDescription": "Occasioni controllate a Wohlen (Argovia). Consegna nazionale, fino a 7 anni di garanzia."
+  }
+}
