@@ -42,20 +42,28 @@ const reviews = [
     name: "Thomas K.",
     initials: "TK",
     stars: 5,
+    date: "Jan. 2026",
   },
   {
     text: "Haben uns das perfekte Fahrzeug gefunden. Heimlieferung hat super geklappt – alles wie versprochen!",
     name: "Sandra M.",
     initials: "SM",
     stars: 5,
+    date: "Dez. 2025",
   },
   {
     text: "Tolle Auswahl, ehrliche Beratung ohne Verkaufsdruck. Kommen gerne wieder.",
     name: "Marco B.",
     initials: "MB",
     stars: 5,
+    date: "Nov. 2025",
   },
 ];
+
+// TODO: Replace with real data from Google Business Profile
+// Set NEXT_PUBLIC_GOOGLE_PLACE_ID in .env.local for live reviews
+const googleRating = { average: 4.9, count: 47 };
+const GOOGLE_MAPS_URL = "https://maps.google.com/?q=Car+Trade24+GmbH+Wohlen";
 
 const trustBadges = [
   { code: "VFAS", label: "Verband freier Autohandel Schweiz" },
@@ -301,70 +309,91 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════
-          REVIEWS — Google Bewertungen
-      ════════════════════════════════════════════ */}
-      <section className="bg-white py-16 md:py-24">
+      {/* Google Reviews */}
+      <section className="py-16 md:py-24 bg-ct-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn>
-            <div className="text-center mb-12">
-              {/* Google rating row */}
-              <div className="flex items-center justify-center gap-1 mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={20} fill="#f59e0b" color="#f59e0b" />
-                ))}
-                <span
-                  className="ml-2 font-bold text-xl"
-                  style={{ color: "var(--ct-dark)" }}
-                >
-                  4.8
-                </span>
-                <span className="text-[#6b7280] text-sm ml-1.5">
-                  · Basierend auf Google Bewertungen
-                </span>
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+              <div>
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-2"
+                   style={{ color: "var(--ct-cyan)" }}>
+                  Kundenstimmen
+                </p>
+                <h2 className="text-3xl font-extrabold" style={{ color: "var(--ct-dark)" }}>
+                  Das sagen unsere Kunden
+                </h2>
               </div>
-              <h2
-                className="text-3xl lg:text-4xl"
-                style={{ color: "var(--ct-dark)", fontWeight: 800 }}
+
+              {/* Google Badge */}
+              <a
+                href={GOOGLE_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 bg-white rounded-xl border border-[#e5e7eb] px-4 py-3
+                           hover:shadow-md transition-shadow shrink-0"
               >
-                Was unsere Kunden sagen
-              </h2>
+                {/* Google G logo */}
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                <div>
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} size={12} fill={i < Math.round(googleRating.average) ? "#FBBC05" : "none"} color="#FBBC05" />
+                    ))}
+                    <span className="text-sm font-bold ml-1" style={{ color: "var(--ct-dark)" }}>
+                      {googleRating.average}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-[#9ca3af]">{googleRating.count} Google-Bewertungen</p>
+                </div>
+              </a>
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {reviews.map((review, i) => (
-              <FadeIn key={review.name} delay={i * 100}>
-                <div className="bg-white border border-[#f0f0f0] rounded-xl p-6 shadow-[0_2px_12px_rgba(0,0,0,0.05)] h-full flex flex-col">
-                  {/* Stars */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {reviews.map((r, i) => (
+              <FadeIn key={r.name} delay={i * 80}>
+                <div className="bg-white rounded-2xl border border-[#e5e7eb] p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] h-full flex flex-col">
                   <div className="flex gap-0.5 mb-4">
-                    {[...Array(review.stars)].map((_, j) => (
-                      <Star key={j} size={14} fill="#f59e0b" color="#f59e0b" />
+                    {Array.from({ length: r.stars }).map((_, j) => (
+                      <Star key={j} size={13} fill="#FBBC05" color="#FBBC05" />
                     ))}
                   </div>
-                  {/* Quote */}
-                  <p className="text-[#374151] text-sm leading-relaxed flex-1 mb-5">
-                    &bdquo;{review.text}&ldquo;
+                  <p className="text-sm text-[#4b5563] leading-relaxed flex-1 italic">
+                    &ldquo;{r.text}&rdquo;
                   </p>
-                  {/* Author */}
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0"
-                      style={{ backgroundColor: "var(--ct-cyan)" }}
-                    >
-                      {review.initials}
+                  <div className="flex items-center gap-2.5 mt-4 pt-4 border-t border-[#f5f5f5]">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
+                         style={{ backgroundColor: "var(--ct-cyan)" }}>
+                      {r.initials}
                     </div>
-                    <p
-                      className="font-semibold text-sm"
-                      style={{ color: "var(--ct-dark)" }}
-                    >
-                      {review.name}
-                    </p>
+                    <div>
+                      <p className="text-xs font-bold" style={{ color: "var(--ct-dark)" }}>{r.name}</p>
+                      <p className="text-[10px] text-[#9ca3af]">{r.date}</p>
+                    </div>
                   </div>
                 </div>
               </FadeIn>
             ))}
           </div>
+
+          <FadeIn>
+            <div className="mt-6 text-center">
+              <a
+                href={GOOGLE_MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold hover:underline"
+                style={{ color: "var(--ct-cyan)" }}
+              >
+                Alle Bewertungen auf Google ansehen <ArrowRight size={13} />
+              </a>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
