@@ -28,7 +28,7 @@ export default function TestDriveModal({ vehicleLabel, onClose }: TestDriveModal
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
-          email: phone,
+          phone,
           subject: `[Probefahrt] ${vehicleLabel} – ${date}`,
           message: `Probefahrt-Anfrage für ${vehicleLabel}.\nWunschtermin: ${date}\nTelefon: ${phone}`,
         }),

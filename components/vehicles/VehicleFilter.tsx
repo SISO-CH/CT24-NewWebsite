@@ -132,22 +132,22 @@ export default function VehicleFilter({ filters, onChange, resultCount, vehicles
     [vehicles]
   );
 
-  const activeFilters: { label: string; key: keyof FilterState }[] = [
-    ...(filters.search       ? [{ label: `"${filters.search}"`,                                           key: "search"         as const }] : []),
+  const activeFilters = useMemo<{ label: string; key: keyof FilterState }[]>(() => [
+    ...(filters.search       ? [{ label: `"${filters.search}"`,                                                     key: "search"         as const }] : []),
     ...(filters.make !== "Alle Marken" && filters.make
-                             ? [{ label: filters.make,                                                     key: "make"           as const }] : []),
-    ...(filters.body         ? [{ label: filters.body,                                                     key: "body"           as const }] : []),
-    ...(filters.priceMin     ? [{ label: `ab CHF ${parseInt(filters.priceMin).toLocaleString("de-CH")}`,   key: "priceMin"       as const }] : []),
-    ...(filters.priceMax     ? [{ label: `bis CHF ${parseInt(filters.priceMax).toLocaleString("de-CH")}`,  key: "priceMax"       as const }] : []),
-    ...(filters.yearMin      ? [{ label: `ab ${filters.yearMin}`,                                          key: "yearMin"        as const }] : []),
-    ...(filters.yearMax      ? [{ label: `bis ${filters.yearMax}`,                                         key: "yearMax"        as const }] : []),
-    ...(filters.kmMax        ? [{ label: `bis ${parseInt(filters.kmMax).toLocaleString("de-CH")} km`,      key: "kmMax"          as const }] : []),
-    ...(filters.fuel         ? [{ label: filters.fuel,                                                     key: "fuel"           as const }] : []),
-    ...(filters.transmission ? [{ label: filters.transmission,                                             key: "transmission"   as const }] : []),
-    ...(filters.color        ? [{ label: filters.color,                                                    key: "color"          as const }] : []),
-    ...(filters.drivetrain   ? [{ label: filters.drivetrain,                                               key: "drivetrain"     as const }] : []),
-    ...(filters.monthlyRateMax ? [{ label: `Rate bis CHF ${filters.monthlyRateMax}/Mt.`,                   key: "monthlyRateMax" as const }] : []),
-  ];
+                             ? [{ label: filters.make,                                                               key: "make"           as const }] : []),
+    ...(filters.body         ? [{ label: filters.body,                                                               key: "body"           as const }] : []),
+    ...(filters.priceMin     ? [{ label: `ab CHF ${parseInt(filters.priceMin, 10).toLocaleString("de-CH")}`,         key: "priceMin"       as const }] : []),
+    ...(filters.priceMax     ? [{ label: `bis CHF ${parseInt(filters.priceMax, 10).toLocaleString("de-CH")}`,        key: "priceMax"       as const }] : []),
+    ...(filters.yearMin      ? [{ label: `ab ${filters.yearMin}`,                                                    key: "yearMin"        as const }] : []),
+    ...(filters.yearMax      ? [{ label: `bis ${filters.yearMax}`,                                                   key: "yearMax"        as const }] : []),
+    ...(filters.kmMax        ? [{ label: `bis ${parseInt(filters.kmMax, 10).toLocaleString("de-CH")} km`,            key: "kmMax"          as const }] : []),
+    ...(filters.fuel         ? [{ label: filters.fuel,                                                               key: "fuel"           as const }] : []),
+    ...(filters.transmission ? [{ label: filters.transmission,                                                       key: "transmission"   as const }] : []),
+    ...(filters.color        ? [{ label: filters.color,                                                              key: "color"          as const }] : []),
+    ...(filters.drivetrain   ? [{ label: filters.drivetrain,                                                         key: "drivetrain"     as const }] : []),
+    ...(filters.monthlyRateMax ? [{ label: `Rate bis CHF ${filters.monthlyRateMax}/Mt.`,                             key: "monthlyRateMax" as const }] : []),
+  ], [filters]);
 
   const hasFilters = activeFilters.length > 0;
   const reset = () => onChange({ ...DEFAULT_FILTERS });

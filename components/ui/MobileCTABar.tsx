@@ -7,6 +7,7 @@ import TestDriveModal from "@/components/vehicles/TestDriveModal";
 
 const PHONE = "+41566185544";
 const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567";
+const cellClass = "flex flex-col items-center justify-center py-3 gap-1 text-white text-[10px] font-semibold hover:opacity-90 transition-opacity";
 
 export default function MobileCTABar() {
   const pathname = usePathname();
@@ -26,12 +27,7 @@ export default function MobileCTABar() {
                       bg-white border-t border-[#e5e7eb] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="grid grid-cols-3 divide-x divide-[#e5e7eb]">
           {/* Anrufen */}
-          <a
-            href={`tel:${PHONE}`}
-            className="flex flex-col items-center justify-center py-3 gap-1
-                       text-white text-[10px] font-semibold hover:opacity-90 transition-opacity"
-            style={{ backgroundColor: "var(--ct-dark)" }}
-          >
+          <a href={`tel:${PHONE}`} className={cellClass} style={{ backgroundColor: "var(--ct-dark)" }}>
             <Phone size={18} aria-hidden="true" />
             Anrufen
           </a>
@@ -41,8 +37,7 @@ export default function MobileCTABar() {
             href={`https://wa.me/${WHATSAPP}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center py-3 gap-1
-                       text-white text-[10px] font-semibold hover:opacity-90 transition-opacity"
+            className={cellClass}
             style={{ backgroundColor: "#25D366" }}
           >
             <MessageCircle size={18} aria-hidden="true" />
@@ -54,20 +49,14 @@ export default function MobileCTABar() {
             <button
               type="button"
               onClick={() => setModalOpen(true)}
-              className="flex flex-col items-center justify-center py-3 gap-1
-                         text-white text-[10px] font-semibold hover:opacity-90 transition-opacity"
+              className={cellClass}
               style={{ backgroundColor: "var(--ct-cyan)" }}
             >
               <Calendar size={18} aria-hidden="true" />
               Probefahrt
             </button>
           ) : (
-            <a
-              href="/kontakt"
-              className="flex flex-col items-center justify-center py-3 gap-1
-                         text-white text-[10px] font-semibold hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: "var(--ct-cyan)" }}
-            >
+            <a href="/kontakt" className={cellClass} style={{ backgroundColor: "var(--ct-cyan)" }}>
               <Calendar size={18} aria-hidden="true" />
               Termin
             </a>

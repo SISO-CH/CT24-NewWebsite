@@ -26,16 +26,17 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { name, email, phone, subject, message } = body;
 
-  if (!name?.trim() || !email?.trim() || !message?.trim()) {
+  const hasContact = email?.trim() || phone?.trim();
+  if (!name?.trim() || !hasContact || !message?.trim()) {
     return NextResponse.json(
-      { error: "Name, E-Mail und Nachricht sind Pflichtfelder." },
+      { error: "Name, Kontakt und Nachricht sind Pflichtfelder." },
       { status: 400 }
     );
   }
 
-  // Fix 3: Basic email format validation
+  // Validate email format only when an email address is provided
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
+  if (email?.trim() && !emailRegex.test(email)) {
     return NextResponse.json(
       { error: "Bitte geben Sie eine gültige E-Mail-Adresse an." },
       { status: 400 }

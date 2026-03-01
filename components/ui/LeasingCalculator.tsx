@@ -1,7 +1,6 @@
-// components/ui/LeasingCalculator.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import { formatCHF } from "@/lib/utils";
 
@@ -31,19 +30,22 @@ const TERM_OPTIONS = [24, 36, 48, 60] as const;
 const KM_OPTIONS = [10000, 15000, 20000, 30000] as const;
 const DOWN_DEFAULT = 10;
 
+function toggleBtnClass(active: boolean) {
+  return `h-8 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+    active ? "bg-ct-cyan text-white" : "bg-ct-light text-[#6b7280] hover:bg-[#e8eaec]"
+  }`;
+}
+
 export default function LeasingCalculator({ fixedPrice, showLink = false }: LeasingCalculatorProps) {
   const [price, setPrice] = useState(fixedPrice ?? 35000);
   const [down, setDown] = useState(DOWN_DEFAULT);
   const [months, setMonths] = useState<(typeof TERM_OPTIONS)[number]>(48);
   const [km, setKm] = useState<(typeof KM_OPTIONS)[number]>(15000);
 
-  const rate = calculateRate(fixedPrice ?? price, down, months);
-
-  const toggleBtnClass = (active: boolean) =>
-    `h-8 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer
-     ${active
-       ? "bg-ct-cyan text-white"
-       : "bg-ct-light text-[#6b7280] hover:bg-[#e8eaec]"}`;
+  const rate = useMemo(
+    () => calculateRate(fixedPrice ?? price, down, months),
+    [fixedPrice, price, down, months]
+  );
 
   return (
     <div className="space-y-5">
@@ -119,7 +121,7 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
               onClick={() => setKm(k)}
               className={toggleBtnClass(km === k)}
             >
-              {k.toLocaleString("de-CH")}
+              {formatCHF(k)}
             </button>
           ))}
         </div>
@@ -133,7 +135,7 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
           <span className="text-sm font-normal text-[#9ca3af]"> /Mt.</span>
         </p>
         <p className="text-[10px] text-[#9ca3af] mt-1.5 leading-relaxed">
-          3.9% p.a., {down}% Anzahlung, {months} Monate, {km.toLocaleString("de-CH")} km/J.
+          3.9% p.a., {down}% Anzahlung, {months} Monate, {formatCHF(km)} km/J.
           <br />Inkl. 8.1% MwSt. Vorbehaltlich Bonitätsprüfung.
         </p>
       </div>

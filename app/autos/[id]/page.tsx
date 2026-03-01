@@ -68,6 +68,7 @@ export default async function VehicleDetailPage({ params }: Props) {
 
   const related = vehicles.filter((v) => v.id !== vehicle.id).slice(0, 3);
   const salesperson = getSalesperson(vehicle.id);
+  const vehicleLabel = `${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`;
 
   return (
     <>
@@ -327,14 +328,12 @@ export default async function VehicleDetailPage({ params }: Props) {
                       Jetzt anfragen <ArrowRight size={15} />
                     </Link>
 
-                    <TestDriveTrigger
-                      vehicleLabel={`${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`}
-                    />
+                    <TestDriveTrigger vehicleLabel={vehicleLabel} />
 
                     {/* WhatsApp */}
                     <a
                       href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567"}?text=${encodeURIComponent(
-                        `Guten Tag, ich interessiere mich für den ${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""} (CHF ${vehicle.price.toLocaleString("de-CH")}).`
+                        `Guten Tag, ich interessiere mich für den ${vehicleLabel} (CHF ${formatCHF(vehicle.price)}).`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -360,9 +359,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                         <span className="text-[10px] group-open:rotate-180 transition-transform">▾</span>
                       </summary>
                       <div className="pt-3">
-                        <VDPContactForm
-                          vehicleLabel={`${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`}
-                        />
+                        <VDPContactForm vehicleLabel={vehicleLabel} />
                       </div>
                     </details>
                   </div>
