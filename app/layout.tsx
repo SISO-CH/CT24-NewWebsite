@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import CookieBanner from "@/components/ui/CookieBanner";
 import GTMScript from "@/components/analytics/GTMScript";
 import MatelsoScript from "@/components/analytics/MatelsoScript";
+import MobileCTABar from "@/components/ui/MobileCTABar";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -66,6 +67,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <CookieBanner />
+        <MobileCTABar />
       </body>
     </html>
   );

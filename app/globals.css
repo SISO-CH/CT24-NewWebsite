@@ -84,3 +84,10 @@ body {
 .animate-fade-in.in-view {
   opacity: 1;
 }
+
+/* Reserve space for mobile sticky CTA bar */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 5rem;
+  }
+}
