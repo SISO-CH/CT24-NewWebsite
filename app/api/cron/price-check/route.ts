@@ -12,10 +12,13 @@ function isAuthorized(req: NextRequest): boolean {
   return Boolean(secret && auth === `Bearer ${secret}`);
 }
 
+const NOTIFY_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+
 interface AlertData {
   email: string;
   filters: Record<string, string>;
   createdAt: number;
+  lastNotifiedAt?: number;
   locale?: string;
 }
 
@@ -47,6 +50,10 @@ export async function GET(req: NextRequest) {
       });
 
       if (matches.length > 0) {
+        if (alert.lastNotifiedAt && Date.now() - alert.lastNotifiedAt < NOTIFY_COOLDOWN_MS) {
+          continue;
+        }
+
         const top = matches[0];
         const vehicleLabel = `${top.make} ${top.model}${top.variant ? " " + top.variant : ""}`;
         await resend.emails.send({
@@ -64,6 +71,7 @@ export async function GET(req: NextRequest) {
             <p>Mit freundlichen Gr&uuml;ssen<br/>Car Trade24 GmbH</p>
           `,
         });
+        await kv.set(`alert:${id}`, { ...alert, lastNotifiedAt: Date.now() });
         matched++;
       }
     }
