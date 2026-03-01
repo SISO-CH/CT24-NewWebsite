@@ -1,4 +1,4 @@
-// app/faq/page.tsx
+// app/[locale]/faq/page.tsx
 import type { Metadata } from "next";
 import FadeIn from "@/components/ui/FadeIn";
 import Accordion, { type AccordionItem } from "@/components/ui/Accordion";

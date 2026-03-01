@@ -1,4 +1,4 @@
-// app/ankauf/page.tsx
+// app/[locale]/ankauf/page.tsx
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";

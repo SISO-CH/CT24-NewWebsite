@@ -1,4 +1,4 @@
-// app/finanzierung/page.tsx
+// app/[locale]/finanzierung/page.tsx
 import type { Metadata } from "next";
 import { CreditCard, TrendingUp, Banknote, ArrowRight } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";

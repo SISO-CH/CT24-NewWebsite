@@ -1,4 +1,4 @@
-// app/ueber-uns/page.tsx
+// app/[locale]/ueber-uns/page.tsx
 import type { Metadata } from "next";
 import { Award, Users, MapPin, CalendarCheck } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";

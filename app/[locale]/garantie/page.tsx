@@ -1,4 +1,4 @@
-// app/garantie/page.tsx
+// app/[locale]/garantie/page.tsx
 import type { Metadata } from "next";
 import { Shield, CheckCircle2, ArrowRight } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";

@@ -1,4 +1,4 @@
-// app/firmenkunden/page.tsx
+// app/[locale]/firmenkunden/page.tsx
 import type { Metadata } from "next";
 import { Building2, Users, Receipt, UserCheck } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";
