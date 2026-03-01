@@ -37,6 +37,10 @@ export interface Vehicle {
   drivetrain?: string;
   condition?: string;
   vin?: string;
+  // --- Phase 3 fields ---
+  imageUrl360?:   string;   // equirectangular 360-Foto-URL (aus AS24)
+  videoUrl?:      string;   // YouTube / Vimeo URL (aus AS24)
+  cardossierUrl?: string;   // cardossier.ch Report-Link (aus AS24)
   salespitch?: string;
 }
 
@@ -86,6 +90,9 @@ export const vehicles: Vehicle[] = [
     condition: "Occasion",
     as24Id: "376934348",
     vin: "WVWZZZ1KZAP123456",
+    imageUrl360: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Camponotus_flavomarginatus_ant.jpg/320px-Camponotus_flavomarginatus_ant.jpg",
+    videoUrl:    "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    cardossierUrl: "https://www.cardossier.ch/de/",
     salespitch:
       "Der Golf Variant 1.5 eTSI ist eine ausgezeichnete Wahl für alle, die Effizienz und Komfort vereinen möchten. Mit nur 16'950 km ist er quasi neuwertig und überzeugt mit moderner Hybrid-Technologie der Energieklasse B. Die umfangreiche Ausstattung mit Navigationssystem, Klimaautomatik und Totwinkelassistent macht jeden Kilometer zum Vergnügen. Ein gepflegtes Fahrzeug mit voller Servicehistorie — hier kaufen Sie sorglos.",
   },

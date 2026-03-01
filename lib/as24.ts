@@ -42,6 +42,10 @@ interface AS24Listing {
   driveType?: string;               // "FWD" | "RWD" | "AWD" | "4WD"
   vehicleCondition?: string;        // "used" | "new" | "demonstration"
   vehicleIdentificationNumber?: string;
+  // Phase 3: Media (TODO: verify field names against real API response)
+  panorama?:      { uri: string };
+  video?:         { uri: string };
+  cardossierUrl?: string;
 }
 
 // Mapping AS24 bodyType → unsere VehicleBody
@@ -104,6 +108,9 @@ function mapAS24ToVehicle(listing: AS24Listing, index: number): Vehicle {
     drivetrain:   DRIVETRAIN_MAP[listing.driveType ?? ""] ?? undefined,
     condition:    CONDITION_MAP[listing.vehicleCondition ?? ""] ?? undefined,
     vin:          listing.vehicleIdentificationNumber ?? undefined,
+    imageUrl360:   listing.panorama?.uri,
+    videoUrl:      listing.video?.uri,
+    cardossierUrl: listing.cardossierUrl,
   };
 }
 
