@@ -15,11 +15,10 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      {
-        source: "/informationen",
-        destination: "/ueber-uns",
-        permanent: true,
-      },
+      { source: "/informationen", destination: "/ueber-uns", permanent: true },
+      { source: "/fr/informationen", destination: "/fr/ueber-uns", permanent: true },
+      { source: "/it/informationen", destination: "/it/ueber-uns", permanent: true },
+      { source: "/en/informationen", destination: "/en/ueber-uns", permanent: true },
     ];
   },
 };
