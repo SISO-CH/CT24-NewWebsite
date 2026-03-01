@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/ui/Logo";
+import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -52,15 +53,18 @@ export default function Header() {
           </nav>
 
           {/* Phone CTA (desktop) + Mobile toggle */}
-          <div className="flex items-center justify-end">
-            <a
-              href="tel:+41566185544"
-              className="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "var(--ct-cyan)" }}
-            >
-              <Phone size={13} />
-              +41 56 618 55 44
-            </a>
+          <div className="flex items-center justify-end gap-2">
+            <div className="hidden lg:flex items-center gap-2">
+              <LocaleSwitcher />
+              <a
+                href="tel:+41566185544"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "var(--ct-cyan)" }}
+              >
+                <Phone size={13} />
+                +41 56 618 55 44
+              </a>
+            </div>
             <button
               className="lg:hidden p-2 rounded-md text-[#374151]"
               onClick={() => setMobileOpen((v) => !v)}
@@ -95,7 +99,8 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <div className="pt-3 border-t border-[#f0f0f0] mt-2">
+          <div className="pt-3 border-t border-[#f0f0f0] mt-2 flex items-center gap-3">
+            <LocaleSwitcher />
             <a
               href="tel:+41566185544"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-white text-sm font-semibold"
