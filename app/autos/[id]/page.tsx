@@ -14,6 +14,7 @@ import {
   ExternalLink,
   PhoneCall,
   Phone,
+  MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
@@ -22,6 +23,9 @@ import VehicleCard from "@/components/vehicles/VehicleCard";
 import VehicleGallery from "@/components/vehicles/VehicleGallery";
 import { formatCHF } from "@/lib/utils";
 import { getSalesperson } from "@/lib/team";
+import TestDriveTrigger from "@/components/vehicles/TestDriveTrigger";
+import VDPContactForm from "@/components/vehicles/VDPContactForm";
+import LeasingCalculator from "@/components/ui/LeasingCalculator";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -277,6 +281,14 @@ export default async function VehicleDetailPage({ params }: Props) {
                     CHF {formatCHF(vehicle.price)}
                   </p>
 
+                  {/* Leasingrechner-Widget */}
+                  <div className="mb-5 pb-5 border-b border-[#f0f0f0]">
+                    <p className="text-[0.65rem] font-bold uppercase tracking-wider text-[#9ca3af] mb-3">
+                      Rate berechnen
+                    </p>
+                    <LeasingCalculator fixedPrice={vehicle.price} showLink={true} />
+                  </div>
+
                   <div className="space-y-2 mb-6">
                     {[
                       "Kostenlose Probefahrt möglich",
@@ -306,13 +318,25 @@ export default async function VehicleDetailPage({ params }: Props) {
                     >
                       Jetzt anfragen <ArrowRight size={15} />
                     </Link>
-                    <Link
-                      href="/finanzierung"
+
+                    <TestDriveTrigger
+                      vehicleLabel={`${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`}
+                    />
+
+                    {/* WhatsApp */}
+                    <a
+                      href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567"}?text=${encodeURIComponent(
+                        `Guten Tag, ich interessiere mich für den ${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""} (CHF ${vehicle.price.toLocaleString("de-CH")}).`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 w-full py-3 rounded-xl
-                                 border border-[#e5e7eb] text-sm font-semibold hover:bg-ct-light transition-colors text-ct-dark"
+                                 text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+                      style={{ backgroundColor: "#25D366" }}
                     >
-                      Finanzierung berechnen
-                    </Link>
+                      <MessageCircle size={15} /> WhatsApp
+                    </a>
+
                     <a
                       href="tel:+41566185544"
                       className="flex items-center justify-center gap-2 w-full py-3 rounded-xl
@@ -320,6 +344,19 @@ export default async function VehicleDetailPage({ params }: Props) {
                     >
                       📞 +41 56 618 55 44
                     </a>
+
+                    {/* Direkt anfragen */}
+                    <details className="group">
+                      <summary className="list-none cursor-pointer flex items-center justify-between py-2 text-xs font-semibold text-[#6b7280] hover:text-ct-cyan transition-colors">
+                        Direkt anfragen
+                        <span className="text-[10px] group-open:rotate-180 transition-transform">▾</span>
+                      </summary>
+                      <div className="pt-3">
+                        <VDPContactForm
+                          vehicleLabel={`${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`}
+                        />
+                      </div>
+                    </details>
                   </div>
                 </div>
 
