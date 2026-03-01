@@ -7,6 +7,7 @@ import VehicleFilter, { type FilterState, DEFAULT_FILTERS } from "./VehicleFilte
 import VehicleGrid from "./VehicleGrid";
 import VehicleCard from "./VehicleCard";
 import CompareBar from "./CompareBar";
+import PriceAlertForm from "@/components/ui/PriceAlertForm";
 
 const VALID_BODIES: VehicleBody[] = ["Cabriolet", "Coupé", "Kombi", "Limousine", "SUV", "Van"];
 
@@ -138,6 +139,9 @@ export default function AutosContent({ vehicles, initialMake = "", initialBody =
       ) : (
         <VehicleGrid vehicles={filtered} />
       )}
+      <div className="max-w-xl mx-auto mt-8 mb-4">
+        <PriceAlertForm filtersJson={JSON.stringify(filters)} />
+      </div>
       <CompareBar vehicles={vehicles} />
     </div>
   );

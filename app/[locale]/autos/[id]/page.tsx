@@ -26,6 +26,7 @@ import { getSalesperson } from "@/lib/team";
 import TestDriveTrigger from "@/components/vehicles/TestDriveTrigger";
 import VDPContactForm from "@/components/vehicles/VDPContactForm";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
+import PriceAlertForm from "@/components/ui/PriceAlertForm";
 
 interface Props {
   params: Promise<{ locale: string; id: string }>;
@@ -364,6 +365,8 @@ export default async function VehicleDetailPage({ params }: Props) {
                     </details>
                   </div>
                 </div>
+
+                <PriceAlertForm filtersJson={JSON.stringify({ make: vehicle.make })} />
 
                 {/* CarVertical — nur für Occasionen */}
                 {vehicle.condition !== "Neuwagen" && (
