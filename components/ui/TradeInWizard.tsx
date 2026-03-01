@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { formatCHF } from "@/lib/utils";
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2;
 type Condition = "Sehr gut" | "Gut" | "Gebraucht";
 
 interface Valuation {
@@ -56,15 +56,18 @@ export default function TradeInWizard({ locale }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plate: plate.trim(), km: Number(km), condition, locale }),
       });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setError("Stripe-Fehler. Bitte versuchen Sie es erneut.");
-        setLoading(false);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error((data as { error?: string }).error ?? "Stripe-Fehler");
       }
-    } catch {
-      setError("Verbindungsfehler. Bitte versuchen Sie es erneut.");
+      const { url } = await res.json();
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error("Keine Checkout-URL erhalten");
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Verbindungsfehler. Bitte versuchen Sie es erneut.");
       setLoading(false);
     }
   }
@@ -73,7 +76,7 @@ export default function TradeInWizard({ locale }: Props) {
     <div className="max-w-xl mx-auto">
       {/* Step indicator */}
       <div className="flex items-center gap-2 mb-8">
-        {([1, 2, 3] as Step[]).map((s, i) => (
+        {([1, 2] as Step[]).map((s, i) => (
           <div key={s} className="flex items-center gap-2">
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
@@ -86,13 +89,11 @@ export default function TradeInWizard({ locale }: Props) {
             >
               {s}
             </div>
-            {i < 2 && <ChevronRight size={14} className="text-[#d1d5db]" />}
+            {i < 1 && <ChevronRight size={14} className="text-[#d1d5db]" />}
           </div>
         ))}
         <span className="ml-2 text-sm text-[#6b7280]">
-          {step === 1 && "Fahrzeugdaten"}
-          {step === 2 && "Sofortschätzung"}
-          {step === 3 && "Verbindliche Bewertung"}
+          {step === 1 ? "Fahrzeugdaten" : "Sofortschätzung"}
         </span>
       </div>
 
@@ -170,7 +171,7 @@ export default function TradeInWizard({ locale }: Props) {
               CHF {formatCHF(valuation.min)} – {formatCHF(valuation.max)}
             </p>
             <p className="text-xs text-[#9ca3af]">
-              {plate} · {Number(km).toLocaleString("de-CH")} km · {condition}
+              {plate} · {formatCHF(Number(km))} km · {condition}
             </p>
             <p className="text-[11px] text-[#9ca3af] mt-3">
               * Sofortschätzung basierend auf Marktdaten. Kein verbindliches Angebot.

@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
-import { Resend } from "resend";
+import { resend } from "@/lib/resend";
 import { fetchVehicles } from "@/lib/as24";
 import { formatCHF } from "@/lib/utils";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 function isAuthorized(req: NextRequest): boolean {
   const auth = req.headers.get("authorization");
@@ -33,11 +31,18 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ checked: 0, matched: 0 });
     }
 
+    // Batch-fetch all alerts in one KV round-trip
+    const keys = alertIds.map((id) => `alert:${id}`);
+    const alertValues = await kv.mget<AlertData[]>(...keys);
+
     const vehicles = await fetchVehicles();
     let matched = 0;
 
-    for (const id of alertIds) {
-      const alert = await kv.get<AlertData>(`alert:${id}`);
+    const sends: Promise<unknown>[] = [];
+    const updates: { id: string; alert: AlertData }[] = [];
+
+    for (let i = 0; i < alertIds.length; i++) {
+      const alert = alertValues[i];
       if (!alert) continue;
 
       const matches = vehicles.filter((v) => {
@@ -49,14 +54,14 @@ export async function GET(req: NextRequest) {
         return true;
       });
 
-      if (matches.length > 0) {
-        if (alert.lastNotifiedAt && Date.now() - alert.lastNotifiedAt < NOTIFY_COOLDOWN_MS) {
-          continue;
-        }
+      if (matches.length === 0) continue;
+      if (alert.lastNotifiedAt && Date.now() - alert.lastNotifiedAt < NOTIFY_COOLDOWN_MS) continue;
 
-        const top = matches[0];
-        const vehicleLabel = `${top.make} ${top.model}${top.variant ? " " + top.variant : ""}`;
-        await resend.emails.send({
+      const top = matches[0];
+      const vehicleLabel = `${top.make} ${top.model}${top.variant ? " " + top.variant : ""}`;
+
+      sends.push(
+        resend.emails.send({
           from: process.env.RESEND_FROM ?? "noreply@cartrade24.ch",
           to: alert.email,
           subject: `Neues Fahrzeug: ${vehicleLabel} – CHF ${formatCHF(top.price)}`,
@@ -70,11 +75,19 @@ export async function GET(req: NextRequest) {
             <p><a href="https://cartrade24.ch/autos/${top.id}">Fahrzeug ansehen &rarr;</a></p>
             <p>Mit freundlichen Gr&uuml;ssen<br/>Car Trade24 GmbH</p>
           `,
-        });
-        await kv.set(`alert:${id}`, { ...alert, lastNotifiedAt: Date.now() });
-        matched++;
-      }
+        })
+      );
+      updates.push({ id: alertIds[i], alert });
+      matched++;
     }
+
+    // Fire all emails and KV writes in parallel
+    await Promise.all([
+      ...sends,
+      ...updates.map(({ id, alert }) =>
+        kv.set(`alert:${id}`, { ...alert, lastNotifiedAt: Date.now() })
+      ),
+    ]);
 
     return NextResponse.json({ checked: alertIds.length, matched });
   } catch (err) {

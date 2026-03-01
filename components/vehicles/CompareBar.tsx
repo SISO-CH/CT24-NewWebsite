@@ -1,9 +1,11 @@
 "use client";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
 import { Suspense } from "react";
 import { X, GitCompare } from "lucide-react";
 import { getCompareIds, buildCompareUrl } from "@/lib/compare-store";
+import { buildLocalePrefix } from "@/lib/utils";
 import type { Vehicle } from "@/lib/vehicles";
 
 interface Props {
@@ -14,6 +16,7 @@ function CompareBarInner({ vehicles }: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const locale = useLocale();
   const ids = getCompareIds(searchParams);
 
   if (ids.length === 0) return null;
@@ -31,10 +34,7 @@ function CompareBarInner({ vehicles }: Props) {
     router.push(`${pathname}${buildCompareUrl([], searchParams.toString())}`, { scroll: false });
   }
 
-  // Build compare page URL — locale-aware
-  const localeMatch = pathname.match(/^\/(fr|it|en)(?=\/|$)/);
-  const localePrefix = localeMatch ? localeMatch[0] : "";
-  const compareUrl = `${localePrefix}/vergleich?compare=${ids.join(",")}`;
+  const compareUrl = `${buildLocalePrefix(locale)}/vergleich?compare=${ids.join(",")}`;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40

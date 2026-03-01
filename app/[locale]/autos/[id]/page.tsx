@@ -48,11 +48,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function VehicleDetailPage({ params }: Props) {
   const { locale, id } = await params;
-  const vehicles = await fetchVehicles();
+  const [vehicles, reservedData] = await Promise.all([
+    fetchVehicles(),
+    kv.get<{ until: number }>(`reserved:${id}`).catch(() => null),
+  ]);
   const vehicle = vehicles.find((v) => v.id === Number(id));
   if (!vehicle) notFound();
 
-  const reservedData = await kv.get<{ until: number }>(`reserved:${id}`).catch(() => null);
   const isReserved = reservedData ? reservedData.until > Date.now() : false;
 
   const allImages = vehicle.images?.length ? vehicle.images : [vehicle.image];

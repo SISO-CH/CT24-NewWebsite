@@ -8,3 +8,8 @@ export function cn(...inputs: ClassValue[]) {
 export function formatCHF(amount: number): string {
   return amount.toLocaleString("de-CH");
 }
+
+/** Returns the URL locale prefix (e.g. "/fr") for non-default locales, "" for DE. */
+export function buildLocalePrefix(locale: string): string {
+  return locale && locale !== "de" ? `/${locale}` : "";
+}

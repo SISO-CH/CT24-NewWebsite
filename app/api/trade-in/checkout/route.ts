@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "sk_test_placeholder");
+import { stripe } from "@/lib/stripe";
+import { buildLocalePrefix, formatCHF } from "@/lib/utils";
 
 const TRADEIN_FEE_CHF = Number(process.env.TRADEIN_FEE_CHF ?? "20");
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://cartrade24.ch";
@@ -13,7 +12,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "plate, km und condition sind erforderlich" }, { status: 400 });
   }
 
-  const localePrefix = locale && locale !== "de" ? `/${locale}` : "";
+  const localePrefix = buildLocalePrefix(locale ?? "");
+  const kmNum = Number(km);
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -27,12 +27,12 @@ export async function POST(req: NextRequest) {
             unit_amount: TRADEIN_FEE_CHF * 100,
             product_data: {
               name: "Verbindliche Fahrzeugbewertung",
-              description: `Kennzeichen: ${plate} · ${km.toLocaleString("de-CH")} km · ${condition}`,
+              description: `Kennzeichen: ${plate} · ${formatCHF(kmNum)} km · ${condition}`,
             },
           },
         },
       ],
-      metadata: { plate: String(plate), km: String(km), condition: String(condition) },
+      metadata: { plate: String(plate), km: String(km), condition: String(condition), type: "trade-in" },
       success_url: `${BASE_URL}${localePrefix}/inzahlungnahme/bestaetigung`,
       cancel_url: `${BASE_URL}${localePrefix}/inzahlungnahme`,
     });

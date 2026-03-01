@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "sk_test_placeholder");
+import { stripe } from "@/lib/stripe";
+import { buildLocalePrefix } from "@/lib/utils";
 
 const AMOUNT_CHF = Number(process.env.RESERVATION_AMOUNT_CHF ?? "200");
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://cartrade24.ch";
@@ -13,7 +12,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "vehicleId fehlt" }, { status: 400 });
   }
 
-  const localePrefix = locale && locale !== "de" ? `/${locale}` : "";
+  const localePrefix = buildLocalePrefix(locale ?? "");
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -32,7 +31,7 @@ export async function POST(req: NextRequest) {
           },
         },
       ],
-      metadata: { vehicleId: String(vehicleId) },
+      metadata: { vehicleId: String(vehicleId), type: "reservation" },
       success_url: `${BASE_URL}${localePrefix}/reservierung/bestaetigung?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${BASE_URL}${localePrefix}/reservierung/abgebrochen`,
     });
