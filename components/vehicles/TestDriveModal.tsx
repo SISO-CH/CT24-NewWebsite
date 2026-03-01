@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { X, Calendar, CheckCircle2 } from "lucide-react";
+import MatelsoBookingWidget, { isMatelsoConfigured } from "@/components/ui/MatelsoBookingWidget";
 
 interface TestDriveModalProps {
   vehicleLabel: string;
@@ -78,7 +79,9 @@ export default function TestDriveModal({ vehicleLabel, onClose }: TestDriveModal
           </button>
         </div>
 
-        {status === "success" ? (
+        {isMatelsoConfigured ? (
+          <MatelsoBookingWidget height={480} />
+        ) : status === "success" ? (
           <div className="flex flex-col items-center gap-3 py-6 text-center">
             <CheckCircle2 size={36} style={{ color: "var(--ct-green)" }} />
             <p className="text-base font-bold" style={{ color: "var(--ct-dark)" }}>
