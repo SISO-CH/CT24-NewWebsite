@@ -561,6 +561,54 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── Inzahlungnahme Teaser ── */}
+      <section className="py-14 bg-ct-light border-t border-[#e5e7eb]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2"
+                 style={{ background: "linear-gradient(135deg, #141414 60%, #1a1a2e 100%)" }}>
+              <div className="p-8 lg:p-12 flex flex-col justify-center">
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-3"
+                   style={{ color: "var(--ct-cyan)" }}>
+                  Digitale Inzahlungnahme
+                </p>
+                <h2 className="text-3xl font-extrabold text-white mb-4 leading-tight">
+                  Ihr altes Fahrzeug clever verwerten
+                </h2>
+                <p className="text-[#9ca3af] text-sm leading-relaxed mb-6 max-w-sm">
+                  Sofortschätzung in 60 Sekunden — verbindliches Kaufangebot innert 24 Stunden.
+                  Den Betrag direkt auf Ihr neues Fahrzeug anrechnen lassen.
+                </p>
+                <Link
+                  href="/inzahlungnahme"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white text-sm font-semibold transition-opacity hover:opacity-90 self-start"
+                  style={{ backgroundColor: "var(--ct-cyan)" }}
+                >
+                  Fahrzeug bewerten <ArrowRight size={15} />
+                </Link>
+              </div>
+              <div className="hidden lg:flex items-center justify-center p-12">
+                <div className="grid grid-cols-3 gap-6 text-center">
+                  {[
+                    { step: "01", label: "Daten eingeben" },
+                    { step: "02", label: "Schätzung erhalten" },
+                    { step: "03", label: "Angebot in 24h" },
+                  ].map((s) => (
+                    <div key={s.step}>
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-black"
+                           style={{ backgroundColor: "var(--ct-cyan)", color: "#fff" }}>
+                        {s.step}
+                      </div>
+                      <p className="text-[#9ca3af] text-xs leading-tight">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
     </>
   );
 }

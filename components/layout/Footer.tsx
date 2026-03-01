@@ -113,6 +113,7 @@ export default function Footer() {
               <FooterLink href="/autos">Alle Fahrzeuge</FooterLink>
               <FooterLink href="/finanzierung">Leasing & Finanzierung</FooterLink>
               <FooterLink href="/ankauf">Fahrzeug verkaufen</FooterLink>
+              <FooterLink href="/inzahlungnahme">Inzahlungnahme</FooterLink>
               <FooterLink href="/firmenkunden">Firmenkunden</FooterLink>
             </ul>
           </div>
