@@ -10,6 +10,13 @@
   --color-ct-light:   #f4f6f8;
   --color-ct-green:   #009640;
   --color-ct-text:    #111111;
+
+  /* UI grays — avoids raw hex values across components */
+  --color-ct-gray:        #6b7280;  /* body / caption text   */
+  --color-ct-gray-mid:    #4b5563;  /* slightly darker body  */
+  --color-ct-muted:       #9ca3af;  /* muted / placeholder   */
+  --color-ct-border:      #e5e7eb;  /* card / section border */
+  --color-ct-border-soft: #f0f0f0;  /* inner / table border  */
 }
 
 :root {

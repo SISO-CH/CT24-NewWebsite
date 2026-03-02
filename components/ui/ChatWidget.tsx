@@ -49,6 +49,7 @@ export default function ChatWidget() {
       const decoder = new TextDecoder();
 
       while (true) {
+        if (abort.signal.aborted) break;
         const { done, value } = await reader.read();
         if (done) break;
 
@@ -96,7 +97,7 @@ export default function ChatWidget() {
       {open && (
         <div
           className="fixed bottom-36 right-4 z-50 w-80 rounded-2xl shadow-2xl
-                     border border-[#e5e7eb] bg-white flex flex-col overflow-hidden"
+                     border border-ct-border bg-white flex flex-col overflow-hidden"
           style={{ height: 420 }}
         >
           <div
@@ -109,7 +110,7 @@ export default function ChatWidget() {
 
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {messages.length === 0 && (
-              <p className="text-xs text-[#9ca3af] text-center mt-4">Wie kann ich Ihnen helfen?</p>
+              <p className="text-xs text-ct-muted text-center mt-4">Wie kann ich Ihnen helfen?</p>
             )}
             {messages.map((m, i) => (
               <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -137,7 +138,7 @@ export default function ChatWidget() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
               placeholder="Ihre Frage..."
-              className="flex-1 text-sm px-3 py-2 rounded-lg border border-[#e5e7eb]
+              className="flex-1 text-sm px-3 py-2 rounded-lg border border-ct-border
                          focus:outline-none focus:ring-2 focus:ring-ct-cyan/30 focus:border-ct-cyan"
             />
             <button

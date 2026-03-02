@@ -17,9 +17,13 @@ export default function VehicleMediaTabs({ images, imageUrl360, videoUrl, alt }:
   const [tab, setTab] = useState<"gallery" | "360" | "video">("gallery");
 
   useEffect(() => {
-    if (!imageUrl360 && tab === "360")   setTab("gallery");
-    if (!videoUrl    && tab === "video") setTab("gallery");
-  }, [imageUrl360, videoUrl, tab]);
+    // Use functional form so `tab` is read inside the setter, not as a dep
+    setTab((current) => {
+      if (!imageUrl360 && current === "360")   return "gallery";
+      if (!videoUrl    && current === "video") return "gallery";
+      return current;
+    });
+  }, [imageUrl360, videoUrl]);
 
   const tabs = [
     { key: "gallery" as const, label: "Fotos",        Icon: Images    },
@@ -39,7 +43,7 @@ export default function VehicleMediaTabs({ images, imageUrl360, videoUrl, alt }:
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
                 tab === key
                   ? "bg-ct-cyan text-white"
-                  : "bg-ct-light text-[#6b7280] hover:bg-[#e5e7eb]"
+                  : "bg-ct-light text-ct-gray hover:bg-ct-border"
               }`}
             >
               <Icon size={13} />
