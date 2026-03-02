@@ -20,11 +20,20 @@ export default function ServiceContactForm({ subject, fields = [] }: Props) {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!email.trim() && !phone.trim()) {
+      setError("Bitte E-Mail oder Telefon angeben.");
+      return;
+    }
     setLoading(true);
     setError(null);
 
     const extraText   = Object.entries(extras).map(([k, v]) => `${k}: ${v}`).join("\n");
     const fullMessage = extraText ? `${extraText}\n\n${message}` : message;
+    if (!fullMessage.trim()) {
+      setLoading(false);
+      setError("Bitte eine Nachricht oder die Felder oben ausfüllen.");
+      return;
+    }
 
     try {
       const res = await fetch("/api/contact", {
@@ -79,9 +88,9 @@ export default function ServiceContactForm({ subject, fields = [] }: Props) {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-ct-dark mb-1.5">E-Mail *</label>
+          <label className="block text-sm font-semibold text-ct-dark mb-1.5">E-Mail</label>
           <input
-            required type="email" value={email}
+            type="email" value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full border border-[#e5e7eb] rounded-xl px-4 py-3 text-sm
                        focus:outline-none focus:ring-2 focus:ring-ct-cyan/30 focus:border-ct-cyan"
@@ -89,7 +98,7 @@ export default function ServiceContactForm({ subject, fields = [] }: Props) {
         </div>
       </div>
       <div>
-        <label className="block text-sm font-semibold text-ct-dark mb-1.5">Telefon</label>
+        <label className="block text-sm font-semibold text-ct-dark mb-1.5">Telefon <span className="text-[#9ca3af] font-normal">(E-Mail oder Telefon erforderlich)</span></label>
         <input
           type="tel" value={phone}
           onChange={(e) => setPhone(e.target.value)}
