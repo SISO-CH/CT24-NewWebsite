@@ -1,6 +1,7 @@
+import type React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Check, Star, MapPin, Phone, Mail } from "lucide-react";
+import { ArrowRight, Check, Star, MapPin, Phone, Mail, Car, Truck, FileText, Search } from "lucide-react";
 import { vehicles } from "@/lib/vehicles";
 import VehicleCard from "@/components/vehicles/VehicleCard";
 import FadeIn from "@/components/ui/FadeIn";
@@ -608,6 +609,36 @@ export default function HomePage() {
               </div>
             </div>
           </FadeIn>
+        </div>
+      </section>
+
+      {/* Services-Teaser */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-extrabold text-ct-dark mb-2 text-center">Unsere Services</h2>
+          <p className="text-center text-[#6b7280] text-sm mb-10">
+            Alles rund um Ihren Fahrzeugkauf — digital und bequem.
+          </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {([
+              { href: "/probefahrt",        Icon: Car,      title: "Probefahrt",        desc: "Kostenlos und unverbindlich" },
+              { href: "/home-delivery",     Icon: Truck,    title: "Home Delivery",     desc: "Lieferung zu Ihnen" },
+              { href: "/zulassungsservice", Icon: FileText, title: "Zulassungsservice", desc: "Wir erledigen alles" },
+              { href: "/fahrzeug-sourcing", Icon: Search,   title: "Fahrzeug-Sourcing", desc: "Wir beschaffen Ihr Wunschauto" },
+            ] as { href: string; Icon: (props: { size?: number; className?: string }) => React.ReactElement | null; title: string; desc: string }[]).map(({ href, Icon, title, desc }) => (
+              <Link key={href} href={href}
+                className="flex flex-col items-center text-center p-6 rounded-2xl bg-ct-light
+                           border border-[#e5e7eb] hover:border-ct-cyan hover:shadow-md transition-all group"
+              >
+                <div className="w-12 h-12 rounded-xl bg-ct-cyan/10 flex items-center justify-center mb-3
+                                group-hover:bg-ct-cyan/20 transition-colors">
+                  <Icon size={22} className="text-ct-cyan" />
+                </div>
+                <p className="font-semibold text-ct-dark text-sm">{title}</p>
+                <p className="text-[#6b7280] text-xs mt-1">{desc}</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
