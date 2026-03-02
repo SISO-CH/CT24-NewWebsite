@@ -1,5 +1,7 @@
 // app/[locale]/faq/page.tsx
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";
 import Accordion, { type AccordionItem } from "@/components/ui/Accordion";
 import Script from "next/script";
@@ -134,6 +136,27 @@ export default function FaqPage() {
               </div>
             </FadeIn>
           ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-12 bg-ct-light border-t border-[#e5e7eb]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <FadeIn>
+            <h2 className="text-2xl font-extrabold mb-3 text-ct-dark">
+              Noch eine Frage?
+            </h2>
+            <p className="text-[#6b7280] text-sm mb-6 max-w-md mx-auto">
+              Wir helfen Ihnen gerne persönlich weiter — telefonisch, per Mail oder direkt vor Ort.
+            </p>
+            <Link
+              href="/kontakt"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: "var(--ct-cyan)" }}
+            >
+              Kontakt aufnehmen <ArrowRight size={15} />
+            </Link>
+          </FadeIn>
         </div>
       </section>
     </>
