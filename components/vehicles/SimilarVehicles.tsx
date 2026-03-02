@@ -13,7 +13,9 @@ export default function SimilarVehicles({ vehicle, allVehicles }: Props) {
       if (v.id === vehicle.id) return false;
       const sameBody = vehicle.body && v.body === vehicle.body;
       const sameFuel = vehicle.fuel && v.fuel === vehicle.fuel;
-      const inRange  = Math.abs(v.price - vehicle.price) / vehicle.price <= 0.3;
+      const inRange  = vehicle.price > 0
+        ? Math.abs(v.price - vehicle.price) / vehicle.price <= 0.3
+        : true;
       return (sameBody || sameFuel) && inRange;
     })
     .slice(0, 3);
