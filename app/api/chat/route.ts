@@ -2,23 +2,33 @@ import { NextRequest } from "next/server";
 import { getClient } from "@/lib/ai";
 import { fetchVehicles } from "@/lib/as24";
 
-// Module-level inventory cache (60s TTL) — avoids fetching on every chat message
+// Process-local cache (60s TTL). On serverless each cold instance starts uncached.
+// In-flight deduplication prevents stampede when cache expires under concurrent requests.
+let _inflight:       Promise<string> | null = null;
 let _inventoryCache: { text: string; expiry: number } | null = null;
 
 async function getCachedInventory(): Promise<string> {
-  if (_inventoryCache && Date.now() < _inventoryCache.expiry) {
-    return _inventoryCache.text;
-  }
-  const vehicles = await fetchVehicles().catch(() => []);
-  const text = vehicles
-    .slice(0, 20)
-    .map((v) =>
-      `- ${v.make} ${v.model}${v.variant ? " " + v.variant : ""}, ${v.year}, ` +
-      `${v.mileage.toLocaleString("de-CH")} km, CHF ${v.price.toLocaleString("de-CH")}, ID: ${v.id}`
-    )
-    .join("\n");
-  _inventoryCache = { text, expiry: Date.now() + 60_000 };
-  return text;
+  if (_inventoryCache && Date.now() < _inventoryCache.expiry) return _inventoryCache.text;
+  if (_inflight) return _inflight;
+  _inflight = (async () => {
+    try {
+      const vehicles = await fetchVehicles();
+      const text = vehicles
+        .slice(0, 20)
+        .map((v) =>
+          `- ${v.make} ${v.model}${v.variant ? " " + v.variant : ""}, ${v.year}, ` +
+          `${v.mileage.toLocaleString("de-CH")} km, CHF ${v.price.toLocaleString("de-CH")}, ID: ${v.id}`
+        )
+        .join("\n");
+      _inventoryCache = { text, expiry: Date.now() + 60_000 };
+      return text;
+    } catch {
+      return ""; // don't cache failures — next request retries
+    } finally {
+      _inflight = null;
+    }
+  })();
+  return _inflight;
 }
 
 export async function POST(req: NextRequest) {

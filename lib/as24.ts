@@ -142,9 +142,19 @@ export const fetchVehicles = cache(async function fetchVehiclesImpl(): Promise<V
     // Feldname ggf. anpassen: data.listings | data.items | data.vehicles
     const listings: AS24Listing[] = data.listings ?? data.items ?? [];
     const vehicles = listings.map(mapAS24ToVehicle);
-    return Promise.all(
-      vehicles.map(async (v) => ({ ...v, salespitch: await generateSalespitch(v) }))
-    );
+    // Batch salespitch generation (3 at a time) to avoid Anthropic rate limits
+    const BATCH = 3;
+    const enriched: Vehicle[] = [];
+    for (let i = 0; i < vehicles.length; i += BATCH) {
+      const batch = await Promise.all(
+        vehicles.slice(i, i + BATCH).map(async (v) => ({
+          ...v,
+          salespitch: await generateSalespitch(v),
+        }))
+      );
+      enriched.push(...batch);
+    }
+    return enriched;
   } catch (err) {
     console.error("[AS24] Fehler beim Laden:", err);
     // Fallback auf Dummy-Daten damit die Seite nicht crasht
