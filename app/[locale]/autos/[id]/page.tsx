@@ -5,10 +5,10 @@ import { generateVehicleMeta } from "@/lib/ai";
 import { kv } from "@vercel/kv";
 import {
   ArrowLeft,
-  Fuel,
+  CalendarDays,
   Gauge,
+  GitMerge,
   Zap,
-  Settings2,
   CheckCircle2,
   ArrowRight,
   Quote,
@@ -195,6 +195,11 @@ export default async function VehicleDetailPage({ params }: Props) {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
                     {
+                      icon: CalendarDays,
+                      label: "Baujahr",
+                      value: String(vehicle.year),
+                    },
+                    {
                       icon: Gauge,
                       label: "Kilometerstand",
                       value: `${vehicle.mileage.toLocaleString("de-CH")} km`,
@@ -205,14 +210,9 @@ export default async function VehicleDetailPage({ params }: Props) {
                       value: `${vehicle.power} PS`,
                     },
                     {
-                      icon: Settings2,
-                      label: "Getriebe",
-                      value: vehicle.transmission,
-                    },
-                    {
-                      icon: Fuel,
-                      label: "Kraftstoff",
-                      value: vehicle.fuel ?? "–",
+                      icon: GitMerge,
+                      label: "Antrieb",
+                      value: vehicle.drivetrain ?? "–",
                     },
                   ].map((s) => (
                     <div
