@@ -10,6 +10,7 @@ import CookieBanner from "@/components/ui/CookieBanner";
 import GTMScript from "@/components/analytics/GTMScript";
 import MatelsoScript from "@/components/analytics/MatelsoScript";
 import MobileCTABar from "@/components/ui/MobileCTABar";
+import ChatWidget from "@/components/ui/ChatWidget";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -86,6 +87,7 @@ export default async function LocaleLayout({
           <Footer />
           <CookieBanner />
           <MobileCTABar />
+          <ChatWidget />
         </NextIntlClientProvider>
       </body>
     </html>
