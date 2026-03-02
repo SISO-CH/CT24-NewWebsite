@@ -35,17 +35,8 @@ export default async function InzahlungnahmePage({ params }: Props) {
         </div>
       </section>
 
-      {/* Wizard */}
-      <section className="py-14 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6">
-          <FadeIn delay={100}>
-            <TradeInWizard locale={locale} />
-          </FadeIn>
-        </div>
-      </section>
-
       {/* USPs */}
-      <section className="py-12 bg-ct-light border-t border-[#e5e7eb]">
+      <section className="py-12 bg-ct-light border-[#e5e7eb]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
             {[
@@ -59,6 +50,15 @@ export default async function InzahlungnahmePage({ params }: Props) {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Wizard */}
+      <section className="py-14 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
+          <FadeIn delay={100}>
+            <TradeInWizard locale={locale} />
+          </FadeIn>
         </div>
       </section>
     </>
