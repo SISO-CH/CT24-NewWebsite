@@ -31,6 +31,7 @@ import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
 import VideoWalkaround from "@/components/vehicles/VideoWalkaround";
+import PriceComparison from "@/components/vehicles/PriceComparison";
 import TrackVehicleView from "@/components/vehicles/TrackVehicleView";
 import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
 
@@ -351,6 +352,11 @@ export default async function VehicleDetailPage({ params }: Props) {
                         <> · Margenbesteuerung (fikt. Vorsteuerabzug)</>
                       )}
                     </p>
+                  </div>
+
+                  {/* Marktpreisvergleich */}
+                  <div className="mb-5">
+                    <PriceComparison vehicle={vehicle} />
                   </div>
 
                   {/* Leasingrechner-Widget */}
