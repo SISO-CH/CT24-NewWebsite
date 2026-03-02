@@ -22,7 +22,7 @@ import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
 import EnergyLabel from "@/components/vehicles/EnergyLabel";
 import VehicleCard from "@/components/vehicles/VehicleCard";
-import VehicleGallery from "@/components/vehicles/VehicleGallery";
+import VehicleMediaTabs from "@/components/vehicles/VehicleMediaTabs";
 import { formatCHF } from "@/lib/utils";
 import { getSalesperson } from "@/lib/team";
 import TestDriveTrigger from "@/components/vehicles/TestDriveTrigger";
@@ -129,8 +129,9 @@ export default async function VehicleDetailPage({ params }: Props) {
             {/* Left: Gallery + Details */}
             <div className="space-y-8">
               <FadeIn>
-                <VehicleGallery
+                <VehicleMediaTabs
                   images={allImages}
+                  imageUrl360={vehicle.imageUrl360}
                   alt={`${vehicle.make} ${vehicle.model}`}
                 />
               </FadeIn>
