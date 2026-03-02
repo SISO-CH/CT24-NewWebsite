@@ -22,7 +22,6 @@ import {
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
 import EnergyLabel from "@/components/vehicles/EnergyLabel";
-import VehicleCard from "@/components/vehicles/VehicleCard";
 import VehicleMediaTabs from "@/components/vehicles/VehicleMediaTabs";
 import { formatCHF } from "@/lib/utils";
 import { getSalesperson } from "@/lib/team";
@@ -32,6 +31,8 @@ import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
 import VideoWalkaround from "@/components/vehicles/VideoWalkaround";
+import TrackVehicleView from "@/components/vehicles/TrackVehicleView";
+import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
 
 export const revalidate = 3600;
 
@@ -94,7 +95,6 @@ export default async function VehicleDetailPage({ params }: Props) {
     vehicle.condition  ? { label: "Zustand",     value: vehicle.condition }         : null,
   ].filter(Boolean) as { label: string; value: string }[];
 
-  const related = vehicles.filter((v) => v.id !== vehicle.id).slice(0, 3);
   const salesperson = getSalesperson(vehicle.id);
   const vehicleLabel = `${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`;
 
@@ -125,6 +125,8 @@ export default async function VehicleDetailPage({ params }: Props) {
           }),
         }}
       />
+
+      <TrackVehicleView vehicleId={vehicle.id} />
 
       {/* Header */}
       <section className="pt-24 pb-6 bg-ct-light border-b border-[#e5e7eb]">
@@ -534,38 +536,12 @@ export default async function VehicleDetailPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Related vehicles */}
-      {related.length > 0 && (
-        <section className="py-12 bg-ct-light border-t border-[#e5e7eb]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <FadeIn>
-              <div className="flex items-end justify-between mb-8">
-                <div>
-                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] mb-1 text-ct-cyan">
-                    Entdecken Sie mehr
-                  </p>
-                  <h2 className="text-2xl font-bold text-ct-dark">
-                    Weitere Fahrzeuge
-                  </h2>
-                </div>
-                <Link
-                  href="/autos"
-                  className="text-sm font-semibold flex items-center gap-1 transition-colors text-ct-cyan"
-                >
-                  Alle <ArrowRight size={14} />
-                </Link>
-              </div>
-            </FadeIn>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {related.map((v) => (
-                <FadeIn key={v.id} delay={v.id * 60}>
-                  <VehicleCard vehicle={v} />
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Similar vehicles */}
+      <section className="bg-ct-light border-t border-[#e5e7eb]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SimilarVehicles vehicle={vehicle} allVehicles={vehicles} />
+        </div>
+      </section>
     </>
   );
 }

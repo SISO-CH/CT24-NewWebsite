@@ -5,6 +5,7 @@ import { vehicles } from "@/lib/vehicles";
 import VehicleCard from "@/components/vehicles/VehicleCard";
 import FadeIn from "@/components/ui/FadeIn";
 import HeroSearch from "@/components/home/HeroSearch";
+import RecentlyViewed from "@/components/vehicles/RecentlyViewed";
 
 const HERO_IMAGE =
   "https://images.autoscout24.ch/public/listing/106/20233106/376934348.png";
@@ -609,6 +610,9 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
+
+      {/* Recently viewed — client-side, renders only when localStorage has entries */}
+      <RecentlyViewed allVehicles={vehicles} />
     </>
   );
 }
