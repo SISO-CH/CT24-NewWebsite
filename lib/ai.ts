@@ -100,7 +100,11 @@ Format: {"description":"...","keywords":["...","...","...","...","..."]}`,
     if (first.type !== "text") return fallback;
 
     const parsed = JSON.parse(first.text.trim()) as typeof fallback;
-    if (typeof parsed.description === "string" && Array.isArray(parsed.keywords)) {
+    if (
+      typeof parsed.description === "string" &&
+      Array.isArray(parsed.keywords) &&
+      parsed.keywords.every((k: unknown) => typeof k === "string")
+    ) {
       return parsed;
     }
     return fallback;

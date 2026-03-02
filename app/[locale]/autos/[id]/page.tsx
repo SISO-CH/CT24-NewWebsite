@@ -33,13 +33,17 @@ import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
 import VideoWalkaround from "@/components/vehicles/VideoWalkaround";
 
+export const revalidate = 3600;
+
 interface Props {
   params: Promise<{ locale: string; id: string }>;
 }
 
 // Sicherer JSON-LD-String: verhindert "</script>"-Injection
 function safeJsonLd(obj: unknown): string {
-  return JSON.stringify(obj).replace(/<\/script>/gi, "<\\/script>");
+  return JSON.stringify(obj)
+    .replace(/<\/script>/gi, "<\\/script>")
+    .replace(/<!--/g, "<\\!--");
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
