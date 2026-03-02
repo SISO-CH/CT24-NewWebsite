@@ -14,6 +14,7 @@ export default function ChatWidget() {
   const [input,    setInput]    = useState("");
   const [loading,  setLoading]  = useState(false);
   const bottomRef               = useRef<HTMLDivElement>(null);
+  const abortRef                = useRef<AbortController | null>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -28,6 +29,9 @@ export default function ChatWidget() {
     setMessages(next);
     setLoading(true);
 
+    const abort = new AbortController();
+    abortRef.current = abort;
+
     let assistantText = "";
     setMessages([...next, { role: "assistant", content: "" }]);
 
@@ -36,6 +40,7 @@ export default function ChatWidget() {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify({ messages: next }),
+        signal:  abort.signal,
       });
 
       if (!res.ok || !res.body) throw new Error("Fehler");
@@ -75,7 +80,10 @@ export default function ChatWidget() {
     <>
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => {
+        if (open) abortRef.current?.abort();
+        setOpen((o) => !o);
+      }}
         className="fixed bottom-20 right-4 z-50 w-12 h-12 rounded-full
                    flex items-center justify-center shadow-lg
                    text-white transition-transform hover:scale-105"

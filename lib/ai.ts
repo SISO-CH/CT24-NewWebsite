@@ -4,7 +4,7 @@ import type { Vehicle } from "@/lib/vehicles";
 // Lazy singleton — instantiated only after ANTHROPIC_API_KEY is confirmed present,
 // so importing this module never crashes in envs without the key set.
 let _client: Anthropic | null = null;
-function getClient(): Anthropic {
+export function getClient(): Anthropic {
   if (!_client) _client = new Anthropic();
   return _client;
 }

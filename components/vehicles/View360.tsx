@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import dynamic from "next/dynamic";
 
 // react-pannellum has no SSR support — types provided via types/react-pannellum.d.ts
@@ -21,11 +22,14 @@ interface Props {
 }
 
 export default function View360({ src, alt }: Props) {
+  const uid      = useId().replace(/:/g, "");
+  const pannellumId = `view360-${uid}`;
+
   return (
     <div className="w-full rounded-xl overflow-hidden" style={{ height: 400 }} aria-label={alt ?? "360°-Fahrzeugansicht"} role="img">
       <ReactPannellum
-        id="view360"
-        sceneId="mainScene"
+        id={pannellumId}
+        sceneId={pannellumId}
         imageSource={src}
         style={{ width: "100%", height: "100%" }}
         config={{ autoLoad: true, showControls: true, hfov: 100 }}

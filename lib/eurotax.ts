@@ -24,6 +24,7 @@ export async function getValuation(
       Authorization: `Bearer ${process.env.EUROTAX_API_KEY}`,
     },
     body: JSON.stringify({ plate, km, condition }),
+    next: { revalidate: 86400 },
   });
 
   if (!res.ok) {

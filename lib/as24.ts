@@ -6,6 +6,7 @@
 // API-Response mit curl testen: curl -H "Authorization: Bearer $AS24_API_KEY" \
 //   "https://api.autoscout24.com/dealers/$AS24_DEALER_ID/listings" | jq .
 
+import { cache } from "react";
 import type { Vehicle, VehicleBody, EnergyLabel } from "@/lib/vehicles";
 import { generateSalespitch } from "@/lib/ai";
 
@@ -114,7 +115,7 @@ function mapAS24ToVehicle(listing: AS24Listing, index: number): Vehicle {
   };
 }
 
-export async function fetchVehicles(): Promise<Vehicle[]> {
+export const fetchVehicles = cache(async function fetchVehiclesImpl(): Promise<Vehicle[]> {
   if (!API_KEY || !DEALER_ID) {
     console.warn("[AS24] AS24_API_KEY oder AS24_DEALER_ID fehlt — Dummy-Daten werden verwendet");
     const { vehicles } = await import("@/lib/vehicles");
@@ -150,4 +151,4 @@ export async function fetchVehicles(): Promise<Vehicle[]> {
     const { vehicles } = await import("@/lib/vehicles");
     return vehicles;
   }
-}
+});

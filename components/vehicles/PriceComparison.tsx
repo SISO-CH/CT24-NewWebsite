@@ -1,19 +1,16 @@
 import { getValuation } from "@/lib/eurotax";
+import { formatCHF } from "@/lib/utils";
 import type { Vehicle } from "@/lib/vehicles";
 
 interface Props {
   vehicle: Vehicle;
 }
 
-function fmt(n: number): string {
-  return n.toLocaleString("de-CH", { maximumFractionDigits: 0 });
-}
-
 export default async function PriceComparison({ vehicle }: Props) {
   let valuation: { min: number; max: number } | null = null;
 
   try {
-    valuation = await getValuation(vehicle.vin ?? vehicle.make, vehicle.mileage, "Gut");
+    valuation = await getValuation(vehicle.vin ?? "", vehicle.mileage, "Gut");
   } catch {
     return null;
   }
@@ -56,11 +53,11 @@ export default async function PriceComparison({ vehicle }: Props) {
         />
       </div>
       <div className="flex justify-between text-[10px] text-[#9ca3af] mb-3">
-        <span>CHF {fmt(min)}</span>
-        <span>CHF {fmt(max)}</span>
+        <span>CHF {formatCHF(min)}</span>
+        <span>CHF {formatCHF(max)}</span>
       </div>
       <div className="flex items-center justify-between">
-        <p className="text-sm font-bold text-ct-dark">Unser Preis: CHF {fmt(vehicle.price)}</p>
+        <p className="text-sm font-bold text-ct-dark">Unser Preis: CHF {formatCHF(vehicle.price)}</p>
         <span className={`text-xs font-semibold ${labelColor}`}>{label}</span>
       </div>
       <p className="text-[10px] text-[#9ca3af] mt-1">
