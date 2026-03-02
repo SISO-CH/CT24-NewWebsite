@@ -22,7 +22,7 @@ interface Props {
 
 export default function View360({ src, alt }: Props) {
   return (
-    <div className="w-full rounded-xl overflow-hidden" style={{ height: 400 }}>
+    <div className="w-full rounded-xl overflow-hidden" style={{ height: 400 }} aria-label={alt ?? "360°-Fahrzeugansicht"} role="img">
       <ReactPannellum
         id="view360"
         sceneId="mainScene"
