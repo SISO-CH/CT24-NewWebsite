@@ -30,6 +30,7 @@ import VDPContactForm from "@/components/vehicles/VDPContactForm";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
+import VideoWalkaround from "@/components/vehicles/VideoWalkaround";
 
 interface Props {
   params: Promise<{ locale: string; id: string }>;
@@ -135,6 +136,12 @@ export default async function VehicleDetailPage({ params }: Props) {
                   alt={`${vehicle.make} ${vehicle.model}`}
                 />
               </FadeIn>
+
+              {vehicle.videoUrl && (
+                <FadeIn delay={30}>
+                  <VideoWalkaround url={vehicle.videoUrl} />
+                </FadeIn>
+              )}
 
               {/* Quick specs */}
               <FadeIn delay={60}>
