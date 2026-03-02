@@ -206,26 +206,6 @@ export default function FinanzierungPage() {
           </div>
         </section>
       </FadeIn>
-
-      {/* CTA */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <FadeIn>
-            <h2 className="text-2xl font-extrabold mb-3" style={{ color: "var(--ct-dark)" }}>
-              Persönliche Offerte anfragen
-            </h2>
-            <p className="text-[#6b7280] text-sm mb-6 max-w-md mx-auto">
-              Wir berechnen Ihre individuelle Rate — kostenlos und unverbindlich.
-            </p>
-            <Link href="/kontakt"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white
-                         font-semibold text-sm hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: "var(--ct-cyan)" }}>
-              Jetzt anfragen <ArrowRight size={15} />
-            </Link>
-          </FadeIn>
-        </div>
-      </section>
     </>
   );
 }
