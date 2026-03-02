@@ -355,6 +355,20 @@ export default async function VehicleDetailPage({ params }: Props) {
                       <ReserveButton vehicleId={vehicle.id} vehicleLabel={vehicleLabel} locale={locale} />
                     )}
 
+                    {vehicle.cardossierUrl && (
+                      <a
+                        href={vehicle.cardossierUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl
+                                   border border-[#e5e7eb] text-sm font-semibold text-ct-dark
+                                   hover:border-ct-cyan hover:text-ct-cyan transition-colors"
+                      >
+                        <ExternalLink size={14} />
+                        Cardossier ansehen
+                      </a>
+                    )}
+
                     {/* WhatsApp */}
                     <a
                       href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567"}?text=${encodeURIComponent(
