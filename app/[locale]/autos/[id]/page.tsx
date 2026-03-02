@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchVehicles } from "@/lib/as24";
+import { generateVehicleMeta } from "@/lib/ai";
 import { kv } from "@vercel/kv";
 import {
   ArrowLeft,
@@ -36,14 +37,27 @@ interface Props {
   params: Promise<{ locale: string; id: string }>;
 }
 
+// Sicherer JSON-LD-String: verhindert "</script>"-Injection
+function safeJsonLd(obj: unknown): string {
+  return JSON.stringify(obj).replace(/<\/script>/gi, "<\\/script>");
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const vehicles = await fetchVehicles();
   const v = vehicles.find((v) => v.id === Number(id));
   if (!v) return { title: "Fahrzeug nicht gefunden" };
+
+  const { description, keywords } = await generateVehicleMeta(v);
   return {
-    title: `${v.make} ${v.model}${v.variant ? " " + v.variant : ""}`,
-    description: `${v.year} · ${v.mileage.toLocaleString("de-CH")} km · CHF ${formatCHF(v.price)} — Occasion bei Car Trade24 GmbH, Wohlen`,
+    title:       `${v.make} ${v.model}${v.variant ? " " + v.variant : ""}`,
+    description,
+    keywords:    keywords.join(", "),
+    openGraph: {
+      title:       `${v.make} ${v.model} — Car Trade24`,
+      description,
+      images:      v.images?.[0] ? [{ url: v.images[0] }] : [],
+    },
   };
 }
 
@@ -82,6 +96,32 @@ export default async function VehicleDetailPage({ params }: Props) {
 
   return (
     <>
+      {/* JSON-LD Structured Data — sicher via safeJsonLd() */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLd({
+            "@context": "https://schema.org",
+            "@type":    "Product",
+            "name":     `${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`,
+            "description": vehicle.salespitch ?? vehicle.description,
+            "image":    vehicle.images ?? [vehicle.image],
+            "brand":    { "@type": "Brand", "name": vehicle.make },
+            "offers": {
+              "@type":         "Offer",
+              "price":         vehicle.price,
+              "priceCurrency": "CHF",
+              "availability":  isReserved
+                ? "https://schema.org/SoldOut"
+                : "https://schema.org/InStock",
+              "seller": { "@type": "AutoDealer", "name": "Car Trade24 GmbH" },
+            },
+            ...(vehicle.vin ? { "vehicleIdentificationNumber": vehicle.vin } : {}),
+          }),
+        }}
+      />
+
       {/* Header */}
       <section className="pt-24 pb-6 bg-ct-light border-b border-[#e5e7eb]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
