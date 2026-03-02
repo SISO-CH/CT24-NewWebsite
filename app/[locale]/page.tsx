@@ -311,6 +311,84 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Services-Teaser */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-extrabold text-ct-dark mb-2 text-center">Unsere Services</h2>
+          <p className="text-center text-[#6b7280] text-sm mb-10">
+            Alles rund um Ihren Fahrzeugkauf — digital und bequem.
+          </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {([
+              { href: "/probefahrt",        Icon: Car,      title: "Probefahrt",        desc: "Kostenlos und unverbindlich" },
+              { href: "/home-delivery",     Icon: Truck,    title: "Home Delivery",     desc: "Lieferung zu Ihnen" },
+              { href: "/zulassungsservice", Icon: FileText, title: "Zulassungsservice", desc: "Wir erledigen alles" },
+              { href: "/fahrzeug-sourcing", Icon: Search,   title: "Fahrzeug-Sourcing", desc: "Wir beschaffen Ihr Wunschauto" },
+            ] as { href: string; Icon: (props: { size?: number; className?: string }) => React.ReactElement | null; title: string; desc: string }[]).map(({ href, Icon, title, desc }) => (
+              <Link key={href} href={href}
+                className="flex flex-col items-center text-center p-6 rounded-2xl bg-ct-light
+                           border border-[#e5e7eb] hover:border-ct-cyan hover:shadow-md transition-all group"
+              >
+                <div className="w-12 h-12 rounded-xl bg-ct-cyan/10 flex items-center justify-center mb-3
+                                group-hover:bg-ct-cyan/20 transition-colors">
+                  <Icon size={22} className="text-ct-cyan" />
+                </div>
+                <p className="font-semibold text-ct-dark text-sm">{title}</p>
+                <p className="text-[#6b7280] text-xs mt-1">{desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Inzahlungnahme Teaser ── */}
+      <section className="py-14 bg-ct-light border-t border-[#e5e7eb]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn>
+            <div className="rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2"
+                 style={{ background: "linear-gradient(135deg, #141414 60%, #1a1a2e 100%)" }}>
+              <div className="p-8 lg:p-12 flex flex-col justify-center">
+                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-3"
+                   style={{ color: "var(--ct-cyan)" }}>
+                  Digitale Inzahlungnahme
+                </p>
+                <h2 className="text-3xl font-extrabold text-white mb-4 leading-tight">
+                  Ihr altes Fahrzeug clever verwerten
+                </h2>
+                <p className="text-[#9ca3af] text-sm leading-relaxed mb-6 max-w-sm">
+                  Sofortschätzung in 60 Sekunden — verbindliches Kaufangebot innert 24 Stunden.
+                  Den Betrag direkt auf Ihr neues Fahrzeug anrechnen lassen.
+                </p>
+                <Link
+                  href="/inzahlungnahme"
+                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white text-sm font-semibold transition-opacity hover:opacity-90 self-start"
+                  style={{ backgroundColor: "var(--ct-cyan)" }}
+                >
+                  Fahrzeug bewerten <ArrowRight size={15} />
+                </Link>
+              </div>
+              <div className="hidden lg:flex items-center justify-center p-12">
+                <div className="grid grid-cols-3 gap-6 text-center">
+                  {[
+                    { step: "01", label: "Daten eingeben" },
+                    { step: "02", label: "Schätzung erhalten" },
+                    { step: "03", label: "Angebot in 24h" },
+                  ].map((s) => (
+                    <div key={s.step}>
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-black"
+                           style={{ backgroundColor: "var(--ct-cyan)", color: "#fff" }}>
+                        {s.step}
+                      </div>
+                      <p className="text-[#9ca3af] text-xs leading-tight">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* Google Reviews */}
       <section className="py-16 md:py-24 bg-ct-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -560,84 +638,6 @@ export default function HomePage() {
                 </Link>
               </div>
             </FadeIn>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Inzahlungnahme Teaser ── */}
-      <section className="py-14 bg-ct-light border-t border-[#e5e7eb]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn>
-            <div className="rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-2"
-                 style={{ background: "linear-gradient(135deg, #141414 60%, #1a1a2e 100%)" }}>
-              <div className="p-8 lg:p-12 flex flex-col justify-center">
-                <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-3"
-                   style={{ color: "var(--ct-cyan)" }}>
-                  Digitale Inzahlungnahme
-                </p>
-                <h2 className="text-3xl font-extrabold text-white mb-4 leading-tight">
-                  Ihr altes Fahrzeug clever verwerten
-                </h2>
-                <p className="text-[#9ca3af] text-sm leading-relaxed mb-6 max-w-sm">
-                  Sofortschätzung in 60 Sekunden — verbindliches Kaufangebot innert 24 Stunden.
-                  Den Betrag direkt auf Ihr neues Fahrzeug anrechnen lassen.
-                </p>
-                <Link
-                  href="/inzahlungnahme"
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-white text-sm font-semibold transition-opacity hover:opacity-90 self-start"
-                  style={{ backgroundColor: "var(--ct-cyan)" }}
-                >
-                  Fahrzeug bewerten <ArrowRight size={15} />
-                </Link>
-              </div>
-              <div className="hidden lg:flex items-center justify-center p-12">
-                <div className="grid grid-cols-3 gap-6 text-center">
-                  {[
-                    { step: "01", label: "Daten eingeben" },
-                    { step: "02", label: "Schätzung erhalten" },
-                    { step: "03", label: "Angebot in 24h" },
-                  ].map((s) => (
-                    <div key={s.step}>
-                      <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2 text-sm font-black"
-                           style={{ backgroundColor: "var(--ct-cyan)", color: "#fff" }}>
-                        {s.step}
-                      </div>
-                      <p className="text-[#9ca3af] text-xs leading-tight">{s.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* Services-Teaser */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-extrabold text-ct-dark mb-2 text-center">Unsere Services</h2>
-          <p className="text-center text-[#6b7280] text-sm mb-10">
-            Alles rund um Ihren Fahrzeugkauf — digital und bequem.
-          </p>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {([
-              { href: "/probefahrt",        Icon: Car,      title: "Probefahrt",        desc: "Kostenlos und unverbindlich" },
-              { href: "/home-delivery",     Icon: Truck,    title: "Home Delivery",     desc: "Lieferung zu Ihnen" },
-              { href: "/zulassungsservice", Icon: FileText, title: "Zulassungsservice", desc: "Wir erledigen alles" },
-              { href: "/fahrzeug-sourcing", Icon: Search,   title: "Fahrzeug-Sourcing", desc: "Wir beschaffen Ihr Wunschauto" },
-            ] as { href: string; Icon: (props: { size?: number; className?: string }) => React.ReactElement | null; title: string; desc: string }[]).map(({ href, Icon, title, desc }) => (
-              <Link key={href} href={href}
-                className="flex flex-col items-center text-center p-6 rounded-2xl bg-ct-light
-                           border border-[#e5e7eb] hover:border-ct-cyan hover:shadow-md transition-all group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-ct-cyan/10 flex items-center justify-center mb-3
-                                group-hover:bg-ct-cyan/20 transition-colors">
-                  <Icon size={22} className="text-ct-cyan" />
-                </div>
-                <p className="font-semibold text-ct-dark text-sm">{title}</p>
-                <p className="text-[#6b7280] text-xs mt-1">{desc}</p>
-              </Link>
-            ))}
           </div>
         </div>
       </section>
