@@ -37,11 +37,11 @@ export interface Vehicle {
   drivetrain?: string;
   condition?: string;
   vin?: string;
+  salespitch?: string;
   // --- Phase 3 fields ---
   imageUrl360?:   string;   // equirectangular 360-Foto-URL (aus AS24)
   videoUrl?:      string;   // YouTube / Vimeo URL (aus AS24)
   cardossierUrl?: string;   // cardossier.ch Report-Link (aus AS24)
-  salespitch?: string;
 }
 
 const DUMMY_IMAGE =
