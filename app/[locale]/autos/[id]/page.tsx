@@ -14,7 +14,6 @@ import {
   Quote,
   Shield,
   ExternalLink,
-  PhoneCall,
   Phone,
   MessageCircle,
   Lock,
@@ -26,7 +25,6 @@ import VehicleMediaTabs from "@/components/vehicles/VehicleMediaTabs";
 import { formatCHF } from "@/lib/utils";
 import { getSalesperson } from "@/lib/team";
 import TestDriveTrigger from "@/components/vehicles/TestDriveTrigger";
-import VDPContactForm from "@/components/vehicles/VDPContactForm";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
@@ -353,14 +351,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                     <PriceComparison vehicle={vehicle} />
                   </div>
 
-                  {/* Leasingrechner-Widget */}
-                  <div className="mb-5 pb-5 border-b border-[#f0f0f0]">
-                    <p className="text-[0.65rem] font-bold uppercase tracking-wider text-[#9ca3af] mb-3">
-                      Rate berechnen
-                    </p>
-                    <LeasingCalculator fixedPrice={vehicle.price} showLink={true} />
-                  </div>
-
+                  {/* USP checkmarks */}
                   <div className="space-y-2 mb-6">
                     {[
                       "Kostenlose Probefahrt möglich",
@@ -380,7 +371,8 @@ export default async function VehicleDetailPage({ params }: Props) {
                     ))}
                   </div>
 
-                  <div className="space-y-2.5">
+                  <div className="space-y-2.5 mb-5">
+                    {/* Primary CTA */}
                     <Link
                       href={`/kontakt?betreff=Fahrzeuganfrage&modell=${encodeURIComponent(
                         `${vehicle.make} ${vehicle.model}`
@@ -391,8 +383,23 @@ export default async function VehicleDetailPage({ params }: Props) {
                       Jetzt anfragen <ArrowRight size={15} />
                     </Link>
 
-                    <TestDriveTrigger vehicleLabel={vehicleLabel} />
+                    {/* Secondary: Probefahrt + WhatsApp side by side */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <TestDriveTrigger vehicleLabel={vehicleLabel} />
+                      <a
+                        href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567"}?text=${encodeURIComponent(
+                          `Guten Tag, ich interessiere mich für den ${vehicleLabel} (CHF ${formatCHF(vehicle.price)}).`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5 py-3 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+                        style={{ backgroundColor: "#25D366" }}
+                      >
+                        <MessageCircle size={14} /> WhatsApp
+                      </a>
+                    </div>
 
+                    {/* Reserve */}
                     {isReserved ? (
                       <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#f3f4f6] text-[#9ca3af] text-sm font-semibold">
                         <Lock size={14} /> Aktuell reserviert
@@ -401,6 +408,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                       <ReserveButton vehicleId={vehicle.id} vehicleLabel={vehicleLabel} locale={locale} />
                     )}
 
+                    {/* Cardossier link if available */}
                     {vehicle.cardossierUrl && (
                       <a
                         href={vehicle.cardossierUrl}
@@ -415,39 +423,23 @@ export default async function VehicleDetailPage({ params }: Props) {
                       </a>
                     )}
 
-                    {/* WhatsApp */}
-                    <a
-                      href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567"}?text=${encodeURIComponent(
-                        `Guten Tag, ich interessiere mich für den ${vehicleLabel} (CHF ${formatCHF(vehicle.price)}).`
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl
-                                 text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-                      style={{ backgroundColor: "#25D366" }}
-                    >
-                      <MessageCircle size={15} /> WhatsApp
-                    </a>
-
+                    {/* Phone as text link */}
                     <a
                       href="tel:+41566185544"
-                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl
-                                 text-sm text-[#6b7280] hover:text-ct-cyan transition-colors"
+                      className="flex items-center justify-center gap-1.5 w-full py-2 text-sm text-[#9ca3af] hover:text-ct-cyan transition-colors"
                     >
-                      📞 +41 56 618 55 44
+                      <Phone size={13} /> +41 56 618 55 44
                     </a>
-
-                    {/* Direkt anfragen */}
-                    <details className="group">
-                      <summary className="list-none cursor-pointer flex items-center justify-between py-2 text-xs font-semibold text-[#6b7280] hover:text-ct-cyan transition-colors">
-                        Direkt anfragen
-                        <span className="text-[10px] group-open:rotate-180 transition-transform">▾</span>
-                      </summary>
-                      <div className="pt-3">
-                        <VDPContactForm vehicleLabel={vehicleLabel} />
-                      </div>
-                    </details>
                   </div>
+
+                  {/* Leasingrechner-Widget — collapsible */}
+                  <details className="group border-t border-[#f0f0f0] pt-4 mb-4">
+                    <summary className="list-none cursor-pointer flex items-center justify-between text-xs font-semibold text-[#6b7280] hover:text-ct-cyan transition-colors mb-3">
+                      Monatsrate berechnen
+                      <span className="text-[10px] group-open:rotate-180 transition-transform">▾</span>
+                    </summary>
+                    <LeasingCalculator fixedPrice={vehicle.price} showLink={true} />
+                  </details>
                 </div>
 
                 <PriceAlertForm filtersJson={JSON.stringify({ make: vehicle.make })} />
@@ -490,40 +482,6 @@ export default async function VehicleDetailPage({ params }: Props) {
                     </a>
                   </div>
                 )}
-
-                {/* Matelso Rückruf */}
-                <div className="rounded-xl overflow-hidden border border-[#e5e7eb]">
-                  <div className="px-5 pt-5 pb-4 bg-ct-dark">
-                    <div className="flex items-center gap-2 mb-2">
-                      <PhoneCall size={14} className="text-ct-cyan shrink-0" />
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-ct-cyan">
-                        Persönliche Beratung
-                      </p>
-                    </div>
-                    <p className="text-white font-extrabold text-base leading-snug">
-                      Lassen Sie sich zu diesem {vehicle.make} {vehicle.model} beraten
-                    </p>
-                    <p className="text-[#9ca3af] text-xs mt-2 leading-relaxed">
-                      Unser Team ruft Sie kostenlos &amp; unverbindlich zurück —
-                      meist innerhalb von 30 Minuten.
-                    </p>
-                  </div>
-                  <div className="px-5 py-4 bg-white">
-                    {/* Matelso füllt diesen Container mit dem Rückruf-Formular */}
-                    <div
-                      id="matelso-callback-widget"
-                      data-matelso-widget="callback"
-                    />
-                    <a
-                      href="tel:+41566185544"
-                      className="flex items-center justify-center gap-1.5 mt-4 text-xs
-                                 text-[#9ca3af] hover:text-ct-cyan transition-colors"
-                    >
-                      <Phone size={11} />
-                      Direkt anrufen: +41 56 618 55 44
-                    </a>
-                  </div>
-                </div>
 
                 {vehicle.as24Id && (
                   <p className="text-center text-xs text-[#d1d5db]">
