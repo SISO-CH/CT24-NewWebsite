@@ -1,27 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import { Images, RotateCcw } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Images, RotateCcw, Play } from "lucide-react";
 import VehicleGallery from "@/components/vehicles/VehicleGallery";
 import View360 from "@/components/vehicles/View360";
+import VideoWalkaround from "@/components/vehicles/VideoWalkaround";
 
 interface Props {
   images:       string[];
   imageUrl360?: string;
+  videoUrl?:    string;
   alt:          string;
 }
 
-export default function VehicleMediaTabs({ images, imageUrl360, alt }: Props) {
-  const [tab, setTab] = useState<"gallery" | "360">("gallery");
+export default function VehicleMediaTabs({ images, imageUrl360, videoUrl, alt }: Props) {
+  const [tab, setTab] = useState<"gallery" | "360" | "video">("gallery");
+
+  useEffect(() => {
+    if (!imageUrl360 && tab === "360")   setTab("gallery");
+    if (!videoUrl    && tab === "video") setTab("gallery");
+  }, [imageUrl360, videoUrl, tab]);
+
+  const tabs = [
+    { key: "gallery" as const, label: "Fotos",        Icon: Images    },
+    ...(imageUrl360 ? [{ key: "360"   as const, label: "360°-Ansicht", Icon: RotateCcw }] : []),
+    ...(videoUrl    ? [{ key: "video" as const, label: "Video",        Icon: Play      }] : []),
+  ];
 
   return (
     <div>
-      {imageUrl360 && (
+      {(imageUrl360 || videoUrl) && (
         <div className="flex gap-1 mb-3">
-          {([
-            { key: "gallery" as const, label: "Fotos",        Icon: Images    },
-            { key: "360"     as const, label: "360°-Ansicht", Icon: RotateCcw },
-          ]).map(({ key, label, Icon }) => (
+          {tabs.map(({ key, label, Icon }) => (
             <button
               key={key}
               type="button"
@@ -40,6 +50,7 @@ export default function VehicleMediaTabs({ images, imageUrl360, alt }: Props) {
       )}
       {tab === "gallery" && <VehicleGallery images={images} alt={alt} />}
       {tab === "360"     && imageUrl360 && <View360 src={imageUrl360} alt={alt} />}
+      {tab === "video"   && videoUrl    && <VideoWalkaround url={videoUrl} />}
     </div>
   );
 }

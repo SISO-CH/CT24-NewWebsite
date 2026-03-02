@@ -30,7 +30,6 @@ import VDPContactForm from "@/components/vehicles/VDPContactForm";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
-import VideoWalkaround from "@/components/vehicles/VideoWalkaround";
 import PriceComparison from "@/components/vehicles/PriceComparison";
 import TrackVehicleView from "@/components/vehicles/TrackVehicleView";
 import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
@@ -180,15 +179,10 @@ export default async function VehicleDetailPage({ params }: Props) {
                 <VehicleMediaTabs
                   images={allImages}
                   imageUrl360={vehicle.imageUrl360}
+                  videoUrl={vehicle.videoUrl}
                   alt={`${vehicle.make} ${vehicle.model}`}
                 />
               </FadeIn>
-
-              {vehicle.videoUrl && (
-                <FadeIn delay={30}>
-                  <VideoWalkaround url={vehicle.videoUrl} />
-                </FadeIn>
-              )}
 
               {/* Quick specs */}
               <FadeIn delay={60}>
