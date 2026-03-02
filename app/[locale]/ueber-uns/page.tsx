@@ -256,6 +256,27 @@ export default function UeberUnsPage() {
           </div>
         </div>
       </section>
+
+      {/* CTA */}
+      <section className="py-12 bg-ct-light border-t border-[#e5e7eb]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <FadeIn>
+            <h2 className="text-2xl font-extrabold mb-3 text-ct-dark">
+              Überzeugt? Schauen Sie sich unsere Fahrzeuge an.
+            </h2>
+            <p className="text-[#6b7280] text-sm mb-6 max-w-md mx-auto">
+              50–80 geprüfte Occasionen und Neuwagen — direkt ab Hof in Wohlen.
+            </p>
+            <Link
+              href="/autos"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: "var(--ct-cyan)" }}
+            >
+              Alle Fahrzeuge ansehen <ArrowRight size={15} />
+            </Link>
+          </FadeIn>
+        </div>
+      </section>
     </>
   );
 }
