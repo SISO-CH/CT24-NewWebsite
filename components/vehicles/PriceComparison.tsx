@@ -23,7 +23,7 @@ export default async function PriceComparison({ vehicle }: Props) {
   const { min, max } = valuation;
   const marketMid = (min + max) / 2;
   const diff = vehicle.price - marketMid;
-  const diffPct = Math.round((diff / marketMid) * 100);
+  const diffPct = marketMid > 0 ? Math.round((diff / marketMid) * 100) : 0;
   const rangeWidth = max - min;
   const clampedPos = Math.max(
     0,
