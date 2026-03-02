@@ -1,12 +1,20 @@
 // app/api/signature/route.ts
+import { timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createSignatureRequest } from "@/lib/skribble";
 import { resend } from "@/lib/resend";
 
+const MAX_PDF_B64_LENGTH = 20_000_000; // ~15 MB decoded
+
 export async function POST(req: NextRequest) {
   // Secured with CRON_SECRET — only callable by the dealer backend
-  const auth = req.headers.get("x-api-key");
-  if (auth !== process.env.CRON_SECRET) {
+  const secret   = process.env.CRON_SECRET ?? "";
+  const provided = req.headers.get("x-api-key") ?? "";
+  const authorized =
+    secret.length > 0 &&
+    secret.length === provided.length &&
+    timingSafeEqual(Buffer.from(provided), Buffer.from(secret));
+  if (!authorized) {
     return NextResponse.json({ error: "Nicht autorisiert" }, { status: 401 });
   }
 
@@ -30,6 +38,14 @@ export async function POST(req: NextRequest) {
         { error: "pdfBase64, customerEmail und customerName sind Pflicht" },
         { status: 400 }
       );
+    }
+
+    if (pdfBase64.length > MAX_PDF_B64_LENGTH) {
+      return NextResponse.json({ error: "PDF zu gross (max. 15 MB)" }, { status: 400 });
+    }
+
+    if (!/^[A-Za-z0-9+/]+=*$/.test(pdfBase64)) {
+      return NextResponse.json({ error: "pdfBase64 ist kein gültiges Base64" }, { status: 400 });
     }
 
     const result = await createSignatureRequest({

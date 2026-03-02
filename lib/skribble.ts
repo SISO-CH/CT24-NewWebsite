@@ -58,8 +58,10 @@ export async function createSignatureRequest(
     signatures?: { signing_url?: string }[];
   };
 
-  return {
-    id:         data.id,
-    signingUrl: data.signatures?.[0]?.signing_url ?? "",
-  };
+  const signingUrl = data.signatures?.[0]?.signing_url;
+  if (!signingUrl) {
+    throw new Error("Skribble returned no signing URL for signer");
+  }
+
+  return { id: data.id, signingUrl };
 }
