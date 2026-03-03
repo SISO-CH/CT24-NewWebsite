@@ -2,7 +2,7 @@ import type React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Check, Star, MapPin, Phone, Mail, Car, Truck, FileText, Search } from "lucide-react";
-import { vehicles } from "@/lib/vehicles";
+import { fetchVehicles } from "@/lib/as24";
 import VehicleCard from "@/components/vehicles/VehicleCard";
 import FadeIn from "@/components/ui/FadeIn";
 import HeroSearch from "@/components/home/HeroSearch";
@@ -81,7 +81,20 @@ const teamMembers = [
 ];
 
 /* ── Page ──────────────────────────────────────────────────── */
-export default function HomePage() {
+export default async function HomePage() {
+  const allVehicles = await fetchVehicles();
+
+  // 4 neueste Fahrzeuge, je Modell (make+model) nur 1x
+  const seen = new Set<string>();
+  const featured: typeof allVehicles = [];
+  for (const v of allVehicles) {
+    const key = `${v.make} ${v.model}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    featured.push(v);
+    if (featured.length >= 4) break;
+  }
+
   return (
     <>
       {/* ════════════════════════════════════════════
@@ -228,7 +241,7 @@ export default function HomePage() {
           </FadeIn>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {vehicles.map((vehicle, i) => (
+            {featured.map((vehicle, i) => (
               <FadeIn key={vehicle.id} delay={i * 100} className="flex flex-col">
                 <VehicleCard vehicle={vehicle} className="flex-1" />
               </FadeIn>
@@ -643,7 +656,7 @@ export default function HomePage() {
       </section>
 
       {/* Recently viewed — client-side, renders only when localStorage has entries */}
-      <RecentlyViewed allVehicles={vehicles} />
+      <RecentlyViewed allVehicles={allVehicles} />
     </>
   );
 }

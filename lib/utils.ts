@@ -9,6 +9,21 @@ export function formatCHF(amount: number): string {
   return amount.toLocaleString("de-CH");
 }
 
+/** Annuity formula for indicative monthly leasing rate. */
+const LEASING_ANNUAL_RATE = 0.039;
+const LEASING_DEFAULT_MONTHS = 60;
+
+export function calcMonthlyRate(
+  price: number,
+  downPct = 0,
+  months = LEASING_DEFAULT_MONTHS,
+): number {
+  const financed = price * (1 - downPct / 100);
+  const r = LEASING_ANNUAL_RATE / 12;
+  if (r === 0) return financed / months;
+  return financed * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+}
+
 /** Returns the URL locale prefix (e.g. "/fr") for non-default locales, "" for DE. */
 export function buildLocalePrefix(locale: string): string {
   return locale && locale !== "de" ? `/${locale}` : "";

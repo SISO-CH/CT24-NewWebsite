@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "listing-images.autoscout24.ch",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "images.autoscout24.ch",
         pathname: "/**",
       },

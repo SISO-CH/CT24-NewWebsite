@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { fetchVehicles } from "@/lib/as24";
+import { fetchVehicles, fetchVehicleDetail } from "@/lib/as24";
 import { generateVehicleMeta } from "@/lib/ai";
 import { kv } from "@vercel/kv";
 import {
@@ -11,7 +11,6 @@ import {
   Zap,
   CheckCircle2,
   ArrowRight,
-  Quote,
   Shield,
   ExternalLink,
   Phone,
@@ -23,7 +22,7 @@ import FadeIn from "@/components/ui/FadeIn";
 import EnergyLabel from "@/components/vehicles/EnergyLabel";
 import VehicleMediaTabs from "@/components/vehicles/VehicleMediaTabs";
 import { formatCHF } from "@/lib/utils";
-import { getSalesperson } from "@/lib/team";
+
 import TestDriveTrigger from "@/components/vehicles/TestDriveTrigger";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
@@ -70,30 +69,39 @@ export default async function VehicleDetailPage({ params }: Props) {
     fetchVehicles(),
     kv.get<{ until: number }>(`reserved:${id}`).catch(() => null),
   ]);
-  const vehicle = vehicles.find((v) => v.id === Number(id));
-  if (!vehicle) notFound();
+  const baseVehicle = vehicles.find((v) => v.id === Number(id));
+  if (!baseVehicle) notFound();
+
+  // Detail-Daten nachladen (Farben, Hubraum, Verbrauch, etc.)
+  const vehicle = await fetchVehicleDetail(baseVehicle);
 
   const isReserved = reservedData ? reservedData.until > Date.now() : false;
 
   const allImages = vehicle.images?.length ? vehicle.images : [vehicle.image];
 
   const techSpecs = [
-    { label: "Kilometerstand", value: `${vehicle.mileage.toLocaleString("de-CH")} km` },
-    { label: "Leistung",       value: `${vehicle.power} PS` },
-    { label: "Baujahr",        value: String(vehicle.year) },
-    { label: "Getriebe",       value: vehicle.transmission },
-    vehicle.fuel       ? { label: "Kraftstoff",  value: vehicle.fuel }              : null,
-    vehicle.body       ? { label: "Karosserie",  value: vehicle.body }              : null,
-    vehicle.doors      ? { label: "Türen",       value: String(vehicle.doors) }     : null,
-    vehicle.seats      ? { label: "Sitze",       value: String(vehicle.seats) }     : null,
-    vehicle.color      ? { label: "Farbe",       value: vehicle.color }             : null,
-    vehicle.drivetrain ? { label: "Antrieb",     value: vehicle.drivetrain }        : null,
-    vehicle.emission   ? { label: "Abgasnorm",   value: vehicle.emission }          : null,
-    vehicle.co2        ? { label: "CO₂",         value: `${vehicle.co2} g/km` }    : null,
-    vehicle.condition  ? { label: "Zustand",     value: vehicle.condition }         : null,
+    { label: "Kilometerstand",  value: `${formatCHF(vehicle.mileage)} km` },
+    { label: "Leistung",        value: `${vehicle.power} PS` },
+    { label: "Baujahr",         value: String(vehicle.year) },
+    { label: "Getriebe",        value: vehicle.transmission },
+    vehicle.fuel           ? { label: "Kraftstoff",     value: vehicle.fuel }                        : null,
+    vehicle.body           ? { label: "Karosserie",     value: vehicle.body }                        : null,
+    vehicle.drivetrain     ? { label: "Antrieb",        value: vehicle.drivetrain }                   : null,
+    vehicle.cubicCapacity  ? { label: "Hubraum",        value: `${formatCHF(vehicle.cubicCapacity)} cm³` } : null,
+    vehicle.cylinders      ? { label: "Zylinder",       value: String(vehicle.cylinders) }            : null,
+    vehicle.doors          ? { label: "Türen",          value: String(vehicle.doors) }                : null,
+    vehicle.seats          ? { label: "Sitze",          value: String(vehicle.seats) }                : null,
+    vehicle.color          ? { label: "Aussenfarbe",    value: vehicle.color }                        : null,
+    vehicle.interiorColor  ? { label: "Innenfarbe",     value: vehicle.interiorColor }                : null,
+    vehicle.consumption    ? { label: "Verbrauch",      value: `${vehicle.consumption} l/100km` }     : null,
+    vehicle.co2            ? { label: "CO₂",            value: `${vehicle.co2} g/km` }               : null,
+    vehicle.energyLabel    ? { label: "Energieeffizienz",value: vehicle.energyLabel }                  : null,
+    vehicle.emission       ? { label: "Abgasnorm",      value: vehicle.emission }                     : null,
+    vehicle.weightCurb     ? { label: "Leergewicht",    value: `${formatCHF(vehicle.weightCurb)} kg` } : null,
+    vehicle.towingCapacity ? { label: "Anhängelast",    value: `${formatCHF(vehicle.towingCapacity)} kg` } : null,
+    vehicle.condition      ? { label: "Zustand",        value: vehicle.condition }                    : null,
   ].filter(Boolean) as { label: string; value: string }[];
 
-  const salesperson = getSalesperson(vehicle.id);
   const vehicleLabel = `${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`;
 
   return (
@@ -107,7 +115,7 @@ export default async function VehicleDetailPage({ params }: Props) {
             "@context": "https://schema.org",
             "@type":    "Product",
             "name":     `${vehicle.make} ${vehicle.model}${vehicle.variant ? " " + vehicle.variant : ""}`,
-            "description": vehicle.salespitch ?? vehicle.description,
+            "description": vehicle.description,
             "image":    vehicle.images ?? [vehicle.image],
             "brand":    { "@type": "Brand", "name": vehicle.make },
             "offers": {
@@ -127,7 +135,7 @@ export default async function VehicleDetailPage({ params }: Props) {
       <TrackVehicleView vehicleId={vehicle.id} />
 
       {/* Header */}
-      <section className="pt-24 pb-6 bg-ct-light border-b border-[#e5e7eb]">
+      <section className="pt-24 pb-6 bg-ct-light border-b border-[#e5e7eb] overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/autos"
@@ -141,7 +149,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                 {vehicle.condition ?? "Occasion"} · {vehicle.year}
                 {vehicle.body ? ` · ${vehicle.body}` : ""}
               </p>
-              <h1 className="text-3xl lg:text-4xl font-extrabold text-ct-dark">
+              <h1 className="text-3xl lg:text-4xl font-extrabold text-ct-dark break-words">
                 {vehicle.make} {vehicle.model}
                 {vehicle.variant ? ` ${vehicle.variant}` : ""}
               </h1>
@@ -167,12 +175,12 @@ export default async function VehicleDetailPage({ params }: Props) {
       </section>
 
       {/* Main content */}
-      <section className="py-8 bg-white">
+      <section className="py-8 bg-white overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-10">
 
             {/* Left: Gallery + Details */}
-            <div className="space-y-8">
+            <div className="space-y-8 min-w-0">
               <FadeIn>
                 <VehicleMediaTabs
                   images={allImages}
@@ -194,7 +202,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                     {
                       icon: Gauge,
                       label: "Kilometerstand",
-                      value: `${vehicle.mileage.toLocaleString("de-CH")} km`,
+                      value: `${formatCHF(vehicle.mileage)} km`,
                     },
                     {
                       icon: Zap,
@@ -222,27 +230,6 @@ export default async function VehicleDetailPage({ params }: Props) {
                   ))}
                 </div>
               </FadeIn>
-
-              {/* Salesperson pitch */}
-              {vehicle.salespitch && (
-                <FadeIn delay={70}>
-                  <div className="rounded-xl bg-ct-light border-l-4 border-ct-cyan p-5">
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-9 h-9 rounded-full bg-ct-cyan flex items-center justify-center text-white text-xs font-bold shrink-0">
-                        {salesperson.initials}
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-ct-dark">{salesperson.name}</p>
-                        <p className="text-[10px] text-[#9ca3af] uppercase tracking-wider">Car Trade24 Berater</p>
-                      </div>
-                      <Quote size={18} className="ml-auto text-ct-cyan/40" />
-                    </div>
-                    <p className="text-sm text-[#4b5563] leading-relaxed italic">
-                      &ldquo;{vehicle.salespitch}&rdquo;
-                    </p>
-                  </div>
-                </FadeIn>
-              )}
 
               {/* Description */}
               {vehicle.description && (

@@ -2,22 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { formatCHF } from "@/lib/utils";
-
-// Standard Swiss leasing rate: 3.9% p.a.
-const ANNUAL_RATE = 0.039;
-
-// Note: km/year (Jahreskilometer) is shown to the user for reference and
-// displayed in the disclaimer, but does not alter the annuity calculation.
-// A full model would factor in residual value based on km — this is an
-// intentional simplification for indicative display purposes.
-function calculateRate(price: number, downPct: number, months: number): number {
-  const financed = price * (1 - downPct / 100);
-  const monthly = ANNUAL_RATE / 12;
-  if (monthly === 0) return financed / months;
-  return (financed * monthly * Math.pow(1 + monthly, months))
-       / (Math.pow(1 + monthly, months) - 1);
-}
+import { formatCHF, calcMonthlyRate } from "@/lib/utils";
 
 interface LeasingCalculatorProps {
   /** If provided, price slider is hidden and this value is used */
@@ -43,7 +28,7 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
   const [km, setKm] = useState<(typeof KM_OPTIONS)[number]>(15000);
 
   const rate = useMemo(
-    () => calculateRate(fixedPrice ?? price, down, months),
+    () => calcMonthlyRate(fixedPrice ?? price, down, months),
     [fixedPrice, price, down, months]
   );
 

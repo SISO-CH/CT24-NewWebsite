@@ -17,7 +17,9 @@ function CompareToggleInner({ vehicleId }: Props) {
   const isSelected = ids.includes(vehicleId);
   const isDisabled = !isSelected && ids.length >= MAX_COMPARE;
 
-  function toggle() {
+  function toggle(e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
     const next = isSelected
       ? ids.filter((id) => id !== vehicleId)
       : [...ids, vehicleId];

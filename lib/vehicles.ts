@@ -24,7 +24,7 @@ export interface Vehicle {
   image: string;
   energyLabel?: EnergyLabel;
   body?: VehicleBody;
-  // --- Detail fields (Task 0B) ---
+  // --- Detail fields ---
   as24Id?: string;
   images?: string[];
   equipment?: string[];
@@ -32,16 +32,23 @@ export interface Vehicle {
   doors?: number;
   seats?: number;
   color?: string;
+  interiorColor?: string;
   co2?: number;
   emission?: string;
   drivetrain?: string;
   condition?: string;
   vin?: string;
   salespitch?: string;
+  cubicCapacity?: number;
+  cylinders?: number;
+  consumption?: number;
+  weightCurb?: number;
+  towingCapacity?: number;
+  leasingUrl?: string;
   // --- Phase 3 fields ---
-  imageUrl360?:   string;   // equirectangular 360-Foto-URL (aus AS24)
-  videoUrl?:      string;   // YouTube / Vimeo URL (aus AS24)
-  cardossierUrl?: string;   // cardossier.ch Report-Link (aus AS24)
+  imageUrl360?:   string;
+  videoUrl?:      string;
+  cardossierUrl?: string;
 }
 
 const DUMMY_IMAGE =
