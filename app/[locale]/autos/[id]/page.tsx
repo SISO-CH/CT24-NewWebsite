@@ -30,6 +30,7 @@ import ReserveButton from "@/components/vehicles/ReserveButton";
 import PriceComparison from "@/components/vehicles/PriceComparison";
 import TrackVehicleView from "@/components/vehicles/TrackVehicleView";
 import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
+import VehicleDetailTabs from "@/components/vehicles/VehicleDetailTabs";
 
 export const revalidate = 3600;
 
@@ -231,69 +232,13 @@ export default async function VehicleDetailPage({ params }: Props) {
                 </div>
               </FadeIn>
 
-              {/* Description */}
-              {vehicle.description && (
-                <FadeIn delay={80}>
-                  <div className="rounded-xl border border-[#f0f0f0] p-6">
-                    <h2 className="font-extrabold text-lg mb-3 text-ct-dark">
-                      Beschreibung
-                    </h2>
-                    <p className="text-sm text-[#4b5563] leading-relaxed whitespace-pre-line">
-                      {vehicle.description}
-                    </p>
-                  </div>
-                </FadeIn>
-              )}
-
-              {/* Equipment */}
-              {vehicle.equipment && vehicle.equipment.length > 0 && (
-                <FadeIn delay={100}>
-                  <div className="rounded-xl border border-[#f0f0f0] p-6">
-                    <h2 className="font-extrabold text-lg mb-4 text-ct-dark">
-                      Ausstattung
-                    </h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
-                      {vehicle.equipment.map((item) => (
-                        <p
-                          key={item}
-                          className="flex items-center gap-2 text-sm text-[#4b5563]"
-                        >
-                          <CheckCircle2
-                            size={13}
-                            className="shrink-0 text-ct-green"
-                          />
-                          {item}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </FadeIn>
-              )}
-
-              {/* Tech specs table */}
-              <FadeIn delay={120}>
-                <div className="rounded-xl border border-[#f0f0f0] overflow-hidden">
-                  <div className="bg-ct-light px-6 py-4 border-b border-[#f0f0f0]">
-                    <h2 className="font-extrabold text-base text-ct-dark">
-                      Technische Daten
-                    </h2>
-                  </div>
-                  <div className="divide-y divide-[#f8f8f8]">
-                    {techSpecs.map((spec) => (
-                      <div
-                        key={spec.label}
-                        className="flex justify-between px-6 py-3 hover:bg-[#fafafa] transition-colors"
-                      >
-                        <span className="text-sm text-[#9ca3af]">
-                          {spec.label}
-                        </span>
-                        <span className="text-sm font-semibold text-ct-dark">
-                          {spec.value}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+              {/* Tabs: Technische Daten / Beschreibung / Ausstattung */}
+              <FadeIn delay={80}>
+                <VehicleDetailTabs
+                  description={vehicle.description}
+                  equipment={vehicle.equipment}
+                  techSpecs={techSpecs}
+                />
               </FadeIn>
             </div>
 
