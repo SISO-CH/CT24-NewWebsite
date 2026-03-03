@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/autos", label: "Autos" },
   { href: "/finanzierung", label: "Finanzierung" },
   { href: "/firmenkunden", label: "Firmenkunden" },
+  { href: "/blog", label: "Blog" },
   { href: "/ueber-uns", label: "Über uns" },
   { href: "/kontakt", label: "Kontakt" },
 ];
