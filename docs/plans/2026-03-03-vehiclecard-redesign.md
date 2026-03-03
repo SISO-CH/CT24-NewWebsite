@@ -1,6 +1,28 @@
+# VehicleCard Redesign Implementation Plan
+
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+
+**Goal:** Redesign VehicleCard for mobile-first sales funnel optimization — whole card clickable, condition badge, compact spec lines, prominent price.
+
+**Architecture:** Single file change to `components/vehicles/VehicleCard.tsx`. Remove unused imports (ArrowRight, EnergyLabel, Chip). Wrap entire article in `<Link>`. Replace chips with text spec lines. Replace price box with direct price display. Add condition badge logic.
+
+**Tech Stack:** Next.js, React, Tailwind CSS v4, lucide-react, `@/lib/utils` (formatCHF)
+
+---
+
+### Task 1: Rewrite VehicleCard component
+
+**Files:**
+- Modify: `components/vehicles/VehicleCard.tsx`
+
+**Step 1: Replace VehicleCard with new design**
+
+Replace the entire file with:
+
+```tsx
 import Image from "next/image";
 import Link from "next/link";
-import { formatCHF, calcMonthlyRate } from "@/lib/utils";
+import { formatCHF } from "@/lib/utils";
 import type { Vehicle } from "@/lib/vehicles";
 import CompareToggle from "./CompareToggle";
 
@@ -14,6 +36,7 @@ export default function VehicleCard({ vehicle, className = "", reserved = false 
   const condition = CONDITION_BADGE[vehicle.condition ?? "Occasion"] ?? CONDITION_BADGE.Occasion;
   const gearShort = vehicle.transmission === "Automat" ? "AT" : "MT";
 
+  // Optional second spec line: PS and/or drivetrain
   const specs2Parts = [
     vehicle.power ? `${vehicle.power} PS` : null,
     vehicle.drivetrain ?? null,
@@ -75,9 +98,9 @@ export default function VehicleCard({ vehicle, className = "", reserved = false 
             CHF {formatCHF(vehicle.price)}
           </p>
           <p className="text-[0.6rem] text-[#9ca3af]">inkl. MwSt.</p>
-          {vehicle.price > 0 && (
+          {vehicle.leasingPrice > 0 && (
             <p className="text-xs font-semibold text-ct-magenta mt-0.5">
-              ab CHF {formatCHF(Math.round(calcMonthlyRate(vehicle.price)))}/Mt.
+              ab CHF {formatCHF(vehicle.leasingPrice)}/Mt.
             </p>
           )}
         </div>
@@ -85,3 +108,27 @@ export default function VehicleCard({ vehicle, className = "", reserved = false 
     </Link>
   );
 }
+```
+
+**Step 2: Verify build**
+
+Run: `npx next build`
+Expected: Build succeeds without errors
+
+**Step 3: Visual check**
+
+Open `http://localhost:3000/autos` and verify:
+- Whole card is clickable (no separate button)
+- Condition badge shows (Neuwagen/Occasion) top left
+- Fuel badge shows top right
+- Spec lines show: year · km · AT/MT and PS · Antrieb
+- Price is large and prominent
+- Leasing rate shows in magenta (if available)
+- No variant text, no chips, no energy label
+
+**Step 4: Commit**
+
+```bash
+git add components/vehicles/VehicleCard.tsx
+git commit -m "refactor: vehiclecard redesign — clickable card, condition badge, compact specs, prominent price"
+```
