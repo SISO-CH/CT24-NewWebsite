@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --font-sans: var(--font-montserrat);
@@ -97,4 +98,16 @@ body {
   body {
     padding-bottom: 5rem;
   }
+}
+
+/* ── Blog prose overrides ── */
+.prose-blog {
+  --tw-prose-headings: var(--ct-dark);
+  --tw-prose-links: var(--ct-cyan);
+  --tw-prose-bold: var(--ct-dark);
+  --tw-prose-quotes: var(--ct-dark);
+  --tw-prose-quote-borders: var(--ct-cyan);
+}
+.prose-blog blockquote {
+  border-left-width: 4px;
 }
