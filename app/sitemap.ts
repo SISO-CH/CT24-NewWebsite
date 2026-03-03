@@ -22,18 +22,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/datenschutz`,  lastModified: now, changeFrequency: "yearly",  priority: 0.2 },
   ];
 
-  let vehicleRoutes: MetadataRoute.Sitemap = [];
-  try {
-    const vehicles = await fetchVehicles();
-    vehicleRoutes = vehicles.map((v) => ({
-      url: `${base}/autos/${v.id}`,
-      lastModified: now,
-      changeFrequency: "daily" as const,
-      priority: 0.8,
-    }));
-  } catch {
-    // Fehler ignorieren — Sitemap ohne Fahrzeuge
-  }
+  const vehiclePromise = fetchVehicles()
+    .then((vehicles) =>
+      vehicles.map((v) => ({
+        url: `${base}/autos/${v.id}`,
+        lastModified: now,
+        changeFrequency: "daily" as const,
+        priority: 0.8,
+      })),
+    )
+    .catch(() => [] as MetadataRoute.Sitemap);
 
   const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((p) => ({
     url: `${base}/blog/${p.slug}`,
@@ -41,6 +39,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
+
+  const vehicleRoutes = await vehiclePromise;
 
   return [...staticRoutes, ...vehicleRoutes, ...blogRoutes];
 }

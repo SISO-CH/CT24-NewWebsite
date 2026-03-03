@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPostSummaries } from "@/lib/blog";
 import BlogContent from "@/components/blog/BlogContent";
 import FadeIn from "@/components/ui/FadeIn";
 
@@ -17,9 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  // Strip raw MDX content — overview only needs summary fields
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const posts = getAllPosts().map(({ content, ...rest }) => rest);
+  const posts = getAllPostSummaries();
 
   const jsonLd = {
     "@context": "https://schema.org",

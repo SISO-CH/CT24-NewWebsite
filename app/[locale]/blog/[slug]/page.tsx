@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { ArrowLeft } from "lucide-react";
-import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import { BLOG_CATEGORIES, getAllPosts, getPostBySlug } from "@/lib/blog";
 import { mdxComponents } from "@/components/blog/mdx";
 import BlogCard from "@/components/blog/BlogCard";
 import FadeIn from "@/components/ui/FadeIn";
@@ -22,6 +22,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = getPostBySlug(slug);
   if (!post) return {};
 
+  const imageUrl = post.image.startsWith("http")
+    ? post.image
+    : `https://cartrade24.ch${post.image}`;
+
   return {
     title: `${post.title} | CarTrade24 Blog`,
     description: post.excerpt,
@@ -33,9 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "article",
       publishedTime: post.date,
       authors: [post.author],
-      images: post.image.startsWith("http")
-        ? [post.image]
-        : [`https://cartrade24.ch${post.image}`],
+      images: [imageUrl],
     },
   };
 }
@@ -49,8 +51,10 @@ export default async function BlogPostPage({ params }: Props) {
     .filter((p) => p.category === post.category && p.slug !== post.slug)
     .slice(0, 3);
 
-  const categoryLabel = post.category === "news" ? "News & Aktionen" : "Ratgeber";
-  const categoryColor = post.category === "news" ? "var(--ct-magenta)" : "var(--ct-cyan)";
+  const { label: categoryLabel, color: categoryColor } = BLOG_CATEGORIES[post.category];
+  const imageUrl = post.image.startsWith("http")
+    ? post.image
+    : `https://cartrade24.ch${post.image}`;
 
   // JSON-LD structured data for SEO — safe because JSON.stringify produces
   // valid JSON and we escape "</script>" via the \u003c replacement.
@@ -68,9 +72,7 @@ export default async function BlogPostPage({ params }: Props) {
       url: "https://cartrade24.ch",
     },
     url: `https://cartrade24.ch/blog/${post.slug}`,
-    image: post.image.startsWith("http")
-      ? post.image
-      : `https://cartrade24.ch${post.image}`,
+    image: imageUrl,
   };
 
   const jsonLdHtml = JSON.stringify(jsonLd).replace(/</g, "\\u003c");

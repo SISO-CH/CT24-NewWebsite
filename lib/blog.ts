@@ -3,21 +3,9 @@ import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
 
-export type BlogCategory = "ratgeber" | "news";
-
-export interface BlogPost {
-  slug: string;
-  title: string;
-  date: string;
-  category: BlogCategory;
-  excerpt: string;
-  image: string;
-  tags: string[];
-  author: string;
-  draft: boolean;
-  readingTime: string;
-  content: string;
-}
+export { BLOG_CATEGORIES } from "./blog-shared";
+export type { BlogCategory, BlogPost, BlogPostSummary } from "./blog-shared";
+import type { BlogCategory, BlogPost, BlogPostSummary } from "./blog-shared";
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
@@ -48,10 +36,15 @@ let _cachedPosts: BlogPost[] | null = null;
 
 export function getAllPosts(): BlogPost[] {
   if (_cachedPosts) return _cachedPosts;
-  if (!fs.existsSync(BLOG_DIR)) return [];
 
-  _cachedPosts = fs
-    .readdirSync(BLOG_DIR)
+  let files: string[];
+  try {
+    files = fs.readdirSync(BLOG_DIR);
+  } catch {
+    return [];
+  }
+
+  _cachedPosts = files
     .filter((f) => f.endsWith(".mdx"))
     .map((f) => parseMdxFile(path.join(BLOG_DIR, f)))
     .filter((p): p is BlogPost => p !== null)
@@ -69,7 +62,10 @@ export function getPostBySlug(slug: string): BlogPost | null {
   return posts.find((p) => p.slug === slug) ?? null;
 }
 
-export type BlogPostSummary = Omit<BlogPost, "content">;
+export function getAllPostSummaries(): BlogPostSummary[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  return getAllPosts().map(({ content, ...rest }) => rest);
+}
 
 export function getAllTags(): string[] {
   const tags = new Set<string>();

@@ -111,7 +111,7 @@ async function main() {
     `category: ${category}`,
     `excerpt: "${escapeYaml(result.excerpt)}"`,
     `image: /images/blog/placeholder.jpg`,
-    `tags: [${allTags.join(", ")}]`,
+    `tags: [${allTags.map((t) => `"${escapeYaml(t)}"`).join(", ")}]`,
     `author: CarTrade24`,
     `draft: true`,
     "---",

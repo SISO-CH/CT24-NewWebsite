@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import BlogGrid from "./BlogGrid";
 import BlogCategoryTabs, { type BlogTab } from "./BlogCategoryTabs";
-import type { BlogPostSummary } from "@/lib/blog";
+import type { BlogPostSummary } from "@/lib/blog-shared";
 
 export default function BlogContent({ posts }: { posts: BlogPostSummary[] }) {
   const [tab, setTab] = useState<BlogTab>("all");

@@ -1,14 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { BlogPost, BlogPostSummary } from "@/lib/blog";
-
-const CATEGORY_BADGE: Record<string, { label: string; color: string }> = {
-  ratgeber: { label: "Ratgeber", color: "var(--ct-cyan)" },
-  news:     { label: "News & Aktionen", color: "var(--ct-magenta)" },
-};
+import { BLOG_CATEGORIES, type BlogPost, type BlogPostSummary } from "@/lib/blog-shared";
 
 export default function BlogCard({ post }: { post: BlogPost | BlogPostSummary }) {
-  const badge = CATEGORY_BADGE[post.category] ?? CATEGORY_BADGE.ratgeber;
+  const badge = BLOG_CATEGORIES[post.category];
 
   return (
     <Link

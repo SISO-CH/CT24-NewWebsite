@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import BlogCard from "./BlogCard";
-import type { BlogPost, BlogPostSummary } from "@/lib/blog";
+import type { BlogPost, BlogPostSummary } from "@/lib/blog-shared";
 
 const PAGE_SIZE = 12;
 
