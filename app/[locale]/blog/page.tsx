@@ -17,7 +17,9 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const posts = getAllPosts().map(({ content: _, ...rest }) => rest);
+  // Strip raw MDX content — overview only needs summary fields
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const posts = getAllPosts().map(({ content, ...rest }) => rest);
 
   const jsonLd = {
     "@context": "https://schema.org",
