@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const posts = getAllPosts();
+  const posts = getAllPosts().map(({ content: _, ...rest }) => rest);
 
   const jsonLd = {
     "@context": "https://schema.org",

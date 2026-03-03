@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { BlogPost } from "@/lib/blog";
+import type { BlogPost, BlogPostSummary } from "@/lib/blog";
 
 const CATEGORY_BADGE: Record<string, { label: string; color: string }> = {
   ratgeber: { label: "Ratgeber", color: "var(--ct-cyan)" },
   news:     { label: "News & Aktionen", color: "var(--ct-magenta)" },
 };
 
-export default function BlogCard({ post }: { post: BlogPost }) {
+export default function BlogCard({ post }: { post: BlogPost | BlogPostSummary }) {
   const badge = CATEGORY_BADGE[post.category] ?? CATEGORY_BADGE.ratgeber;
 
   return (

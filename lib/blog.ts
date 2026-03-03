@@ -44,15 +44,20 @@ function parseMdxFile(filePath: string): BlogPost | null {
   };
 }
 
+let _cachedPosts: BlogPost[] | null = null;
+
 export function getAllPosts(): BlogPost[] {
+  if (_cachedPosts) return _cachedPosts;
   if (!fs.existsSync(BLOG_DIR)) return [];
 
-  return fs
+  _cachedPosts = fs
     .readdirSync(BLOG_DIR)
     .filter((f) => f.endsWith(".mdx"))
     .map((f) => parseMdxFile(path.join(BLOG_DIR, f)))
     .filter((p): p is BlogPost => p !== null)
     .sort((a, b) => b.date.localeCompare(a.date));
+
+  return _cachedPosts;
 }
 
 export function getPostsByCategory(category: BlogCategory): BlogPost[] {
@@ -63,6 +68,8 @@ export function getPostBySlug(slug: string): BlogPost | null {
   const posts = getAllPosts();
   return posts.find((p) => p.slug === slug) ?? null;
 }
+
+export type BlogPostSummary = Omit<BlogPost, "content">;
 
 export function getAllTags(): string[] {
   const tags = new Set<string>();

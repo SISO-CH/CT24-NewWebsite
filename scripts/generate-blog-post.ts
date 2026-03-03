@@ -77,6 +77,10 @@ Unternehmen: CarTrade24, Fahrzeughändler in Wohlen AG`,
   };
 }
 
+function escapeYaml(s: string): string {
+  return s.replace(/"/g, '\\"');
+}
+
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -101,11 +105,11 @@ async function main() {
 
   const frontmatter = [
     "---",
-    `title: "${result.title}"`,
+    `title: "${escapeYaml(result.title)}"`,
     `slug: ${slug}`,
     `date: ${today}`,
     `category: ${category}`,
-    `excerpt: "${result.excerpt}"`,
+    `excerpt: "${escapeYaml(result.excerpt)}"`,
     `image: /images/blog/placeholder.jpg`,
     `tags: [${allTags.join(", ")}]`,
     `author: CarTrade24`,

@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import BlogCard from "./BlogCard";
-import type { BlogPost } from "@/lib/blog";
+import type { BlogPost, BlogPostSummary } from "@/lib/blog";
 
 const PAGE_SIZE = 12;
 
-export default function BlogGrid({ posts }: { posts: BlogPost[] }) {
+export default function BlogGrid({ posts }: { posts: (BlogPost | BlogPostSummary)[] }) {
   const [visible, setVisible] = useState(PAGE_SIZE);
   const loaderRef = useRef<HTMLDivElement>(null);
 

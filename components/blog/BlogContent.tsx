@@ -3,9 +3,9 @@
 import { useState, useMemo } from "react";
 import BlogGrid from "./BlogGrid";
 import BlogCategoryTabs, { type BlogTab } from "./BlogCategoryTabs";
-import type { BlogPost } from "@/lib/blog";
+import type { BlogPostSummary } from "@/lib/blog";
 
-export default function BlogContent({ posts }: { posts: BlogPost[] }) {
+export default function BlogContent({ posts }: { posts: BlogPostSummary[] }) {
   const [tab, setTab] = useState<BlogTab>("all");
 
   const filtered = useMemo(
