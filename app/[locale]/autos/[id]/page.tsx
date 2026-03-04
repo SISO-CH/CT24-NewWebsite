@@ -133,7 +133,12 @@ export default async function VehicleDetailPage({ params }: Props) {
         }}
       />
 
-      <TrackVehicleView vehicleId={vehicle.id} />
+      <TrackVehicleView
+        vehicleId={vehicle.id}
+        make={vehicle.make}
+        model={vehicle.model}
+        price={vehicle.price}
+      />
 
       {/* Header */}
       <section className="pt-24 pb-6 bg-ct-light border-b border-[#e5e7eb] overflow-x-hidden">
