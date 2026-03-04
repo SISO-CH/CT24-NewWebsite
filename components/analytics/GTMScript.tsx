@@ -1,22 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
 import Script from "next/script";
-import { hasConsent, CONSENT_EVENT } from "@/lib/consent";
+import { useConsentGate } from "@/lib/useConsentGate";
 
 export default function GTMScript() {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    if (hasConsent("marketing")) {
-      setReady(true);
-      return;
-    }
-    const handler = () => {
-      if (hasConsent("marketing")) setReady(true);
-    };
-    window.addEventListener(CONSENT_EVENT, handler);
-    return () => window.removeEventListener(CONSENT_EVENT, handler);
-  }, []);
+  const ready = useConsentGate("marketing");
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
   if (!ready || !gtmId) return null;

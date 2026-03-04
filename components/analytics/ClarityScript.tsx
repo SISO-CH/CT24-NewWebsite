@@ -1,22 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
 import Script from "next/script";
-import { hasConsent, CONSENT_EVENT } from "@/lib/consent";
+import { useConsentGate } from "@/lib/useConsentGate";
 
 export default function ClarityScript() {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    if (hasConsent("analytics")) {
-      setReady(true);
-      return;
-    }
-    const handler = () => {
-      if (hasConsent("analytics")) setReady(true);
-    };
-    window.addEventListener(CONSENT_EVENT, handler);
-    return () => window.removeEventListener(CONSENT_EVENT, handler);
-  }, []);
+  const ready = useConsentGate("analytics");
 
   const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID;
   if (!ready || !clarityId) return null;

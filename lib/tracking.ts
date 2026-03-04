@@ -15,7 +15,10 @@ interface VehicleViewEvent {
 
 interface VehicleListFilterEvent {
   event: "vehicle_list_filter";
-  filter_type: string;
+  filter_type:
+    | "search" | "make" | "body" | "priceMin" | "priceMax"
+    | "sort" | "fuel" | "transmission" | "yearMin" | "yearMax"
+    | "kmMax" | "color" | "drivetrain" | "monthlyRateMax";
   filter_value: string;
 }
 
