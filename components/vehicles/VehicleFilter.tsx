@@ -109,12 +109,14 @@ const MONTHLY_RATE_OPTIONS = [
 ];
 
 const selectClass =
-  "h-9 px-3 text-sm border border-[#e5e7eb] bg-white text-[#374151] rounded-lg" +
+  "h-10 px-3 text-sm font-medium border border-[#e5e7eb] bg-white text-[#1f2937] rounded-lg" +
   " focus:outline-none focus:border-ct-cyan focus:ring-1 focus:ring-[var(--ct-cyan)]/20" +
   " transition-colors cursor-pointer appearance-none pr-7";
 
+const labelClass = "text-[10px] font-semibold text-[#6b7280] uppercase tracking-wider mb-1";
+
 export default function VehicleFilter({ filters, onChange, resultCount, vehicles }: VehicleFilterProps) {
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(true);
 
   const makes = useMemo(
     () => ["Alle Marken", ...Array.from(new Set(vehicles.map((v) => v.make))).sort()],
@@ -158,77 +160,92 @@ export default function VehicleFilter({ filters, onChange, resultCount, vehicles
 
   return (
     <div className="bg-white rounded-xl border border-[#e5e7eb] shadow-[0_2px_12px_rgba(0,0,0,0.06)] mb-8 overflow-hidden">
-      <div className="flex flex-wrap gap-2.5 items-center p-4">
-        <div className="flex items-center gap-1.5 mr-1">
+      <div className="flex flex-wrap gap-2.5 items-end p-4 max-sm:grid max-sm:grid-cols-2 max-sm:gap-3">
+        <div className="flex items-center gap-1.5 mr-1 max-sm:col-span-2">
           <SlidersHorizontal size={14} className="text-ct-cyan" />
           <span className="text-xs font-semibold uppercase tracking-[0.08em] text-[#374151]">Filter</span>
         </div>
 
-        <div className="relative flex-1 min-w-[180px]">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Marke, Modell suchen…"
-            value={filters.search}
-            onChange={(e) => onChange({ ...filters, search: e.target.value })}
-            onBlur={(e) => {
-              if (e.target.value) {
-                trackEvent({ event: "vehicle_list_filter", filter_type: "search", filter_value: e.target.value });
+        <div className="flex flex-col flex-1 min-w-[180px] max-sm:col-span-2">
+          <label className={labelClass}>Suche</label>
+          <div className="relative">
+            <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Marke, Modell suchen…"
+              value={filters.search}
+              onChange={(e) => onChange({ ...filters, search: e.target.value })}
+              onBlur={(e) => {
+                if (e.target.value) {
+                  trackEvent({ event: "vehicle_list_filter", filter_type: "search", filter_value: e.target.value });
+                }
+              }}
+              className="h-10 w-full pl-8 pr-3 text-sm font-medium border border-[#e5e7eb] bg-white text-[#1f2937] rounded-lg
+                         focus:outline-none focus:border-ct-cyan focus:ring-1 focus:ring-[var(--ct-cyan)]/20 transition-colors"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col min-w-[140px]">
+          <label className={labelClass}>Marke</label>
+          <div className="relative">
+            <select value={filters.make} onChange={(e) => {
+              onChange({ ...filters, make: e.target.value });
+              if (e.target.value && e.target.value !== "Alle Marken") {
+                trackEvent({ event: "vehicle_list_filter", filter_type: "make", filter_value: e.target.value });
               }
-            }}
-            className="h-9 w-full pl-8 pr-3 text-sm border border-[#e5e7eb] bg-white text-[#374151] rounded-lg
-                       focus:outline-none focus:border-ct-cyan focus:ring-1 focus:ring-[var(--ct-cyan)]/20 transition-colors"
-          />
+            }} className={selectClass}>
+              {makes.map((m) => <option key={m}>{m}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
         </div>
 
-        <div className="relative">
-          <select value={filters.make} onChange={(e) => {
-            onChange({ ...filters, make: e.target.value });
-            if (e.target.value && e.target.value !== "Alle Marken") {
-              trackEvent({ event: "vehicle_list_filter", filter_type: "make", filter_value: e.target.value });
-            }
-          }} className={selectClass}>
-            {makes.map((m) => <option key={m}>{m}</option>)}
-          </select>
-          <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+        <div className="flex flex-col min-w-[140px]">
+          <label className={labelClass}>Karosserie</label>
+          <div className="relative">
+            <select value={filters.body} onChange={(e) => {
+              onChange({ ...filters, body: e.target.value as VehicleBody | "" });
+              if (e.target.value) {
+                trackEvent({ event: "vehicle_list_filter", filter_type: "body", filter_value: e.target.value });
+              }
+            }} className={selectClass}>
+              <option value="">Karosserie</option>
+              {bodies.map((b) => <option key={b} value={b}>{b}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
         </div>
 
-        <div className="relative">
-          <select value={filters.body} onChange={(e) => {
-            onChange({ ...filters, body: e.target.value as VehicleBody | "" });
-            if (e.target.value) {
-              trackEvent({ event: "vehicle_list_filter", filter_type: "body", filter_value: e.target.value });
-            }
-          }} className={selectClass}>
-            <option value="">Karosserie</option>
-            {bodies.map((b) => <option key={b} value={b}>{b}</option>)}
-          </select>
-          <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+        <div className="flex flex-col min-w-[140px]">
+          <label className={labelClass}>Preis max</label>
+          <div className="relative">
+            <select value={filters.priceMax} onChange={(e) => {
+              onChange({ ...filters, priceMax: e.target.value });
+              if (e.target.value) {
+                trackEvent({ event: "vehicle_list_filter", filter_type: "priceMax", filter_value: e.target.value });
+              }
+            }} className={selectClass}>
+              {PRICE_OPTIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
         </div>
 
-        <div className="relative">
-          <select value={filters.priceMax} onChange={(e) => {
-            onChange({ ...filters, priceMax: e.target.value });
-            if (e.target.value) {
-              trackEvent({ event: "vehicle_list_filter", filter_type: "priceMax", filter_value: e.target.value });
-            }
-          }} className={selectClass}>
-            {PRICE_OPTIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
-          </select>
-          <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
-        </div>
-
-        <div className="relative ml-auto">
-          <ArrowUpDown size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none" />
-          <select value={filters.sort} onChange={(e) => {
-            onChange({ ...filters, sort: e.target.value as FilterState["sort"] });
-            if (e.target.value && e.target.value !== "default") {
-              trackEvent({ event: "vehicle_list_filter", filter_type: "sort", filter_value: e.target.value });
-            }
-          }} className={`${selectClass} pl-7`}>
-            {SORT_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-          </select>
-          <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+        <div className="flex flex-col min-w-[140px] ml-auto max-sm:ml-0">
+          <label className={labelClass}>Sortierung</label>
+          <div className="relative">
+            <ArrowUpDown size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none" />
+            <select value={filters.sort} onChange={(e) => {
+              onChange({ ...filters, sort: e.target.value as FilterState["sort"] });
+              if (e.target.value && e.target.value !== "default") {
+                trackEvent({ event: "vehicle_list_filter", filter_type: "sort", filter_value: e.target.value });
+              }
+            }} className={`${selectClass} pl-7`}>
+              {SORT_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+            </select>
+            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          </div>
         </div>
       </div>
 
@@ -246,130 +263,157 @@ export default function VehicleFilter({ filters, onChange, resultCount, vehicles
       </div>
 
       {showAdvanced && (
-        <div className="flex flex-wrap gap-2.5 items-center px-4 pb-3 border-t border-[#f5f5f5] pt-3">
+        <div className="flex flex-wrap gap-2.5 items-end px-4 pb-3 border-t border-[#f5f5f5] pt-3 max-sm:grid max-sm:grid-cols-2 max-sm:gap-3">
           {/* Preis min */}
-          <div className="relative">
-            <select value={filters.priceMin} onChange={(e) => {
-              onChange({ ...filters, priceMin: e.target.value });
-              if (e.target.value) {
-                trackEvent({ event: "vehicle_list_filter", filter_type: "priceMin", filter_value: e.target.value });
-              }
-            }} className={selectClass}>
-              {PRICE_MIN_OPTIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
-            </select>
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          <div className="flex flex-col min-w-[140px]">
+            <label className={labelClass}>Preis min</label>
+            <div className="relative">
+              <select value={filters.priceMin} onChange={(e) => {
+                onChange({ ...filters, priceMin: e.target.value });
+                if (e.target.value) {
+                  trackEvent({ event: "vehicle_list_filter", filter_type: "priceMin", filter_value: e.target.value });
+                }
+              }} className={selectClass}>
+                {PRICE_MIN_OPTIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
           </div>
 
           {/* Treibstoff */}
-          <div className="relative">
-            <select value={filters.fuel} onChange={(e) => {
-              onChange({ ...filters, fuel: e.target.value });
-              if (e.target.value) {
-                trackEvent({ event: "vehicle_list_filter", filter_type: "fuel", filter_value: e.target.value });
-              }
-            }} className={selectClass}>
-              {FUEL_OPTIONS.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
-            </select>
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          <div className="flex flex-col min-w-[140px]">
+            <label className={labelClass}>Treibstoff</label>
+            <div className="relative">
+              <select value={filters.fuel} onChange={(e) => {
+                onChange({ ...filters, fuel: e.target.value });
+                if (e.target.value) {
+                  trackEvent({ event: "vehicle_list_filter", filter_type: "fuel", filter_value: e.target.value });
+                }
+              }} className={selectClass}>
+                {FUEL_OPTIONS.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
           </div>
 
           {/* Getriebe */}
-          <div className="relative">
-            <select value={filters.transmission} onChange={(e) => {
-              onChange({ ...filters, transmission: e.target.value });
-              if (e.target.value) {
-                trackEvent({ event: "vehicle_list_filter", filter_type: "transmission", filter_value: e.target.value });
-              }
-            }} className={selectClass}>
-              {TRANSMISSION_OPTIONS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
-            </select>
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          <div className="flex flex-col min-w-[140px]">
+            <label className={labelClass}>Getriebe</label>
+            <div className="relative">
+              <select value={filters.transmission} onChange={(e) => {
+                onChange({ ...filters, transmission: e.target.value });
+                if (e.target.value) {
+                  trackEvent({ event: "vehicle_list_filter", filter_type: "transmission", filter_value: e.target.value });
+                }
+              }} className={selectClass}>
+                {TRANSMISSION_OPTIONS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
           </div>
 
           {/* Baujahr von */}
-          <div className="relative">
-            <select value={filters.yearMin} onChange={(e) => {
-              onChange({ ...filters, yearMin: e.target.value });
-              if (e.target.value) {
-                trackEvent({ event: "vehicle_list_filter", filter_type: "yearMin", filter_value: e.target.value });
-              }
-            }} className={selectClass}>
-              <option value="">Jahr ab</option>
-              {YEAR_OPTIONS.map((y) => <option key={y.value} value={y.value}>{y.label}</option>)}
-            </select>
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          <div className="flex flex-col min-w-[140px]">
+            <label className={labelClass}>Jahr ab</label>
+            <div className="relative">
+              <select value={filters.yearMin} onChange={(e) => {
+                onChange({ ...filters, yearMin: e.target.value });
+                if (e.target.value) {
+                  trackEvent({ event: "vehicle_list_filter", filter_type: "yearMin", filter_value: e.target.value });
+                }
+              }} className={selectClass}>
+                <option value="">Jahr ab</option>
+                {YEAR_OPTIONS.map((y) => <option key={y.value} value={y.value}>{y.label}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
           </div>
 
           {/* Baujahr bis */}
-          <div className="relative">
-            <select value={filters.yearMax} onChange={(e) => {
-              onChange({ ...filters, yearMax: e.target.value });
-              if (e.target.value) {
-                trackEvent({ event: "vehicle_list_filter", filter_type: "yearMax", filter_value: e.target.value });
-              }
-            }} className={selectClass}>
-              <option value="">Jahr bis</option>
-              {YEAR_OPTIONS.map((y) => <option key={y.value} value={y.value}>{y.label}</option>)}
-            </select>
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          <div className="flex flex-col min-w-[140px]">
+            <label className={labelClass}>Jahr bis</label>
+            <div className="relative">
+              <select value={filters.yearMax} onChange={(e) => {
+                onChange({ ...filters, yearMax: e.target.value });
+                if (e.target.value) {
+                  trackEvent({ event: "vehicle_list_filter", filter_type: "yearMax", filter_value: e.target.value });
+                }
+              }} className={selectClass}>
+                <option value="">Jahr bis</option>
+                {YEAR_OPTIONS.map((y) => <option key={y.value} value={y.value}>{y.label}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
           </div>
 
           {/* km max */}
-          <div className="relative">
-            <select value={filters.kmMax} onChange={(e) => {
-              onChange({ ...filters, kmMax: e.target.value });
-              if (e.target.value) {
-                trackEvent({ event: "vehicle_list_filter", filter_type: "kmMax", filter_value: e.target.value });
-              }
-            }} className={selectClass}>
-              {KM_OPTIONS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
-            </select>
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          <div className="flex flex-col min-w-[140px]">
+            <label className={labelClass}>km max</label>
+            <div className="relative">
+              <select value={filters.kmMax} onChange={(e) => {
+                onChange({ ...filters, kmMax: e.target.value });
+                if (e.target.value) {
+                  trackEvent({ event: "vehicle_list_filter", filter_type: "kmMax", filter_value: e.target.value });
+                }
+              }} className={selectClass}>
+                {KM_OPTIONS.map((k) => <option key={k.value} value={k.value}>{k.label}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
           </div>
 
           {/* Farbe */}
           {colors.length > 0 && (
-            <div className="relative">
-              <select value={filters.color} onChange={(e) => {
-                onChange({ ...filters, color: e.target.value });
-                if (e.target.value) {
-                  trackEvent({ event: "vehicle_list_filter", filter_type: "color", filter_value: e.target.value });
-                }
-              }} className={selectClass}>
-                <option value="">Farbe</option>
-                {colors.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            <div className="flex flex-col min-w-[140px]">
+              <label className={labelClass}>Farbe</label>
+              <div className="relative">
+                <select value={filters.color} onChange={(e) => {
+                  onChange({ ...filters, color: e.target.value });
+                  if (e.target.value) {
+                    trackEvent({ event: "vehicle_list_filter", filter_type: "color", filter_value: e.target.value });
+                  }
+                }} className={selectClass}>
+                  <option value="">Farbe</option>
+                  {colors.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+              </div>
             </div>
           )}
 
           {/* Antrieb */}
           {drivetrains.length > 0 && (
-            <div className="relative">
-              <select value={filters.drivetrain} onChange={(e) => {
-                onChange({ ...filters, drivetrain: e.target.value });
-                if (e.target.value) {
-                  trackEvent({ event: "vehicle_list_filter", filter_type: "drivetrain", filter_value: e.target.value });
-                }
-              }} className={selectClass}>
-                <option value="">Antrieb</option>
-                {drivetrains.map((d) => <option key={d} value={d}>{d}</option>)}
-              </select>
-              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            <div className="flex flex-col min-w-[140px]">
+              <label className={labelClass}>Antrieb</label>
+              <div className="relative">
+                <select value={filters.drivetrain} onChange={(e) => {
+                  onChange({ ...filters, drivetrain: e.target.value });
+                  if (e.target.value) {
+                    trackEvent({ event: "vehicle_list_filter", filter_type: "drivetrain", filter_value: e.target.value });
+                  }
+                }} className={selectClass}>
+                  <option value="">Antrieb</option>
+                  {drivetrains.map((d) => <option key={d} value={d}>{d}</option>)}
+                </select>
+                <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+              </div>
             </div>
           )}
 
           {/* Monatsrate max */}
-          <div className="relative">
-            <select value={filters.monthlyRateMax} onChange={(e) => {
-              onChange({ ...filters, monthlyRateMax: e.target.value });
-              if (e.target.value) {
-                trackEvent({ event: "vehicle_list_filter", filter_type: "monthlyRateMax", filter_value: e.target.value });
-              }
-            }} className={selectClass}>
-              {MONTHLY_RATE_OPTIONS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
-            </select>
-            <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+          <div className="flex flex-col min-w-[140px]">
+            <label className={labelClass}>Monatsrate max</label>
+            <div className="relative">
+              <select value={filters.monthlyRateMax} onChange={(e) => {
+                onChange({ ...filters, monthlyRateMax: e.target.value });
+                if (e.target.value) {
+                  trackEvent({ event: "vehicle_list_filter", filter_type: "monthlyRateMax", filter_value: e.target.value });
+                }
+              }} className={selectClass}>
+                {MONTHLY_RATE_OPTIONS.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
+              </select>
+              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9ca3af] text-[10px]">▾</span>
+            </div>
           </div>
         </div>
       )}
@@ -381,8 +425,8 @@ export default function VehicleFilter({ filters, onChange, resultCount, vehicles
         {activeFilters.map((f) => (
           <button type="button" key={f.key} onClick={() => removeFilter(f.key)}
             aria-label={`Filter "${f.label}" entfernen`}
-            className="inline-flex items-center gap-1 h-6 px-2.5 rounded-full text-xs font-medium
-                       bg-ct-cyan/10 text-ct-cyan hover:bg-ct-cyan/20 transition-colors">
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-ct-cyan text-white text-xs font-semibold
+                       hover:bg-ct-cyan/80 transition-colors">
             {f.label}<X size={10} />
           </button>
         ))}
