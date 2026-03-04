@@ -26,10 +26,11 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
   const [down, setDown] = useState(DOWN_DEFAULT);
   const [months, setMonths] = useState<(typeof TERM_OPTIONS)[number]>(48);
   const [km, setKm] = useState<(typeof KM_OPTIONS)[number]>(15000);
+  const [residual, setResidual] = useState(30);
 
   const rate = useMemo(
-    () => calcMonthlyRate(fixedPrice ?? price, down, months),
-    [fixedPrice, price, down, months]
+    () => calcMonthlyRate(fixedPrice ?? price, down, months, residual),
+    [fixedPrice, price, down, months, residual]
   );
 
   return (
@@ -78,6 +79,28 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
         </div>
       </div>
 
+      {/* Restwert slider */}
+      <div>
+        <div className="flex justify-between items-baseline mb-1.5">
+          <label className="text-xs font-semibold text-[#6b7280] uppercase tracking-wider">Restwert</label>
+          <span className="text-sm font-bold text-ct-dark">
+            {residual}% = CHF {formatCHF(Math.round((fixedPrice ?? price) * residual / 100))}
+          </span>
+        </div>
+        <input
+          type="range"
+          min={10}
+          max={60}
+          step={5}
+          value={residual}
+          onChange={(e) => setResidual(Number(e.target.value))}
+          className="w-full accent-[var(--ct-cyan)] cursor-pointer"
+        />
+        <div className="flex justify-between text-[10px] text-[#9ca3af] mt-0.5">
+          <span>10%</span><span>60%</span>
+        </div>
+      </div>
+
       {/* Term toggles */}
       <div>
         <p className="text-xs font-semibold text-[#6b7280] uppercase tracking-wider mb-2">Laufzeit</p>
@@ -120,7 +143,7 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
           <span className="text-sm font-normal text-[#9ca3af]"> /Mt.</span>
         </p>
         <p className="text-[10px] text-[#9ca3af] mt-1.5 leading-relaxed">
-          3.9% p.a., {down}% Anzahlung, {months} Monate, {formatCHF(km)} km/J.
+          3.9% p.a., {down}% Anzahlung, {residual}% Restwert, {months} Monate, {formatCHF(km)} km/J.
           <br />Inkl. 8.1% MwSt. Vorbehaltlich Bonitätsprüfung.
         </p>
       </div>

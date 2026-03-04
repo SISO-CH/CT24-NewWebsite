@@ -376,7 +376,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                   </div>
 
                   {/* Leasingrechner-Widget — collapsible */}
-                  <details className="group border-t border-[#f0f0f0] pt-4 mb-4">
+                  <details open className="group border-t border-[#f0f0f0] pt-4 mb-4">
                     <summary className="list-none cursor-pointer flex items-center justify-between text-xs font-semibold text-[#6b7280] hover:text-ct-cyan transition-colors mb-3">
                       Monatsrate berechnen
                       <span className="text-[10px] group-open:rotate-180 transition-transform">▾</span>
