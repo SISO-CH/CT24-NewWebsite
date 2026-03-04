@@ -16,7 +16,7 @@ const KM_OPTIONS = [10000, 15000, 20000, 30000] as const;
 const DOWN_DEFAULT = 10;
 
 function toggleBtnClass(active: boolean) {
-  return `h-8 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+  return `h-8 min-h-[44px] px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
     active ? "bg-ct-cyan text-white" : "bg-ct-light text-[#6b7280] hover:bg-[#e8eaec]"
   }`;
 }

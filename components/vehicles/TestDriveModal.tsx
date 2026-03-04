@@ -60,8 +60,9 @@ export default function TestDriveModal({ vehicleLabel, onClose, vehiclePrice }: 
 
       {/* Modal */}
       <div
-        className="fixed inset-x-4 top-1/2 -translate-y-1/2 max-w-md mx-auto
-                   bg-white rounded-2xl shadow-2xl z-50 p-6"
+        className="fixed inset-0 sm:inset-x-4 sm:inset-y-auto sm:top-1/2 sm:-translate-y-1/2
+                   max-w-md sm:mx-auto bg-white sm:rounded-2xl shadow-2xl z-50 p-6
+                   overflow-y-auto"
         role="dialog"
         aria-modal="true"
         aria-label="Probefahrt buchen"
