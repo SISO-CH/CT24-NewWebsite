@@ -51,7 +51,7 @@ interface TestDriveRequestEvent {
 
 interface CTAClickEvent {
   event: "cta_click";
-  cta_type: "phone" | "whatsapp" | "test_drive" | "appointment" | "other";
+  cta_type: "phone" | "whatsapp" | "test_drive" | "appointment" | "inquiry" | "other";
   source_page: string;
 }
 

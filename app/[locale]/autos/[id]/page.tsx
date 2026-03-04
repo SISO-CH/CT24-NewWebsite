@@ -10,7 +10,6 @@ import {
   GitMerge,
   Zap,
   CheckCircle2,
-  ArrowRight,
   Shield,
   ExternalLink,
   Phone,
@@ -25,6 +24,7 @@ import VehicleMediaTabs from "@/components/vehicles/VehicleMediaTabs";
 import { formatCHF } from "@/lib/utils";
 
 import TestDriveTrigger from "@/components/vehicles/TestDriveTrigger";
+import InquiryTrigger from "@/components/vehicles/InquiryTrigger";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
@@ -316,15 +316,10 @@ export default async function VehicleDetailPage({ params }: Props) {
 
                   <div className="space-y-2.5 mb-5">
                     {/* Primary CTA */}
-                    <Link
-                      href={`/kontakt?betreff=Fahrzeuganfrage&modell=${encodeURIComponent(
-                        `${vehicle.make} ${vehicle.model}`
-                      )}`}
-                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl
-                                 text-white font-semibold text-sm hover:opacity-90 transition-opacity bg-ct-cyan"
-                    >
-                      Jetzt anfragen <ArrowRight size={15} />
-                    </Link>
+                    <InquiryTrigger
+                      vehicleLabel={vehicleLabel}
+                      vehiclePrice={vehicle.price}
+                    />
 
                     {/* Secondary: Probefahrt + WhatsApp side by side */}
                     <div className="grid grid-cols-2 gap-2">
