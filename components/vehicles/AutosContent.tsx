@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, CheckCircle2 } from "lucide-react";
+import { trackEvent } from "@/lib/tracking";
 import type { Vehicle, VehicleBody } from "@/lib/vehicles";
 import VehicleFilter, { type FilterState, DEFAULT_FILTERS } from "./VehicleFilter";
 import VehicleGrid from "./VehicleGrid";
@@ -15,6 +16,83 @@ interface AutosContentProps {
   vehicles: Vehicle[];
   initialMake?: string;
   initialBody?: string;
+}
+
+function SourcingMiniForm() {
+  const [email, setEmail] = useState("");
+  const [desc, setDesc] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          subject: "Fahrzeug-Sourcing-Anfrage",
+          message: `Fahrzeugwunsch: ${desc}\nE-Mail: ${email}`,
+        }),
+      });
+      if (res.ok) {
+        trackEvent({ event: "lead_form_submit", form_type: "sourcing", value: 50 });
+      }
+      setStatus(res.ok ? "success" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "success") {
+    return (
+      <div className="flex flex-col items-center gap-2 py-2">
+        <CheckCircle2 size={28} style={{ color: "var(--ct-green)" }} />
+        <p className="text-sm font-semibold text-ct-dark">Anfrage gesendet!</p>
+        <p className="text-xs text-[#6b7280]">Wir melden uns bei Ihnen.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3 text-left">
+      <input
+        required
+        type="email"
+        placeholder="Ihre E-Mail-Adresse *"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-full h-10 px-3 text-sm border border-[#e5e7eb] rounded-lg
+                   focus:outline-none focus:border-[var(--ct-cyan)] focus:ring-1
+                   focus:ring-[var(--ct-cyan)]/20 transition-colors"
+      />
+      <textarea
+        required
+        placeholder="Welches Fahrzeug suchen Sie? (Marke, Modell, Budget…) *"
+        rows={3}
+        value={desc}
+        onChange={(e) => setDesc(e.target.value)}
+        className="w-full px-3 py-2 text-sm border border-[#e5e7eb] rounded-lg resize-none
+                   focus:outline-none focus:border-[var(--ct-cyan)] focus:ring-1
+                   focus:ring-[var(--ct-cyan)]/20 transition-colors"
+      />
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="w-full py-2.5 rounded-xl text-white text-sm font-semibold
+                   hover:opacity-90 transition-opacity disabled:opacity-60"
+        style={{ backgroundColor: "var(--ct-cyan)" }}
+      >
+        {status === "loading" ? "Wird gesendet…" : "Wunschfahrzeug anfragen"}
+      </button>
+      {status === "error" && (
+        <p className="text-xs text-center" style={{ color: "var(--ct-magenta)" }}>
+          Fehler. Bitte anrufen: +41 56 618 55 44
+        </p>
+      )}
+    </form>
+  );
 }
 
 export default function AutosContent({ vehicles, initialMake = "", initialBody = "" }: AutosContentProps) {
@@ -135,6 +213,18 @@ export default function AutosContent({ vehicles, initialMake = "", initialBody =
               </div>
             </div>
           )}
+
+          {/* Sourcing CTA */}
+          <div className="mt-10 max-w-lg mx-auto bg-ct-light rounded-2xl p-6 text-center">
+            <h4 className="text-lg font-extrabold text-ct-dark mb-2">
+              Wir finden Ihr Traumauto!
+            </h4>
+            <p className="text-sm text-[#6b7280] mb-4 leading-relaxed">
+              Beschreiben Sie uns Ihr Wunschfahrzeug — wir suchen aktiv für Sie
+              und melden uns, sobald wir einen Treffer haben.
+            </p>
+            <SourcingMiniForm />
+          </div>
         </div>
       ) : (
         <VehicleGrid vehicles={filtered} />
