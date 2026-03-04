@@ -16,6 +16,7 @@ import {
   Phone,
   MessageCircle,
   Lock,
+  Cog,
 } from "lucide-react";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
@@ -198,7 +199,7 @@ export default async function VehicleDetailPage({ params }: Props) {
 
               {/* Quick specs */}
               <FadeIn delay={60}>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                   {[
                     {
                       icon: CalendarDays,
@@ -219,6 +220,11 @@ export default async function VehicleDetailPage({ params }: Props) {
                       icon: GitMerge,
                       label: "Antrieb",
                       value: vehicle.drivetrain ?? "–",
+                    },
+                    {
+                      icon: Cog,
+                      label: "Getriebe",
+                      value: vehicle.transmission,
                     },
                   ].map((s) => (
                     <div
