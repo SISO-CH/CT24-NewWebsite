@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Settings, X } from "lucide-react";
 import {
   getConsent,
@@ -60,9 +61,9 @@ export default function CookieBanner() {
           <p className="text-sm text-[#4b5563] max-w-2xl leading-relaxed">
             Wir verwenden Cookies und Tracking-Technologien, um Ihr Erlebnis zu verbessern und
             unsere Dienste zu optimieren.{" "}
-            <a href="/datenschutz" className="underline hover:text-ct-cyan transition-colors">
+            <Link href="/datenschutz" className="underline hover:text-ct-cyan transition-colors">
               Datenschutzrichtlinie
-            </a>
+            </Link>
           </p>
           <div className="flex gap-3 shrink-0">
             <button
