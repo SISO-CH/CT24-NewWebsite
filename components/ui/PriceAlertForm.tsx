@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Bell } from "lucide-react";
+import { trackEvent } from "@/lib/tracking";
 
 interface Props {
   filtersJson?: string;
@@ -21,7 +22,15 @@ export default function PriceAlertForm({ filtersJson }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), filtersJson }),
       });
-      setState(res.ok ? "success" : "error");
+      const ok = res.ok;
+      if (ok) {
+        trackEvent({
+          event: "lead_form_submit",
+          form_type: "price_alert",
+          value: 50,
+        });
+      }
+      setState(ok ? "success" : "error");
     } catch {
       setState("error");
     }

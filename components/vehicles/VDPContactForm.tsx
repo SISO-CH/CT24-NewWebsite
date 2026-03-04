@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { Send, CheckCircle2 } from "lucide-react";
+import { trackEvent, conversionValue } from "@/lib/tracking";
 
 interface VDPContactFormProps {
   vehicleLabel: string; // e.g. "VW Golf Variant 1.5 eTSI"
+  vehiclePrice?: number;
 }
 
-export default function VDPContactForm({ vehicleLabel }: VDPContactFormProps) {
+export default function VDPContactForm({ vehicleLabel, vehiclePrice }: VDPContactFormProps) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [message, setMessage] = useState(
@@ -29,7 +31,15 @@ export default function VDPContactForm({ vehicleLabel }: VDPContactFormProps) {
           message,
         }),
       });
-      setStatus(res.ok ? "success" : "error");
+      const ok = res.ok;
+      if (ok) {
+        trackEvent({
+          event: "lead_form_submit",
+          form_type: "vdp_contact",
+          value: conversionValue(vehiclePrice),
+        });
+      }
+      setStatus(ok ? "success" : "error");
     } catch {
       setStatus("error");
     }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { trackEvent } from "@/lib/tracking";
 
 interface Props {
   subject: string;
@@ -45,6 +46,11 @@ export default function ServiceContactForm({ subject, fields = [] }: Props) {
         const d = await res.json().catch(() => ({}));
         throw new Error((d as { error?: string }).error ?? "Fehler");
       }
+      trackEvent({
+        event: "lead_form_submit",
+        form_type: "service",
+        value: 50,
+      });
       setDone(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Senden fehlgeschlagen.");

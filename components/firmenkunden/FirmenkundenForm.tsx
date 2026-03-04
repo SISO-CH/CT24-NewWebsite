@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Send, CheckCircle2 } from "lucide-react";
+import { trackEvent } from "@/lib/tracking";
 
 const fieldClass =
   "w-full px-4 py-3 text-sm border border-[#e5e7eb] bg-white text-ct-text placeholder:text-[#9ca3af]" +
@@ -41,6 +42,11 @@ export default function FirmenkundenForm() {
         const data = await res.json();
         throw new Error(data.error ?? "Unbekannter Fehler");
       }
+      trackEvent({
+        event: "lead_form_submit",
+        form_type: "firmenkunden",
+        value: 50,
+      });
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Fehler beim Senden.");

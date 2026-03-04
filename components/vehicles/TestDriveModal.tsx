@@ -3,13 +3,15 @@
 import { useState, useMemo } from "react";
 import { X, Calendar, CheckCircle2 } from "lucide-react";
 import MatelsoBookingWidget, { isMatelsoConfigured } from "@/components/ui/MatelsoBookingWidget";
+import { trackEvent, conversionValue } from "@/lib/tracking";
 
 interface TestDriveModalProps {
   vehicleLabel: string;
   onClose: () => void;
+  vehiclePrice?: number;
 }
 
-export default function TestDriveModal({ vehicleLabel, onClose }: TestDriveModalProps) {
+export default function TestDriveModal({ vehicleLabel, onClose, vehiclePrice }: TestDriveModalProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const minDate = useMemo(() => {
@@ -34,7 +36,14 @@ export default function TestDriveModal({ vehicleLabel, onClose }: TestDriveModal
           message: `Probefahrt-Anfrage für ${vehicleLabel}.\nWunschtermin: ${date}\nTelefon: ${phone}`,
         }),
       });
-      setStatus(res.ok ? "success" : "error");
+      const ok = res.ok;
+      if (ok) {
+        trackEvent({
+          event: "test_drive_request",
+          value: conversionValue(vehiclePrice),
+        });
+      }
+      setStatus(ok ? "success" : "error");
     } catch {
       setStatus("error");
     }
