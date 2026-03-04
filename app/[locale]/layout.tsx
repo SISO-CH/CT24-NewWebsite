@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import CookieBanner from "@/components/ui/CookieBanner";
 import GTMScript from "@/components/analytics/GTMScript";
 import MatelsoScript from "@/components/analytics/MatelsoScript";
+import ClarityScript from "@/components/analytics/ClarityScript";
 import MobileCTABar from "@/components/ui/MobileCTABar";
 import ChatWidget from "@/components/ui/ChatWidget";
 
@@ -81,6 +82,7 @@ export default async function LocaleLayout({
       <body className="flex flex-col min-h-screen">
         <GTMScript />
         <MatelsoScript />
+        <ClarityScript />
         <NextIntlClientProvider messages={messages}>
           <Header />
           <main className="flex-1">{children}</main>
