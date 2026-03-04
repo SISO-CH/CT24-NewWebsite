@@ -139,6 +139,7 @@ export default async function VehicleDetailPage({ params }: Props) {
         make={vehicle.make}
         model={vehicle.model}
         price={vehicle.price}
+        image={vehicle.images?.[0] ?? vehicle.image ?? ""}
       />
 
       {/* Header */}

@@ -9,11 +9,12 @@ interface Props {
   make: string;
   model: string;
   price: number;
+  image: string;
 }
 
-export default function TrackVehicleView({ vehicleId, make, model, price }: Props) {
+export default function TrackVehicleView({ vehicleId, make, model, price, image }: Props) {
   useEffect(() => {
-    addRecentlyViewed(vehicleId);
+    addRecentlyViewed({ id: vehicleId, make, model, price, image });
     trackEvent({
       event: "vehicle_view",
       vehicle_id: vehicleId,
@@ -21,7 +22,7 @@ export default function TrackVehicleView({ vehicleId, make, model, price }: Prop
       vehicle_model: model,
       vehicle_price: price,
     });
-  }, [vehicleId, make, model, price]);
+  }, [vehicleId, make, model, price, image]);
 
   return null;
 }
