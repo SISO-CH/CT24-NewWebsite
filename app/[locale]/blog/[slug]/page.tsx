@@ -8,6 +8,7 @@ import { BLOG_CATEGORIES, getAllPosts, getPostBySlug } from "@/lib/blog";
 import { mdxComponents } from "@/components/blog/mdx";
 import BlogCard from "@/components/blog/BlogCard";
 import FadeIn from "@/components/ui/FadeIn";
+import TrackBlogRead from "@/components/blog/TrackBlogRead";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -79,6 +80,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <article className="bg-ct-light min-h-screen">
+      <TrackBlogRead slug={post.slug} category={post.category} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdHtml }}

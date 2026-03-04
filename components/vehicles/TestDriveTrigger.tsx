@@ -6,9 +6,10 @@ import TestDriveModal from "./TestDriveModal";
 
 interface TestDriveTriggerProps {
   vehicleLabel: string;
+  vehiclePrice?: number;
 }
 
-export default function TestDriveTrigger({ vehicleLabel }: TestDriveTriggerProps) {
+export default function TestDriveTrigger({ vehicleLabel, vehiclePrice }: TestDriveTriggerProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -21,7 +22,7 @@ export default function TestDriveTrigger({ vehicleLabel }: TestDriveTriggerProps
       >
         <Calendar size={14} /> Probefahrt buchen
       </button>
-      {open && <TestDriveModal vehicleLabel={vehicleLabel} onClose={() => setOpen(false)} />}
+      {open && <TestDriveModal vehicleLabel={vehicleLabel} vehiclePrice={vehiclePrice} onClose={() => setOpen(false)} />}
     </>
   );
 }

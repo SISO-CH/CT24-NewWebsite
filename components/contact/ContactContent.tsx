@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send, CheckCircle2, MapPin, Phone, Mail, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { trackEvent } from "@/lib/tracking";
 
 interface FormData {
   name: string; email: string; phone: string; subject: string; message: string;
@@ -40,6 +41,11 @@ export default function ContactContent() {
         const data = await res.json();
         throw new Error(data.error ?? "Unbekannter Fehler");
       }
+      trackEvent({
+        event: "lead_form_submit",
+        form_type: "general_contact",
+        value: 50,
+      });
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Fehler beim Senden.");

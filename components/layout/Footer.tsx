@@ -51,6 +51,9 @@ function IconButton({
 }
 
 /* ── Footer ─────────────────────────────────────────────────── */
+// NOTE: Footer is a server component — onClick tracking for phone/email links
+// is not possible here. MobileCTABar covers mobile phone tracking, and
+// Matelso dynamic number insertion handles desktop call tracking.
 export default function Footer() {
   return (
     <footer
