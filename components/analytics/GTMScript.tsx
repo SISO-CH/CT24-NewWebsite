@@ -1,21 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
 import Script from "next/script";
-import { hasConsent } from "@/lib/consent";
+import { hasConsent, CONSENT_EVENT } from "@/lib/consent";
 
 export default function GTMScript() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (hasConsent()) {
+    if (hasConsent("marketing")) {
       setReady(true);
       return;
     }
     const handler = () => {
-      if (hasConsent()) setReady(true);
+      if (hasConsent("marketing")) setReady(true);
     };
-    window.addEventListener("ct24_consent_changed", handler);
-    return () => window.removeEventListener("ct24_consent_changed", handler);
+    window.addEventListener(CONSENT_EVENT, handler);
+    return () => window.removeEventListener(CONSENT_EVENT, handler);
   }, []);
 
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
