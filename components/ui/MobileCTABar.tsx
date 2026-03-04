@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Phone, MessageCircle, Calendar } from "lucide-react";
 import TestDriveModal from "@/components/vehicles/TestDriveModal";
+import { trackEvent } from "@/lib/tracking";
 
 const PHONE = "+41566185544";
 const WHATSAPP = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567";
@@ -27,7 +28,12 @@ export default function MobileCTABar() {
                       bg-white border-t border-[#e5e7eb] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="grid grid-cols-3 divide-x divide-[#e5e7eb]">
           {/* Anrufen */}
-          <a href={`tel:${PHONE}`} className={cellClass} style={{ backgroundColor: "var(--ct-dark)" }}>
+          <a
+            href={`tel:${PHONE}`}
+            className={cellClass}
+            style={{ backgroundColor: "var(--ct-dark)" }}
+            onClick={() => trackEvent({ event: "phone_click", source_page: pathname, value: 50 })}
+          >
             <Phone size={18} aria-hidden="true" />
             Anrufen
           </a>
@@ -39,6 +45,7 @@ export default function MobileCTABar() {
             rel="noopener noreferrer"
             className={cellClass}
             style={{ backgroundColor: "#25D366" }}
+            onClick={() => trackEvent({ event: "whatsapp_click", source_page: pathname, value: 50 })}
           >
             <MessageCircle size={18} aria-hidden="true" />
             WhatsApp
@@ -48,7 +55,10 @@ export default function MobileCTABar() {
           {isVDP ? (
             <button
               type="button"
-              onClick={() => setModalOpen(true)}
+              onClick={() => {
+                trackEvent({ event: "cta_click", cta_type: "test_drive", source_page: pathname });
+                setModalOpen(true);
+              }}
               className={cellClass}
               style={{ backgroundColor: "var(--ct-cyan)" }}
             >
@@ -56,7 +66,12 @@ export default function MobileCTABar() {
               Probefahrt
             </button>
           ) : (
-            <a href="/kontakt" className={cellClass} style={{ backgroundColor: "var(--ct-cyan)" }}>
+            <a
+              href="/kontakt"
+              className={cellClass}
+              style={{ backgroundColor: "var(--ct-cyan)" }}
+              onClick={() => trackEvent({ event: "cta_click", cta_type: "appointment", source_page: pathname })}
+            >
               <Calendar size={18} aria-hidden="true" />
               Termin
             </a>

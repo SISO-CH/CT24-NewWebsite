@@ -7,6 +7,7 @@ import { Menu, X, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/ui/Logo";
 import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
+import { trackEvent } from "@/lib/tracking";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -61,6 +62,7 @@ export default function Header() {
                 href="tel:+41566185544"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold transition-opacity hover:opacity-90"
                 style={{ backgroundColor: "var(--ct-cyan)" }}
+                onClick={() => trackEvent({ event: "phone_click", source_page: pathname, value: 50 })}
               >
                 <Phone size={13} />
                 +41 56 618 55 44
@@ -106,6 +108,7 @@ export default function Header() {
               href="tel:+41566185544"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-white text-sm font-semibold"
               style={{ backgroundColor: "var(--ct-cyan)" }}
+              onClick={() => trackEvent({ event: "phone_click", source_page: pathname, value: 50 })}
             >
               <Phone size={13} />
               +41 56 618 55 44
