@@ -32,6 +32,7 @@ import PriceComparison from "@/components/vehicles/PriceComparison";
 import TrackVehicleView from "@/components/vehicles/TrackVehicleView";
 import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
 import VehicleDetailTabs from "@/components/vehicles/VehicleDetailTabs";
+import WishlistHeart from "@/components/vehicles/WishlistHeart";
 
 export const revalidate = 3600;
 
@@ -163,6 +164,11 @@ export default async function VehicleDetailPage({ params }: Props) {
               </h1>
             </div>
             <div className="flex items-center gap-3 shrink-0">
+              <WishlistHeart
+                vehicle={{ id: vehicle.id, make: vehicle.make, model: vehicle.model, price: vehicle.price, image: vehicle.images?.[0] ?? "" }}
+                size={22}
+                className="bg-ct-light text-[#9ca3af] hover:text-[var(--ct-magenta)] hover:bg-ct-light"
+              />
               {vehicle.energyLabel && (
                 <EnergyLabel label={vehicle.energyLabel} />
               )}

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { formatCHF, calcMonthlyRate } from "@/lib/utils";
 import type { Vehicle } from "@/lib/vehicles";
 import CompareToggle from "./CompareToggle";
+import WishlistHeart from "@/components/vehicles/WishlistHeart";
 
 const CONDITION_BADGE: Record<string, { label: string; bg: string }> = {
   Neuwagen:        { label: "Neuwagen",        bg: "var(--ct-green)" },
@@ -49,6 +50,14 @@ export default function VehicleCard({ vehicle, className = "", reserved = false 
             {vehicle.fuel}
           </span>
         )}
+
+        {/* Bottom left: Wishlist heart */}
+        <div className="absolute bottom-2 left-2 z-10">
+          <WishlistHeart
+            vehicle={{ id: vehicle.id, make: vehicle.make, model: vehicle.model, price: vehicle.price, image: vehicle.images?.[0] ?? "" }}
+            size={16}
+          />
+        </div>
 
         {/* Bottom right: Compare toggle */}
         <div className="absolute bottom-2.5 right-3">
