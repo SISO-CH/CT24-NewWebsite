@@ -17,8 +17,10 @@ export function calcMonthlyRate(
   price: number,
   downPct = 0,
   months = LEASING_DEFAULT_MONTHS,
+  residualPct = 0,
 ): number {
-  const financed = price * (1 - downPct / 100);
+  const residualAmount = price * (residualPct / 100);
+  const financed = price * (1 - downPct / 100) - residualAmount;
   const r = LEASING_ANNUAL_RATE / 12;
   if (r === 0) return financed / months;
   return financed * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);

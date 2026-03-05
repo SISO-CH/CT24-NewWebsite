@@ -17,12 +17,12 @@ export default function VehicleGallery({ images, alt }: VehicleGalleryProps) {
   return (
     <div className="space-y-3">
       {/* Main image */}
-      <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-ct-light group">
+      <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-ct-light group">
         <Image
           src={images[active]}
           alt={`${alt} – Bild ${active + 1}`}
           fill
-          className="object-cover transition-opacity duration-300"
+          className="object-contain transition-opacity duration-300"
           sizes="(max-width: 1024px) 100vw, 65vw"
           priority
         />
@@ -64,7 +64,7 @@ export default function VehicleGallery({ images, alt }: VehicleGalleryProps) {
               key={`${src}-${i}`}
               onClick={() => setActive(i)}
               aria-label={`Bild ${i + 1} anzeigen`}
-              className={`relative w-20 h-14 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
+              className={`relative w-20 aspect-[4/3] rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
                 i === active
                   ? "border-ct-cyan"
                   : "border-transparent opacity-60 hover:opacity-100"

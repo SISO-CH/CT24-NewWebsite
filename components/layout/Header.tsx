@@ -7,6 +7,7 @@ import { Menu, X, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/ui/Logo";
 import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
+import RecentlyViewedFlyout from "@/components/layout/RecentlyViewedFlyout";
 import { trackEvent } from "@/lib/tracking";
 
 const navLinks = [
@@ -57,6 +58,7 @@ export default function Header() {
           {/* Phone CTA (desktop) + Mobile toggle */}
           <div className="flex items-center justify-end gap-2">
             <div className="hidden lg:flex items-center gap-2">
+              <RecentlyViewedFlyout />
               <LocaleSwitcher />
               <a
                 href="tel:+41566185544"

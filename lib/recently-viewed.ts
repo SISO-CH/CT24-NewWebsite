@@ -2,22 +2,45 @@
 const KEY = "ct24_rv";
 const MAX = 5;
 
-export function addRecentlyViewed(id: number): void {
-  if (typeof window === "undefined") return;
-  try {
-    const raw  = localStorage.getItem(KEY);
-    const ids  = raw ? (JSON.parse(raw) as number[]) : [];
-    const next = [id, ...ids.filter((i) => i !== id)].slice(0, MAX);
-    localStorage.setItem(KEY, JSON.stringify(next));
-  } catch { /* ignoriere localStorage-Fehler */ }
+export interface RecentVehicle {
+  id: number;
+  make: string;
+  model: string;
+  price: number;
+  image: string;
 }
 
-export function getRecentlyViewed(): number[] {
+export function addRecentlyViewed(vehicle: RecentVehicle): void {
+  if (typeof window === "undefined") return;
+  try {
+    const raw = localStorage.getItem(KEY);
+    const items: RecentVehicle[] = raw ? JSON.parse(raw) : [];
+    // Filter out legacy number entries and duplicates
+    const clean = items.filter(
+      (v): v is RecentVehicle => typeof v === "object" && v !== null && v.id !== vehicle.id
+    );
+    const next = [vehicle, ...clean].slice(0, MAX);
+    localStorage.setItem(KEY, JSON.stringify(next));
+  } catch { /* ignore localStorage errors */ }
+}
+
+export function getRecentlyViewed(): RecentVehicle[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as number[]) : [];
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    // Handle legacy format (array of numbers)
+    if (Array.isArray(parsed) && parsed.length > 0 && typeof parsed[0] === "number") return [];
+    return (parsed as RecentVehicle[]).filter(
+      (v): v is RecentVehicle => typeof v === "object" && v !== null && typeof v.id === "number"
+    );
   } catch {
     return [];
   }
+}
+
+// Backward compat: get just IDs
+export function getRecentlyViewedIds(): number[] {
+  return getRecentlyViewed().map((v) => v.id);
 }

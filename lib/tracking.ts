@@ -24,7 +24,7 @@ interface VehicleListFilterEvent {
 
 interface LeadFormSubmitEvent {
   event: "lead_form_submit";
-  form_type: "vdp_contact" | "test_drive" | "general_contact" | "service" | "firmenkunden" | "ankauf" | "price_alert";
+  form_type: "vdp_contact" | "test_drive" | "general_contact" | "service" | "firmenkunden" | "ankauf" | "price_alert" | "sourcing";
   vehicle_id?: number;
   value: number;
 }
@@ -51,7 +51,7 @@ interface TestDriveRequestEvent {
 
 interface CTAClickEvent {
   event: "cta_click";
-  cta_type: "phone" | "whatsapp" | "test_drive" | "appointment" | "other";
+  cta_type: "phone" | "whatsapp" | "test_drive" | "appointment" | "inquiry" | "other";
   source_page: string;
 }
 

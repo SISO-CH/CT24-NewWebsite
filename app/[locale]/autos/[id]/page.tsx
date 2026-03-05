@@ -10,12 +10,12 @@ import {
   GitMerge,
   Zap,
   CheckCircle2,
-  ArrowRight,
   Shield,
   ExternalLink,
   Phone,
   MessageCircle,
   Lock,
+  Cog,
 } from "lucide-react";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
@@ -24,6 +24,7 @@ import VehicleMediaTabs from "@/components/vehicles/VehicleMediaTabs";
 import { formatCHF } from "@/lib/utils";
 
 import TestDriveTrigger from "@/components/vehicles/TestDriveTrigger";
+import InquiryTrigger from "@/components/vehicles/InquiryTrigger";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
@@ -138,6 +139,7 @@ export default async function VehicleDetailPage({ params }: Props) {
         make={vehicle.make}
         model={vehicle.model}
         price={vehicle.price}
+        image={vehicle.images?.[0] ?? vehicle.image ?? ""}
       />
 
       {/* Header */}
@@ -198,7 +200,7 @@ export default async function VehicleDetailPage({ params }: Props) {
 
               {/* Quick specs */}
               <FadeIn delay={60}>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                   {[
                     {
                       icon: CalendarDays,
@@ -219,6 +221,11 @@ export default async function VehicleDetailPage({ params }: Props) {
                       icon: GitMerge,
                       label: "Antrieb",
                       value: vehicle.drivetrain ?? "–",
+                    },
+                    {
+                      icon: Cog,
+                      label: "Getriebe",
+                      value: vehicle.transmission,
                     },
                   ].map((s) => (
                     <div
@@ -310,15 +317,10 @@ export default async function VehicleDetailPage({ params }: Props) {
 
                   <div className="space-y-2.5 mb-5">
                     {/* Primary CTA */}
-                    <Link
-                      href={`/kontakt?betreff=Fahrzeuganfrage&modell=${encodeURIComponent(
-                        `${vehicle.make} ${vehicle.model}`
-                      )}`}
-                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl
-                                 text-white font-semibold text-sm hover:opacity-90 transition-opacity bg-ct-cyan"
-                    >
-                      Jetzt anfragen <ArrowRight size={15} />
-                    </Link>
+                    <InquiryTrigger
+                      vehicleLabel={vehicleLabel}
+                      vehiclePrice={vehicle.price}
+                    />
 
                     {/* Secondary: Probefahrt + WhatsApp side by side */}
                     <div className="grid grid-cols-2 gap-2">
@@ -370,7 +372,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                   </div>
 
                   {/* Leasingrechner-Widget — collapsible */}
-                  <details className="group border-t border-[#f0f0f0] pt-4 mb-4">
+                  <details open className="group border-t border-[#f0f0f0] pt-4 mb-4">
                     <summary className="list-none cursor-pointer flex items-center justify-between text-xs font-semibold text-[#6b7280] hover:text-ct-cyan transition-colors mb-3">
                       Monatsrate berechnen
                       <span className="text-[10px] group-open:rotate-180 transition-transform">▾</span>
