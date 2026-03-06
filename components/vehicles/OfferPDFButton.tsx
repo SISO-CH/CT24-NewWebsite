@@ -148,7 +148,7 @@ export default function OfferPDFButton({ vehicle }: Props) {
       type="button"
       onClick={generatePDF}
       disabled={loading}
-      className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-[#e5e7eb]
+      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[#e5e7eb]
                  text-sm font-semibold text-[#374151] hover:bg-ct-light transition-colors disabled:opacity-50"
     >
       <FileDown size={15} />

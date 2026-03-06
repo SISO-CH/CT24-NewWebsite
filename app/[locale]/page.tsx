@@ -425,10 +425,10 @@ export default async function HomePage() {
               Ihre Ansprechpartner
             </h2>
           </FadeIn>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="flex overflow-x-auto sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-6 snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:overflow-visible">
             {TEAM.map((m, i) => (
               <FadeIn key={m.name} delay={i * 80}>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center snap-center shrink-0 w-[140px] sm:w-auto">
                   {m.image ? (
                     <Image src={m.image} alt={m.name} width={96} height={96}
                            className="w-24 h-24 rounded-full object-cover mb-3" />

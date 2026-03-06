@@ -38,7 +38,7 @@ function CompareToggleInner({ vehicleId }: Props) {
           ? "Aus Vergleich entfernen"
           : "Zum Vergleich hinzufügen"
       }
-      className={`w-7 h-7 rounded-full flex items-center justify-center
+      className={`w-7 h-7 min-h-[44px] min-w-[44px] rounded-full flex items-center justify-center
                   transition-all border text-xs font-bold shadow-sm
                   ${
                     isSelected
