@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Check, Star, MapPin, Phone, Mail, Car, Truck, FileText, Search } from "lucide-react";
 import { fetchVehicles } from "@/lib/as24";
+import { fetchPreorderVehicles } from "@/lib/preorder-vehicles";
 import { TEAM } from "@/lib/team";
 import VehicleCard from "@/components/vehicles/VehicleCard";
 import FadeIn from "@/components/ui/FadeIn";
@@ -83,7 +84,10 @@ const teamMembers = [
 
 /* ── Page ──────────────────────────────────────────────────── */
 export default async function HomePage() {
-  const allVehicles = await fetchVehicles();
+  const [allVehicles, preorderVehicles] = await Promise.all([
+    fetchVehicles(),
+    fetchPreorderVehicles(),
+  ]);
 
   // 4 neueste Fahrzeuge, je Modell (make+model) nur 1x
   const seen = new Set<string>();
@@ -561,6 +565,42 @@ export default async function HomePage() {
           </div>
         </section>
       </FadeIn>
+
+      {/* ════════════════════════════════════════════
+          PREORDER — Demnächst verfügbar
+      ════════════════════════════════════════════ */}
+      {preorderVehicles.length > 0 && (
+        <section className="py-16 md:py-24 bg-white border-t border-[#e5e7eb]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <FadeIn>
+              <div className="mb-10">
+                <p
+                  className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-2"
+                  style={{ color: "var(--ct-magenta)" }}
+                >
+                  In Kürze bei uns
+                </p>
+                <h2
+                  className="text-3xl lg:text-4xl"
+                  style={{ color: "var(--ct-dark)", fontWeight: 800 }}
+                >
+                  Demnächst verfügbar
+                </h2>
+                <p className="text-[#6b7280] mt-2 text-sm">
+                  Diese Fahrzeuge sind bereits bestellbar — Interesse anmelden lohnt sich.
+                </p>
+              </div>
+            </FadeIn>
+            <div className="flex overflow-x-auto gap-5 snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+              {preorderVehicles.map((vehicle, i) => (
+                <FadeIn key={vehicle.id} delay={i * 80} className="w-72 shrink-0 snap-start flex flex-col">
+                  <VehicleCard vehicle={vehicle} className="flex-1" />
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ════════════════════════════════════════════
           CONTACT — dark section

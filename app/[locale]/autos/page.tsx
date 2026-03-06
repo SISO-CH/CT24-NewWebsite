@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { fetchVehicles } from "@/lib/as24";
+import { fetchPreorderVehicles } from "@/lib/preorder-vehicles";
 import AutosContent from "@/components/vehicles/AutosContent";
 
 export const metadata: Metadata = {
@@ -15,10 +16,12 @@ export default async function AutosPage({
 }: {
   searchParams: Promise<{ make?: string; body?: string }>;
 }) {
-  const [{ make, body }, vehicles] = await Promise.all([
+  const [{ make, body }, activeVehicles, preorderVehicles] = await Promise.all([
     searchParams,
     fetchVehicles(),
+    fetchPreorderVehicles(),
   ]);
+  const vehicles = [...activeVehicles, ...preorderVehicles];
 
   const VALID_BODIES = ["Cabriolet", "Coupé", "Kombi", "Limousine", "SUV", "Van"] as const;
   const initialMake = make ?? "";
