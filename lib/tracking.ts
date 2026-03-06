@@ -24,7 +24,7 @@ interface VehicleListFilterEvent {
 
 interface LeadFormSubmitEvent {
   event: "lead_form_submit";
-  form_type: "vdp_contact" | "test_drive" | "general_contact" | "service" | "firmenkunden" | "ankauf" | "price_alert" | "sourcing";
+  form_type: "vdp_contact" | "test_drive" | "general_contact" | "service" | "firmenkunden" | "ankauf" | "price_alert" | "sourcing" | "b2b_haendler";
   vehicle_id?: number;
   value: number;
 }
