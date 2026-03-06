@@ -7,6 +7,7 @@ interface VehicleData {
   id: number;
   make: string;
   model: string;
+  variant?: string;
   year: number;
   mileage: number;
   power: number;
@@ -14,8 +15,19 @@ interface VehicleData {
   fuel?: string;
   drivetrain?: string;
   color?: string;
+  interiorColor?: string;
   price: number;
   images?: string[];
+  equipment?: string[];
+  condition?: string;
+  doors?: number;
+  seats?: number;
+  cubicCapacity?: number;
+  cylinders?: number;
+  consumption?: number;
+  co2?: number;
+  emission?: string;
+  body?: string;
 }
 
 interface LeasingDetails {
@@ -31,7 +43,6 @@ interface Props {
 }
 
 async function fetchImageAsDataUrl(src: string): Promise<string> {
-  // Use server-side proxy to avoid CORS
   const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(src)}`;
   const res = await fetch(proxyUrl);
   if (!res.ok) throw new Error("image proxy failed");
@@ -43,6 +54,18 @@ async function fetchImageAsDataUrl(src: string): Promise<string> {
     reader.readAsDataURL(blob);
   });
 }
+
+function fmt(n: number): string {
+  return n.toLocaleString("de-CH");
+}
+
+// Colors
+const CYAN = [0, 160, 227] as const;
+const MAGENTA = [228, 0, 125] as const;
+const DARK = [27, 27, 27] as const;
+const GRAY = [107, 114, 128] as const;
+const LIGHT_GRAY = [156, 163, 175] as const;
+const LIGHT_BG = [244, 246, 248] as const;
 
 export default function OfferPDFButton({ vehicle }: Props) {
   const [loading, setLoading] = useState(false);
@@ -64,120 +87,284 @@ export default function OfferPDFButton({ vehicle }: Props) {
 
       const doc = new jsPDF("p", "mm", "a4");
       const w = doc.internal.pageSize.getWidth();
+      const pageH = doc.internal.pageSize.getHeight();
+      const margin = 15;
+      const contentW = w - margin * 2;
 
-      // Header
-      doc.setFontSize(22);
+      // Helper: check if we need a new page
+      function checkPage(needed: number, yPos: number): number {
+        if (yPos + needed > pageH - 25) {
+          doc.addPage();
+          return 20;
+        }
+        return yPos;
+      }
+
+      // ═══════════════════════════════════════════════════════════════
+      // HEADER
+      // ═══════════════════════════════════════════════════════════════
+      // Cyan accent bar
+      doc.setFillColor(...CYAN);
+      doc.rect(0, 0, w, 3, "F");
+
+      doc.setFontSize(20);
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(0, 160, 227); // ct-cyan
-      doc.text("Car Trade24", 15, 20);
+      doc.setTextColor(...CYAN);
+      doc.text("Car Trade24", margin, 16);
+
+      doc.setFontSize(7.5);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...GRAY);
+      doc.text("Bremgartenstrasse 67 | 5610 Wohlen | +41 56 618 55 44 | info@cartrade24.ch", w - margin, 16, { align: "right" });
+
+      // Separator
+      doc.setDrawColor(...CYAN);
+      doc.setLineWidth(0.4);
+      doc.line(margin, 21, w - margin, 21);
+
+      // ═══════════════════════════════════════════════════════════════
+      // VEHICLE TITLE
+      // ═══════════════════════════════════════════════════════════════
+      const title = `${vehicle.make} ${vehicle.model}${vehicle.variant ? ` ${vehicle.variant}` : ""}`;
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(...DARK);
+      const titleLines = doc.splitTextToSize(title, contentW) as string[];
+      doc.text(titleLines, margin, 30);
+      const titleBottom = 30 + (titleLines.length - 1) * 6;
+
+      // Subtitle
+      const subtitle = [
+        vehicle.condition ?? "Occasion",
+        String(vehicle.year),
+        vehicle.body,
+      ].filter(Boolean).join(" · ");
       doc.setFontSize(8);
       doc.setFont("helvetica", "normal");
-      doc.setTextColor(107, 114, 128);
-      doc.text("Bremgartenstrasse 67 | 5610 Wohlen | +41 56 618 55 44 | info@cartrade24.ch", 15, 27);
+      doc.setTextColor(...GRAY);
+      doc.text(subtitle, margin, titleBottom + 6);
 
-      // Line
-      doc.setDrawColor(0, 160, 227);
-      doc.setLineWidth(0.5);
-      doc.line(15, 31, w - 15, 31);
+      let yPos = titleBottom + 12;
 
-      // Title
-      doc.setFontSize(18);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(27, 27, 27); // ct-dark
-      doc.text(`${vehicle.make} ${vehicle.model}`, 15, 42);
+      // ═══════════════════════════════════════════════════════════════
+      // IMAGE (right) + PRICE/LEASING (left) — side by side
+      // ═══════════════════════════════════════════════════════════════
+      const imgW = contentW * 0.55;
+      const imgH = imgW * 0.75; // 4:3
+      const imgX = w - margin - imgW;
+      const leftW = contentW - imgW - 5; // gap 5mm
+      const leasing = leasingRef.current;
 
-      let yPos = 52;
-
-      // Vehicle image (via server proxy to bypass CORS)
+      // Image right
       if (vehicle.images?.[0]) {
         try {
           const dataUrl = await fetchImageAsDataUrl(vehicle.images[0]);
-          const imgW = w - 30;
-          const imgH = imgW * 0.75;
-          doc.addImage(dataUrl, "JPEG", 15, yPos, imgW, imgH);
-          yPos += imgH + 10;
-        } catch { yPos += 5; }
+          doc.addImage(dataUrl, "JPEG", imgX, yPos, imgW, imgH);
+        } catch { /* no image */ }
       }
 
-      // Specs table
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(27, 27, 27);
-      doc.text("Technische Daten", 15, yPos);
-      yPos += 8;
-
-      doc.setFontSize(9);
-      const specs: [string, string][] = [
-        ["Marke / Modell", `${vehicle.make} ${vehicle.model}`],
-        ["Baujahr", String(vehicle.year)],
-        ["Kilometerstand", `${vehicle.mileage.toLocaleString("de-CH")} km`],
-        ["Leistung", `${vehicle.power} PS`],
-        ["Getriebe", vehicle.transmission],
-        ["Treibstoff", vehicle.fuel ?? "\u2013"],
-        ["Antrieb", vehicle.drivetrain ?? "\u2013"],
-        ["Farbe", vehicle.color ?? "\u2013"],
-      ];
-
-      specs.forEach(([label, value]) => {
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(107, 114, 128);
-        doc.text(label, 15, yPos);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(27, 27, 27);
-        doc.text(value, 80, yPos);
-        yPos += 6;
-      });
-
-      // Price
-      yPos += 8;
+      // Price left
+      const boxW = leftW;
+      const boxH = 20;
+      doc.setFillColor(...LIGHT_BG);
+      doc.roundedRect(margin, yPos, boxW, boxH, 2, 2, "F");
+      doc.setFontSize(7);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...GRAY);
+      doc.text("KAUFPREIS", margin + 4, yPos + 6);
       doc.setFontSize(16);
       doc.setFont("helvetica", "bold");
-      doc.setTextColor(27, 27, 27);
-      doc.text(`CHF ${vehicle.price.toLocaleString("de-CH")}.-`, 15, yPos);
-      yPos += 6;
-      doc.setFontSize(8);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(107, 114, 128);
-      doc.text("Preis inkl. 8.1% MwSt. | Preisänderungen vorbehalten", 15, yPos);
+      doc.setTextColor(...DARK);
+      doc.text(`CHF ${fmt(vehicle.price)}.-`, margin + 4, yPos + 15);
 
-      // Leasing (from calculator if user adjusted, otherwise default)
-      const leasing = leasingRef.current;
+      // Leasing below price
+      const leasingY = yPos + boxH + 3;
+      doc.setFillColor(...LIGHT_BG);
+      doc.roundedRect(margin, leasingY, boxW, boxH, 2, 2, "F");
+      doc.setFontSize(7);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...GRAY);
+      doc.text("LEASING AB", margin + 4, leasingY + 6);
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(...MAGENTA);
+      const rateText = leasing && leasing.rate > 0
+        ? `CHF ${fmt(leasing.rate)}.-/Mt.`
+        : "Auf Anfrage";
+      doc.text(rateText, margin + 4, leasingY + 15);
+
+      // Small print below boxes
+      const detailY = leasingY + boxH + 2;
+      doc.setFontSize(5.5);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...LIGHT_GRAY);
+      doc.text("inkl. 8.1% MwSt.", margin, detailY + 3);
       if (leasing && leasing.rate > 0) {
-        yPos += 8;
-        doc.setFontSize(11);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(228, 0, 125); // ct-magenta
-        doc.text(`Leasing ab CHF ${leasing.rate.toLocaleString("de-CH")}.-/Mt.`, 15, yPos);
-        yPos += 5;
-        doc.setFontSize(7);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(107, 114, 128);
         doc.text(
-          `3.9% p.a., ${leasing.down}% Anzahlung, ${leasing.residual}% Restwert, ${leasing.months} Mt., ${leasing.km.toLocaleString("de-CH")} km/J. | inkl. MwSt.`,
-          15, yPos
+          `${leasing.down}% Anz. | ${leasing.residual}% Restwert | ${leasing.months} Mt. | ${fmt(leasing.km)} km/J.`,
+          margin, detailY + 7
         );
       }
 
-      // Validity
-      yPos += 12;
+      // yPos advances past the taller of image or price blocks
+      yPos += Math.max(imgH, boxH * 2 + 15) + 8;
+
+      // ═══════════════════════════════════════════════════════════════
+      // TECHNISCHE DATEN (2-column grid)
+      // ═══════════════════════════════════════════════════════════════
+      yPos = checkPage(60, yPos);
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(...CYAN);
+      doc.text("TECHNISCHE DATEN", margin, yPos);
+      doc.setDrawColor(...CYAN);
+      doc.setLineWidth(0.3);
+      doc.line(margin, yPos + 1.5, margin + 38, yPos + 1.5);
+      yPos += 7;
+
+      const specs: [string, string][] = [
+        ["Marke", vehicle.make],
+        ["Modell", `${vehicle.model}${vehicle.variant ? ` ${vehicle.variant}` : ""}`],
+        ["Baujahr", String(vehicle.year)],
+        ["Kilometerstand", `${fmt(vehicle.mileage)} km`],
+        ["Leistung", `${vehicle.power} PS`],
+        ["Getriebe", vehicle.transmission],
+        ["Treibstoff", vehicle.fuel ?? "–"],
+        ["Antrieb", vehicle.drivetrain ?? "–"],
+        ["Karosserie", vehicle.body ?? "–"],
+        ["Farbe", vehicle.color ?? "–"],
+      ];
+      if (vehicle.interiorColor) specs.push(["Innenfarbe", vehicle.interiorColor]);
+      if (vehicle.doors) specs.push(["Türen", String(vehicle.doors)]);
+      if (vehicle.seats) specs.push(["Sitze", String(vehicle.seats)]);
+      if (vehicle.cubicCapacity) specs.push(["Hubraum", `${fmt(vehicle.cubicCapacity)} cm³`]);
+      if (vehicle.cylinders) specs.push(["Zylinder", String(vehicle.cylinders)]);
+      if (vehicle.consumption) specs.push(["Verbrauch", `${vehicle.consumption} l/100km`]);
+      if (vehicle.co2) specs.push(["CO₂", `${vehicle.co2} g/km`]);
+      if (vehicle.emission) specs.push(["Abgasnorm", vehicle.emission]);
+
+      const colW = contentW / 2;
+      const labelW = 28;
+      const valueMaxW = colW - labelW - 2;
+      const rowH = 5.5;
+
+      specs.forEach(([label, value], i) => {
+        const col = i % 2;
+        const row = Math.floor(i / 2);
+        const x = margin + col * colW;
+        const y = yPos + row * rowH;
+
+        // Alternating row background
+        if (col === 0 && row % 2 === 0) {
+          doc.setFillColor(249, 250, 251);
+          doc.rect(margin, y - 3.5, contentW, rowH, "F");
+        }
+
+        doc.setFontSize(7.5);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(...GRAY);
+        doc.text(label, x, y);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(...DARK);
+        // Truncate value if it exceeds column width
+        let displayVal = value;
+        while (doc.getTextWidth(displayVal) > valueMaxW && displayVal.length > 3) {
+          displayVal = displayVal.slice(0, -2) + "…";
+        }
+        doc.text(displayVal, x + labelW, y);
+      });
+
+      yPos += Math.ceil(specs.length / 2) * rowH + 6;
+
+      // ═══════════════════════════════════════════════════════════════
+      // AUSSTATTUNG (multi-column list)
+      // ═══════════════════════════════════════════════════════════════
+      const equipment = vehicle.equipment?.filter(Boolean) ?? [];
+      if (equipment.length > 0) {
+        yPos = checkPage(30, yPos);
+
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(...CYAN);
+        doc.text("AUSSTATTUNG", margin, yPos);
+        doc.setDrawColor(...CYAN);
+        doc.line(margin, yPos + 1.5, margin + 28, yPos + 1.5);
+        yPos += 7;
+
+        const eqCols = 3;
+        const eqColW = contentW / eqCols;
+        const eqRowH = 4.5;
+
+        doc.setFontSize(6.5);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(...DARK);
+
+        equipment.forEach((item, i) => {
+          const col = i % eqCols;
+          const row = Math.floor(i / eqCols);
+          const x = margin + col * eqColW;
+          const y = yPos + row * eqRowH;
+
+          // Page break check every 10 rows
+          if (col === 0) {
+            const newY = checkPage(eqRowH, y);
+            if (newY !== y) {
+              yPos = newY - row * eqRowH;
+            }
+          }
+
+          doc.setTextColor(...CYAN);
+          doc.text("✓", x, yPos + row * eqRowH);
+          doc.setTextColor(...DARK);
+          // Truncate long items
+          const truncated = item.length > 28 ? item.slice(0, 26) + "…" : item;
+          doc.text(truncated, x + 4, yPos + row * eqRowH);
+        });
+
+        yPos += Math.ceil(equipment.length / eqCols) * eqRowH + 6;
+      }
+
+      // ═══════════════════════════════════════════════════════════════
+      // VALIDITY + QR CODE
+      // ═══════════════════════════════════════════════════════════════
+      yPos = checkPage(30, yPos);
+
+      // Separator
+      doc.setDrawColor(220, 220, 220);
+      doc.setLineWidth(0.2);
+      doc.line(margin, yPos, w - margin, yPos);
+      yPos += 6;
+
+      doc.setFontSize(7.5);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...GRAY);
       const validUntil = new Date(Date.now() + 14 * 86400000).toLocaleDateString("de-CH");
-      doc.setFontSize(8);
-      doc.text(`Angebot gültig bis: ${validUntil}`, 15, yPos);
+      doc.text(`Angebot gültig bis: ${validUntil}`, margin, yPos);
+      doc.text("Dieses Angebot ist unverbindlich.", margin, yPos + 4);
 
-      // QR code
+      // QR code (right side)
       const url = `https://cartrade24.ch/autos/${vehicle.id}`;
-      const qrDataUrl = await QRCode.toDataURL(url, { width: 120, margin: 1 });
-      doc.addImage(qrDataUrl, "PNG", w - 40, yPos - 15, 25, 25);
-      doc.setFontSize(7);
-      doc.text("QR-Code scannen", w - 40, yPos + 12);
+      const qrDataUrl = await QRCode.toDataURL(url, { width: 150, margin: 1 });
+      doc.addImage(qrDataUrl, "PNG", w - margin - 22, yPos - 5, 22, 22);
+      doc.setFontSize(6);
+      doc.setTextColor(...LIGHT_GRAY);
+      doc.text("Online ansehen", w - margin - 22, yPos + 19);
 
-      // Footer
-      const pageH = doc.internal.pageSize.getHeight();
-      doc.setDrawColor(0, 160, 227);
-      doc.line(15, pageH - 15, w - 15, pageH - 15);
+      // ═══════════════════════════════════════════════════════════════
+      // FOOTER
+      // ═══════════════════════════════════════════════════════════════
+      // Cyan accent bar at bottom
+      doc.setFillColor(...CYAN);
+      doc.rect(0, pageH - 12, w, 12, "F");
       doc.setFontSize(7);
-      doc.setTextColor(156, 163, 175);
-      doc.text("Car Trade24 GmbH | Bremgartenstrasse 67 | 5610 Wohlen | www.cartrade24.ch", 15, pageH - 10);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(255, 255, 255);
+      doc.text(
+        "Car Trade24 GmbH  |  Bremgartenstrasse 67  |  5610 Wohlen  |  +41 56 618 55 44  |  www.cartrade24.ch",
+        w / 2, pageH - 5,
+        { align: "center" }
+      );
 
       doc.save(`CarTrade24_Angebot_${vehicle.make}_${vehicle.model}.pdf`);
     } catch (err) {
