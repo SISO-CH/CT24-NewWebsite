@@ -22,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/news`,         lastModified: now, changeFrequency: "weekly",  priority: 0.5 },
     { url: `${base}/agb`,          lastModified: now, changeFrequency: "yearly",  priority: 0.2 },
     { url: `${base}/datenschutz`,  lastModified: now, changeFrequency: "yearly",  priority: 0.2 },
+    { url: `${base}/co2-rechner`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
   ];
 
   const vehiclePromise = fetchVehicles()

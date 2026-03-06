@@ -125,6 +125,7 @@ export default function Footer() {
               <FooterLink href="/zulassungsservice">Zulassungsservice</FooterLink>
               <FooterLink href="/fahrzeug-sourcing">Fahrzeug-Sourcing</FooterLink>
               <FooterLink href="/fahrzeug-archiv">Fahrzeug-Archiv</FooterLink>
+              <FooterLink href="/co2-rechner">CO2-Rechner</FooterLink>
             </ul>
           </div>
 
