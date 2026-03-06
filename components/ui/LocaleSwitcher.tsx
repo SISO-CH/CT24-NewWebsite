@@ -10,10 +10,15 @@ const LOCALES = [
   { code: "fr", label: "FR" },
   { code: "it", label: "IT" },
   { code: "en", label: "EN" },
+  { code: "es", label: "ES" },
+  { code: "pl", label: "PL" },
+  { code: "sk", label: "SK" },
+  { code: "pt", label: "PT" },
+  { code: "sq", label: "SQ" },
 ] as const;
 
 type LocaleCode = (typeof LOCALES)[number]["code"];
-const PREFIXED: LocaleCode[] = ["fr", "it", "en"];
+const PREFIXED: LocaleCode[] = ["fr", "it", "en", "es", "pl", "sk", "pt", "sq"];
 
 function buildLocalePath(currentPath: string, currentLocale: string, targetLocale: LocaleCode): string {
   // Strip current locale prefix if present
@@ -59,7 +64,7 @@ export default function LocaleSwitcher() {
       {open && (
         <div
           role="listbox"
-          className="absolute right-0 top-full mt-1 bg-white border border-[#e5e7eb] rounded-xl shadow-lg py-1 min-w-[80px] z-50"
+          className="absolute right-0 top-full mt-1 bg-white border border-[#e5e7eb] rounded-xl shadow-lg py-1 min-w-[80px] max-h-[280px] overflow-y-auto z-50"
         >
           {LOCALES.map(({ code, label }) => (
             <button

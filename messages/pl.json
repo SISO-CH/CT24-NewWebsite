@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Strona główna",
+    "autos": "Samochody",
+    "finanzierung": "Finansowanie",
+    "firmenkunden": "Klienci firmowi",
+    "ueberUns": "O nas",
+    "kontakt": "Kontakt",
+    "inzahlungnahme": "Odkup pojazdu"
+  },
+  "common": {
+    "anfragen": "Zapytaj teraz",
+    "probefahrt": "Zarezerwuj jazdę próbną",
+    "zurueck": "Wstecz",
+    "speichern": "Zapisz",
+    "weiter": "Dalej",
+    "abbrechen": "Anuluj",
+    "laden": "Ładowanie…",
+    "fehler": "Wystąpił błąd. Proszę spróbować ponownie.",
+    "erfolg": "Wysłano pomyślnie!",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "Twój wymarzony samochód czeka.",
+    "subtitle": "Sprawdzone samochody używane i nowe — dostawa w całej Szwajcarii.",
+    "cta": "Zobacz wszystkie pojazdy"
+  },
+  "vehicles": {
+    "vergleichen": "Porównaj",
+    "imVergleich": "W porównaniu",
+    "reservieren": "Zarezerwuj teraz",
+    "reserviert": "Zarezerwowany",
+    "preisalarm": "Alert cenowy",
+    "preisalarmTitle": "Alert cenowy",
+    "preisalarmSubtitle": "Otrzymaj powiadomienie, gdy odpowiedni pojazd będzie dostępny.",
+    "preisalarmEmail": "Twój adres e-mail",
+    "preisalarmButton": "Aktywuj alert cenowy",
+    "preisalarmSuccess": "Alert cenowy aktywowany! Otrzymasz e-mail z potwierdzeniem.",
+    "vergleichTitle": "Porównanie pojazdów",
+    "vergleichLeer": "Nie wybrano pojazdów do porównania.",
+    "vergleichMax": "Maksymalnie 3 pojazdy do porównania.",
+    "vergleichOeffnen": "Otwórz porównanie",
+    "vergleichEntfernen": "Usuń",
+    "anfragenCTA": "Zapytaj"
+  },
+  "comparison": {
+    "preis": "Cena zakupu",
+    "baujahr": "Rok produkcji",
+    "km": "Przebieg",
+    "kraftstoff": "Paliwo",
+    "getriebe": "Skrzynia biegów",
+    "leistung": "Moc",
+    "karosserie": "Nadwozie",
+    "farbe": "Kolor",
+    "antrieb": "Napęd",
+    "tueren": "Drzwi",
+    "sitze": "Miejsca",
+    "energielabel": "Etykieta energetyczna"
+  },
+  "reservation": {
+    "title": "Zarezerwuj pojazd",
+    "subtitle": "Zabezpiecz ten pojazd na 48 godzin — CHF 200 opłaty rezerwacyjnej (zaliczanej na poczet zakupu).",
+    "button": "Zarezerwuj teraz — CHF 200",
+    "successTitle": "Rezerwacja potwierdzona!",
+    "successText": "Twój pojazd jest zarezerwowany na 48 godzin. Skontaktujemy się wkrótce.",
+    "cancelledTitle": "Rezerwacja anulowana",
+    "cancelledText": "Twoja rezerwacja nie została zrealizowana. Żadna kwota nie została pobrana."
+  },
+  "tradein": {
+    "title": "Oddaj pojazd w rozliczeniu",
+    "subtitle": "Uzyskaj darmową natychmiastową wycenę swojego pojazdu w 2 minuty.",
+    "step1Title": "Dane pojazdu",
+    "kontrollschild": "Tablica rejestracyjna (np. AG 12345)",
+    "km": "Przebieg",
+    "zustand": "Stan",
+    "zustandSehrGut": "Bardzo dobry",
+    "zustandGut": "Dobry",
+    "zustandGebraucht": "Używany",
+    "step2Title": "Twoja natychmiastowa wycena",
+    "schaetzungText": "Na podstawie aktualnych danych rynkowych szacujemy wartość Twojego pojazdu na:",
+    "verbindlichBewerten": "Zlecić wiążącą wycenę — CHF 20",
+    "step3Title": "Wiążąca wycena",
+    "step3Text": "Za CHF 20 otrzymasz wiążącą ofertę w ciągu 24 godzin.",
+    "successTitle": "Zlecenie wyceny otrzymane!",
+    "successText": "Skontaktujemy się w ciągu 24 godzin z wiążącą ofertą drogą e-mailową."
+  },
+  "contact": {
+    "probefahrtTitle": "Zarezerwuj jazdę próbną",
+    "probefahrtSubtitle": "Zarezerwuj bezpłatną jazdę próbną bezpośrednio online."
+  },
+  "footer": {
+    "tagline": "Twój specjalista od sprawdzonych samochodów używanych w Szwajcarii.",
+    "fahrzeuge": "Pojazdy",
+    "unternehmen": "Firma",
+    "kontakt": "Kontakt",
+    "copyright": "Wszelkie prawa zastrzeżone.",
+    "madeIn": "Stworzone z ❤️ w Szwajcarii"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Samochody używane i nowe w Szwajcarii",
+    "homeDescription": "Sprawdzone samochody używane i nowe w Wohlen (Argowia). Dostawa w całej Szwajcarii, do 7 lat gwarancji."
+  }
+}

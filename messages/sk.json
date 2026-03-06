@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Domov",
+    "autos": "Autá",
+    "finanzierung": "Financovanie",
+    "firmenkunden": "Firemní zákazníci",
+    "ueberUns": "O nás",
+    "kontakt": "Kontakt",
+    "inzahlungnahme": "Výkup vozidla"
+  },
+  "common": {
+    "anfragen": "Poslať dopyt",
+    "probefahrt": "Rezervovať skúšobnú jazdu",
+    "zurueck": "Späť",
+    "speichern": "Uložiť",
+    "weiter": "Ďalej",
+    "abbrechen": "Zrušiť",
+    "laden": "Načítava sa…",
+    "fehler": "Vyskytla sa chyba. Skúste to prosím znova.",
+    "erfolg": "Úspešne odoslané!",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "Vaše vysnívaté auto čaká.",
+    "subtitle": "Overené ojazdené a nové vozidlá — doručenie po celom Švajčiarsku.",
+    "cta": "Objaviť všetky vozidlá"
+  },
+  "vehicles": {
+    "vergleichen": "Porovnať",
+    "imVergleich": "V porovnaní",
+    "reservieren": "Rezervovať teraz",
+    "reserviert": "Rezervované",
+    "preisalarm": "Cenový alarm",
+    "preisalarmTitle": "Cenový alarm",
+    "preisalarmSubtitle": "Dostanete upozornenie, keď bude vhodné vozidlo k dispozícii.",
+    "preisalarmEmail": "Vaša e-mailová adresa",
+    "preisalarmButton": "Aktivovať cenový alarm",
+    "preisalarmSuccess": "Cenový alarm aktivovaný! Dostanete potvrdzujúci e-mail.",
+    "vergleichTitle": "Porovnanie vozidiel",
+    "vergleichLeer": "Neboli vybrané žiadne vozidlá na porovnanie.",
+    "vergleichMax": "Maximálne 3 vozidlá na porovnanie.",
+    "vergleichOeffnen": "Otvoriť porovnanie",
+    "vergleichEntfernen": "Odstrániť",
+    "anfragenCTA": "Dopyt"
+  },
+  "comparison": {
+    "preis": "Kúpna cena",
+    "baujahr": "Rok výroby",
+    "km": "Počet kilometrov",
+    "kraftstoff": "Palivo",
+    "getriebe": "Prevodovka",
+    "leistung": "Výkon",
+    "karosserie": "Karoséria",
+    "farbe": "Farba",
+    "antrieb": "Pohon",
+    "tueren": "Dvere",
+    "sitze": "Sedadlá",
+    "energielabel": "Energetický štítok"
+  },
+  "reservation": {
+    "title": "Rezervovať vozidlo",
+    "subtitle": "Zabezpečte si toto vozidlo na 48 hodín — CHF 200 rezervačný poplatok (započítava sa pri kúpe).",
+    "button": "Rezervovať teraz — CHF 200",
+    "successTitle": "Rezervácia potvrdená!",
+    "successText": "Vaše vozidlo je rezervované na 48 hodín. Čoskoro sa ozveme.",
+    "cancelledTitle": "Rezervácia zrušená",
+    "cancelledText": "Vaša rezervácia nebola dokončená. Žiadna suma nebola účtovaná."
+  },
+  "tradein": {
+    "title": "Odovzdať vozidlo na protiúčet",
+    "subtitle": "Získajte bezplatnú okamžitú cenovú ponuku za vaše vozidlo do 2 minút.",
+    "step1Title": "Údaje o vozidle",
+    "kontrollschild": "ŠPZ (napr. AG 12345)",
+    "km": "Počet kilometrov",
+    "zustand": "Stav",
+    "zustandSehrGut": "Veľmi dobrý",
+    "zustandGut": "Dobrý",
+    "zustandGebraucht": "Ojazdený",
+    "step2Title": "Vaša okamžitá cenová ponuka",
+    "schaetzungText": "Na základe aktuálnych trhových údajov odhadujeme hodnotu vášho vozidla na:",
+    "verbindlichBewerten": "Záväzné ocenenie — CHF 20",
+    "step3Title": "Záväzné ocenenie",
+    "step3Text": "Za CHF 20 dostanete záväznú ponuku do 24 hodín.",
+    "successTitle": "Požiadavka na ocenenie prijatá!",
+    "successText": "Ozveme sa do 24 hodín so záväznou ponukou e-mailom."
+  },
+  "contact": {
+    "probefahrtTitle": "Rezervovať skúšobnú jazdu",
+    "probefahrtSubtitle": "Rezervujte si bezplatnú skúšobnú jazdu priamo online."
+  },
+  "footer": {
+    "tagline": "Váš špecialista na overené ojazdené vozidlá vo Švajčiarsku.",
+    "fahrzeuge": "Vozidlá",
+    "unternehmen": "Spoločnosť",
+    "kontakt": "Kontakt",
+    "copyright": "Všetky práva vyhradené.",
+    "madeIn": "Vyvinuté s ❤️ vo Švajčiarsku"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Ojazdené a nové vozidlá Švajčiarsko",
+    "homeDescription": "Overené ojazdené a nové vozidlá vo Wohlen (Aargau). Doručenie po celom Švajčiarsku, až 7 rokov záruka."
+  }
+}
