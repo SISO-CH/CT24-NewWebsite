@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchVehicles, fetchVehicleDetail } from "@/lib/as24";
 import { generateVehicleMeta } from "@/lib/ai";
-import { kv } from "@vercel/kv";
 import {
   ArrowLeft,
   CalendarDays,
@@ -35,6 +34,7 @@ import TrackVehicleView from "@/components/vehicles/TrackVehicleView";
 import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
 import VehicleDetailTabs from "@/components/vehicles/VehicleDetailTabs";
 import WishlistHeart from "@/components/vehicles/WishlistHeart";
+import ViewCounter from "@/components/vehicles/ViewCounter";
 
 export const revalidate = 3600;
 
@@ -70,9 +70,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function VehicleDetailPage({ params }: Props) {
   const { locale, id } = await params;
+  async function getReservedData() {
+    try {
+      const { kv } = await import("@vercel/kv");
+      return await kv.get<{ until: number }>(`reserved:${id}`);
+    } catch { return null; }
+  }
+
   const [vehicles, reservedData] = await Promise.all([
     fetchVehicles(),
-    kv.get<{ until: number }>(`reserved:${id}`).catch(() => null),
+    getReservedData(),
   ]);
   const baseVehicle = vehicles.find((v) => v.id === Number(id));
   if (!baseVehicle) notFound();
@@ -164,6 +171,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                 {vehicle.make} {vehicle.model}
                 {vehicle.variant ? ` ${vehicle.variant}` : ""}
               </h1>
+              <ViewCounter vehicleId={vehicle.id} />
             </div>
             <div className="flex items-center gap-3 shrink-0">
               <WishlistHeart
@@ -362,7 +370,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                     />
 
                     {/* PDF Angebot */}
-                    <OfferPDFButton vehicle={vehicle} />
+                    <OfferPDFButton vehicle={vehicle} leasingRate={vehicle.leasingPrice > 0 ? vehicle.leasingPrice : undefined} />
 
                     {/* Cardossier link if available */}
                     {vehicle.cardossierUrl && (

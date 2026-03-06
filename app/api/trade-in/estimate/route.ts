@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         similar.reduce((s, v) => s + v.price, 0) / similar.length;
       estimate = Math.round(avgPrice * (CONDITION_FACTOR[condition] ?? 0.7));
       method = "market";
-    } else {
+    } else if (process.env.ANTHROPIC_API_KEY) {
       // Fallback: Claude AI
       const { default: Anthropic } = await import("@anthropic-ai/sdk");
       const client = new Anthropic();
@@ -47,6 +47,18 @@ export async function POST(req: NextRequest) {
         msg.content[0].type === "text" ? msg.content[0].text.trim() : "0";
       estimate = parseInt(text.replace(/[^\d]/g, ""), 10) || 0;
       method = "ai";
+    } else {
+      // Einfache Schätzung ohne API: Durchschnitt aller Fahrzeuge gleicher Marke
+      const sameMake = allVehicles.filter(
+        (v) => v.make.toLowerCase() === make.toLowerCase()
+      );
+      const base = sameMake.length > 0
+        ? sameMake.reduce((s, v) => s + v.price, 0) / sameMake.length
+        : 15000;
+      const yearFactor = Math.max(0.3, 1 - (new Date().getFullYear() - Number(year)) * 0.06);
+      const kmFactor = Math.max(0.4, 1 - Number(mileage) / 300000);
+      estimate = Math.round(base * yearFactor * kmFactor * (CONDITION_FACTOR[condition] ?? 0.7));
+      method = "market";
     }
 
     return NextResponse.json({

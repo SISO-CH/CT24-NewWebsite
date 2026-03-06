@@ -15,13 +15,32 @@ interface VehicleData {
   color?: string;
   price: number;
   images?: string[];
+  leasingPrice?: number;
 }
 
 interface Props {
   vehicle: VehicleData;
+  leasingRate?: number;
 }
 
-export default function OfferPDFButton({ vehicle }: Props) {
+function loadImageAsDataUrl(src: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+      const ctx = canvas.getContext("2d");
+      ctx?.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL("image/jpeg", 0.85));
+    };
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+export default function OfferPDFButton({ vehicle, leasingRate }: Props) {
   const [loading, setLoading] = useState(false);
 
   async function generatePDF() {
@@ -56,16 +75,10 @@ export default function OfferPDFButton({ vehicle }: Props) {
 
       let yPos = 52;
 
-      // Vehicle image
+      // Vehicle image (via canvas to handle CORS)
       if (vehicle.images?.[0]) {
         try {
-          const response = await fetch(vehicle.images[0]);
-          const blob = await response.blob();
-          const dataUrl = await new Promise<string>((resolve) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result as string);
-            reader.readAsDataURL(blob);
-          });
+          const dataUrl = await loadImageAsDataUrl(vehicle.images[0]);
           const imgW = w - 30;
           const imgH = imgW * 0.75;
           doc.addImage(dataUrl, "JPEG", 15, yPos, imgW, imgH);
@@ -113,6 +126,21 @@ export default function OfferPDFButton({ vehicle }: Props) {
       doc.setFont("helvetica", "normal");
       doc.setTextColor(107, 114, 128);
       doc.text("Preis inkl. 8.1% MwSt. | Preisänderungen vorbehalten", 15, yPos);
+
+      // Leasing
+      const displayRate = leasingRate ?? vehicle.leasingPrice;
+      if (displayRate && displayRate > 0) {
+        yPos += 8;
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(228, 0, 125); // ct-magenta
+        doc.text(`Leasing ab CHF ${displayRate.toLocaleString("de-CH")}.-/Mt.`, 15, yPos);
+        yPos += 5;
+        doc.setFontSize(7);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(107, 114, 128);
+        doc.text("inkl. MwSt., vorbehaltlich Bonitätsprüfung", 15, yPos);
+      }
 
       // Validity
       yPos += 12;

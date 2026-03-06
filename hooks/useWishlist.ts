@@ -27,5 +27,10 @@ export function useWishlist() {
     }
   }, []);
 
-  return { items, toggle, isInWishlist };
+  const isInList = useCallback(
+    (id: number) => items.some((v) => v.id === id),
+    [items],
+  );
+
+  return { items, toggle, isInWishlist: isInList };
 }

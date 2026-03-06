@@ -22,6 +22,12 @@ export default function TrackVehicleView({ vehicleId, make, model, price, image 
       vehicle_model: model,
       vehicle_price: price,
     });
+    // Increment view counter
+    fetch("/api/vehicle-views", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: vehicleId }),
+    }).catch(() => {});
   }, [vehicleId, make, model, price, image]);
 
   return null;
