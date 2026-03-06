@@ -3,6 +3,8 @@ import Link from "next/link";
 import { formatCHF, calcMonthlyRate } from "@/lib/utils";
 import type { Vehicle } from "@/lib/vehicles";
 import CompareToggle from "./CompareToggle";
+import WishlistHeart from "@/components/vehicles/WishlistHeart";
+import ViewCounter from "@/components/vehicles/ViewCounter";
 
 const CONDITION_BADGE: Record<string, { label: string; bg: string }> = {
   Neuwagen:        { label: "Neuwagen",        bg: "var(--ct-green)" },
@@ -13,6 +15,15 @@ const CONDITION_BADGE: Record<string, { label: string; bg: string }> = {
 export default function VehicleCard({ vehicle, className = "", reserved = false }: { vehicle: Vehicle; className?: string; reserved?: boolean }) {
   const condition = CONDITION_BADGE[vehicle.condition ?? "Occasion"] ?? CONDITION_BADGE.Occasion;
   const gearShort = vehicle.transmission === "Automat" ? "AT" : "MT";
+
+  // Scarcity badges
+  const isNew = vehicle.createdAt
+    ? (Date.now() - new Date(vehicle.createdAt).getTime()) < 7 * 86400000
+    : false;
+  const isReduced = vehicle.previousPrice && vehicle.previousPrice > vehicle.price;
+  const savingsPercent = isReduced
+    ? Math.round(((vehicle.previousPrice! - vehicle.price) / vehicle.previousPrice!) * 100)
+    : 0;
 
   const specs2Parts = [
     vehicle.power ? `${vehicle.power} PS` : null,
@@ -43,12 +54,34 @@ export default function VehicleCard({ vehicle, className = "", reserved = false 
           {reserved ? "Reserviert" : condition.label}
         </span>
 
+        {/* Scarcity badge (top left, below condition) */}
+        {isNew && (
+          <span className="absolute top-10 left-3 px-2 py-0.5 text-[10px] rounded-full text-white font-bold shadow-sm"
+                style={{ backgroundColor: "var(--ct-green)" }}>
+            Neu eingetroffen
+          </span>
+        )}
+        {isReduced && !isNew && (
+          <span className="absolute top-10 left-3 px-2 py-0.5 text-[10px] rounded-full text-white font-bold shadow-sm"
+                style={{ backgroundColor: "var(--ct-magenta)" }}>
+            Preisreduziert
+          </span>
+        )}
+
         {/* Top right: Fuel badge */}
         {vehicle.fuel && (
           <span className="absolute top-3 right-3 px-2 py-0.5 text-[11px] font-medium rounded-full bg-white/90 text-[#374151] backdrop-blur-sm shadow-sm">
             {vehicle.fuel}
           </span>
         )}
+
+        {/* Bottom left: Wishlist heart */}
+        <div className="absolute bottom-2 left-2 z-10">
+          <WishlistHeart
+            vehicle={{ id: vehicle.id, make: vehicle.make, model: vehicle.model, price: vehicle.price, image: vehicle.images?.[0] ?? "" }}
+            size={16}
+          />
+        </div>
 
         {/* Bottom right: Compare toggle */}
         <div className="absolute bottom-2.5 right-3">
@@ -71,15 +104,28 @@ export default function VehicleCard({ vehicle, className = "", reserved = false 
         )}
 
         <div className="mt-auto pt-3">
-          <p className="text-xl font-extrabold text-ct-dark">
-            CHF {formatCHF(vehicle.price)}
-          </p>
+          {isReduced && (
+            <p className="text-xs text-[#9ca3af] line-through">
+              CHF {formatCHF(vehicle.previousPrice!)}
+            </p>
+          )}
+          <div className="flex items-baseline gap-2">
+            <p className="text-xl font-extrabold text-ct-dark">
+              CHF {formatCHF(vehicle.price)}
+            </p>
+            {isReduced && (
+              <span className="text-xs font-bold" style={{ color: "var(--ct-magenta)" }}>
+                &minus;{savingsPercent}%
+              </span>
+            )}
+          </div>
           <p className="text-[0.6rem] text-[#9ca3af]">inkl. MwSt.</p>
           {vehicle.price > 0 && (
             <p className="text-xs font-semibold text-ct-magenta mt-0.5">
               ab CHF {formatCHF(Math.round(calcMonthlyRate(vehicle.price)))}/Mt.
             </p>
           )}
+          <ViewCounter vehicleId={vehicle.id} />
         </div>
       </div>
     </Link>

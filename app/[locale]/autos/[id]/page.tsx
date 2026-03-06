@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchVehicles, fetchVehicleDetail } from "@/lib/as24";
 import { generateVehicleMeta } from "@/lib/ai";
-import { kv } from "@vercel/kv";
 import {
   ArrowLeft,
   CalendarDays,
@@ -28,10 +27,14 @@ import InquiryTrigger from "@/components/vehicles/InquiryTrigger";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
+import OfferPDFButton from "@/components/vehicles/OfferPDFButton";
+import TradeInTrigger from "@/components/vehicles/TradeInTrigger";
 import PriceComparison from "@/components/vehicles/PriceComparison";
 import TrackVehicleView from "@/components/vehicles/TrackVehicleView";
 import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
 import VehicleDetailTabs from "@/components/vehicles/VehicleDetailTabs";
+import WishlistHeart from "@/components/vehicles/WishlistHeart";
+import ViewCounter from "@/components/vehicles/ViewCounter";
 
 export const revalidate = 3600;
 
@@ -67,9 +70,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function VehicleDetailPage({ params }: Props) {
   const { locale, id } = await params;
+  async function getReservedData() {
+    try {
+      const { kv } = await import("@vercel/kv");
+      return await kv.get<{ until: number }>(`reserved:${id}`);
+    } catch { return null; }
+  }
+
   const [vehicles, reservedData] = await Promise.all([
     fetchVehicles(),
-    kv.get<{ until: number }>(`reserved:${id}`).catch(() => null),
+    getReservedData(),
   ]);
   const baseVehicle = vehicles.find((v) => v.id === Number(id));
   if (!baseVehicle) notFound();
@@ -161,8 +171,14 @@ export default async function VehicleDetailPage({ params }: Props) {
                 {vehicle.make} {vehicle.model}
                 {vehicle.variant ? ` ${vehicle.variant}` : ""}
               </h1>
+              <ViewCounter vehicleId={vehicle.id} />
             </div>
             <div className="flex items-center gap-3 shrink-0">
+              <WishlistHeart
+                vehicle={{ id: vehicle.id, make: vehicle.make, model: vehicle.model, price: vehicle.price, image: vehicle.images?.[0] ?? "" }}
+                size={22}
+                className="bg-ct-light text-[#9ca3af] hover:text-[var(--ct-magenta)] hover:bg-ct-light"
+              />
               {vehicle.energyLabel && (
                 <EnergyLabel label={vehicle.energyLabel} />
               )}
@@ -346,6 +362,15 @@ export default async function VehicleDetailPage({ params }: Props) {
                     ) : (
                       <ReserveButton vehicleId={vehicle.id} vehicleLabel={vehicleLabel} locale={locale} />
                     )}
+
+                    {/* Inzahlungnahme */}
+                    <TradeInTrigger
+                      targetVehicleLabel={`${vehicle.make} ${vehicle.model}`}
+                      targetVehicleId={vehicle.id}
+                    />
+
+                    {/* PDF Angebot */}
+                    <OfferPDFButton vehicle={vehicle} />
 
                     {/* Cardossier link if available */}
                     {vehicle.cardossierUrl && (

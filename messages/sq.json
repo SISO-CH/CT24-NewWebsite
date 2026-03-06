@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Kryefaqja",
+    "autos": "Vetura",
+    "finanzierung": "Financimi",
+    "firmenkunden": "Klientë biznesi",
+    "ueberUns": "Rreth nesh",
+    "kontakt": "Kontakti",
+    "inzahlungnahme": "Dorëzimi i veturës"
+  },
+  "common": {
+    "anfragen": "Kërko tani",
+    "probefahrt": "Rezervo provën e vozitjes",
+    "zurueck": "Mbrapa",
+    "speichern": "Ruaj",
+    "weiter": "Vazhdo",
+    "abbrechen": "Anulo",
+    "laden": "Duke u ngarkuar…",
+    "fehler": "Ndodhi një gabim. Ju lutem provoni përsëri.",
+    "erfolg": "U dërgua me sukses!",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "Vetura juaj e ëndrrave ju pret.",
+    "subtitle": "Vetura të përdorura të verifikuara dhe vetura të reja — dërgesa në mbarë Zvicrrën.",
+    "cta": "Zbuloni të gjitha veturat"
+  },
+  "vehicles": {
+    "vergleichen": "Krahaso",
+    "imVergleich": "Në krahasim",
+    "reservieren": "Rezervo tani",
+    "reserviert": "E rezervuar",
+    "preisalarm": "Alarmi i çmimit",
+    "preisalarmTitle": "Alarmi i çmimit",
+    "preisalarmSubtitle": "Merrni njoftim kur një veturë e përshtatshme të jetë e disponueshme.",
+    "preisalarmEmail": "Adresa juaj e e-mailit",
+    "preisalarmButton": "Aktivizo alarmin e çmimit",
+    "preisalarmSuccess": "Alarmi i çmimit u aktivizua! Do të merrni një e-mail konfirmimi.",
+    "vergleichTitle": "Krahasimi i veturave",
+    "vergleichLeer": "Nuk janë zgjedhur vetura për krahasim.",
+    "vergleichMax": "Maksimumi 3 vetura për krahasim.",
+    "vergleichOeffnen": "Hap krahasimin",
+    "vergleichEntfernen": "Hiq",
+    "anfragenCTA": "Kërko"
+  },
+  "comparison": {
+    "preis": "Çmimi i blerjes",
+    "baujahr": "Viti i prodhimit",
+    "km": "Kilometrazhi",
+    "kraftstoff": "Karburanti",
+    "getriebe": "Kutia e shpejtësive",
+    "leistung": "Fuqia",
+    "karosserie": "Karoseria",
+    "farbe": "Ngjyra",
+    "antrieb": "Tërheqja",
+    "tueren": "Dyert",
+    "sitze": "Ulëset",
+    "energielabel": "Etiketa e energjisë"
+  },
+  "reservation": {
+    "title": "Rezervo veturën",
+    "subtitle": "Siguroni këtë veturë për 48 orë — CHF 200 tarifë rezervimi (zbritet në blerje).",
+    "button": "Rezervo tani — CHF 200",
+    "successTitle": "Rezervimi u konfirmua!",
+    "successText": "Vetura juaj është e rezervuar për 48 orë. Do t'ju kontaktojmë së shpejti.",
+    "cancelledTitle": "Rezervimi u anulua",
+    "cancelledText": "Rezervimi juaj nuk u përfundua. Asnjë shumë nuk u ngarkua."
+  },
+  "tradein": {
+    "title": "Dorëzo veturën në llogaritje",
+    "subtitle": "Merrni një vlerësim të menjëhershëm falas për veturën tuaj brenda 2 minutash.",
+    "step1Title": "Të dhënat e veturës",
+    "kontrollschild": "Targa (p.sh. AG 12345)",
+    "km": "Kilometrazhi",
+    "zustand": "Gjendja",
+    "zustandSehrGut": "Shumë mirë",
+    "zustandGut": "Mirë",
+    "zustandGebraucht": "E përdorur",
+    "step2Title": "Vlerësimi juaj i menjëhershëm",
+    "schaetzungText": "Bazuar në të dhënat aktuale të tregut, vlerësojmë veturën tuaj në:",
+    "verbindlichBewerten": "Kërko vlerësim të detyrueshëm — CHF 20",
+    "step3Title": "Vlerësimi i detyrueshëm",
+    "step3Text": "Për CHF 20 do të merrni një ofertë të detyrueshme brenda 24 orësh.",
+    "successTitle": "Kërkesa për vlerësim u pranua!",
+    "successText": "Do t'ju kontaktojmë brenda 24 orësh me një ofertë të detyrueshme me e-mail."
+  },
+  "contact": {
+    "probefahrtTitle": "Rezervo provën e vozitjes",
+    "probefahrtSubtitle": "Rezervoni provën tuaj të vozitjes falas direkt online."
+  },
+  "footer": {
+    "tagline": "Specialisti juaj për vetura të përdorura të verifikuara në Zvicër.",
+    "fahrzeuge": "Veturat",
+    "unternehmen": "Kompania",
+    "kontakt": "Kontakti",
+    "copyright": "Të gjitha të drejtat e rezervuara.",
+    "madeIn": "Zhvilluar me ❤️ në Zvicër"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Vetura të përdorura dhe të reja në Zvicër",
+    "homeDescription": "Vetura të përdorura të verifikuara dhe vetura të reja në Wohlen (Aargau). Dërgesa në mbarë Zvicrrën, deri në 7 vjet garanci."
+  }
+}

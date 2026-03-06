@@ -45,6 +45,9 @@ export interface Vehicle {
   weightCurb?: number;
   towingCapacity?: number;
   leasingUrl?: string;
+  // --- Scarcity / Social Proof ---
+  createdAt?: string;
+  previousPrice?: number;
   // --- Phase 3 fields ---
   imageUrl360?:   string;
   videoUrl?:      string;

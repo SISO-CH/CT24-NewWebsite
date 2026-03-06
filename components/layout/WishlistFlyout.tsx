@@ -1,24 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Clock } from "lucide-react";
+import { Heart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { getRecentlyViewed, type RecentVehicle } from "@/lib/recently-viewed";
+import { useWishlist } from "@/hooks/useWishlist";
 
-export default function RecentlyViewedFlyout() {
+export default function WishlistFlyout() {
   const [open, setOpen] = useState(false);
-  const [vehicles, setVehicles] = useState<RecentVehicle[]>([]);
+  const { items } = useWishlist();
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setVehicles(getRecentlyViewed());
-  }, []);
-
-  // Refresh list when flyout opens (user may have visited new vehicles)
-  useEffect(() => {
-    if (open) setVehicles(getRecentlyViewed());
-  }, [open]);
 
   // Close on outside click
   useEffect(() => {
@@ -30,7 +21,7 @@ export default function RecentlyViewedFlyout() {
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
-  if (vehicles.length === 0) return null;
+  if (items.length === 0) return null;
 
   return (
     <div className="relative" ref={ref}>
@@ -38,12 +29,12 @@ export default function RecentlyViewedFlyout() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         className="relative p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg hover:bg-ct-light transition-colors text-[#374151]"
-        aria-label="Zuletzt angesehen"
+        aria-label="Merkliste"
       >
-        <Clock size={18} />
-        <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-ct-cyan
+        <Heart size={18} />
+        <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-ct-magenta
                          text-white text-[9px] font-bold flex items-center justify-center">
-          {vehicles.length}
+          {items.length}
         </span>
       </button>
 
@@ -56,9 +47,9 @@ export default function RecentlyViewedFlyout() {
                         z-50 max-h-[70vh] overflow-y-auto">
           <p className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[#9ca3af]
                         border-b border-[#f0f0f0]">
-            Zuletzt angesehen
+            Merkliste
           </p>
-          {vehicles.map((v) => (
+          {items.map((v) => (
             <Link
               key={v.id}
               href={`/autos/${v.id}`}
@@ -84,6 +75,15 @@ export default function RecentlyViewedFlyout() {
               </div>
             </Link>
           ))}
+          <Link
+            href="/merkliste"
+            onClick={() => setOpen(false)}
+            className="block px-4 py-2.5 text-center text-xs font-semibold border-t border-[#f0f0f0]
+                       hover:bg-ct-light transition-colors"
+            style={{ color: "var(--ct-cyan)" }}
+          >
+            Alle anzeigen
+          </Link>
         </div>
         </>
       )}

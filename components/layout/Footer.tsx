@@ -118,6 +118,7 @@ export default function Footer() {
               <FooterLink href="/ankauf">Fahrzeug verkaufen</FooterLink>
               <FooterLink href="/inzahlungnahme">Inzahlungnahme</FooterLink>
               <FooterLink href="/firmenkunden">Firmenkunden</FooterLink>
+              <FooterLink href="/haendler">Für Händler</FooterLink>
               <FooterLink href="/probefahrt">Probefahrt buchen</FooterLink>
               <FooterLink href="/home-delivery">Home Delivery</FooterLink>
               <FooterLink href="/zulassungsservice">Zulassungsservice</FooterLink>

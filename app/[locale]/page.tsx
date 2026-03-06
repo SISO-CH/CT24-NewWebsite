@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Check, Star, MapPin, Phone, Mail, Car, Truck, FileText, Search } from "lucide-react";
 import { fetchVehicles } from "@/lib/as24";
+import { TEAM } from "@/lib/team";
 import VehicleCard from "@/components/vehicles/VehicleCard";
 import FadeIn from "@/components/ui/FadeIn";
 import HeroSearch from "@/components/home/HeroSearch";
@@ -405,6 +406,46 @@ export default async function HomePage() {
                   <p className="text-[#6b7280] text-sm leading-relaxed max-w-[230px]">
                     {step.desc}
                   </p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════
+          TEAM
+      ════════════════════════════════════════════ */}
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <FadeIn>
+            <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-2"
+               style={{ color: "var(--ct-cyan)" }}>Unser Team</p>
+            <h2 className="text-3xl font-extrabold mb-12" style={{ color: "var(--ct-dark)" }}>
+              Ihre Ansprechpartner
+            </h2>
+          </FadeIn>
+          <div className="flex overflow-x-auto sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-6 snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:overflow-visible">
+            {TEAM.map((m, i) => (
+              <FadeIn key={m.name} delay={i * 80}>
+                <div className="flex flex-col items-center snap-center shrink-0 w-[140px] sm:w-auto">
+                  {m.image ? (
+                    <Image src={m.image} alt={m.name} width={96} height={96}
+                           className="w-24 h-24 rounded-full object-cover mb-3" />
+                  ) : (
+                    <div className="w-24 h-24 rounded-full flex items-center justify-center mb-3 text-xl font-bold text-white"
+                         style={{ backgroundColor: "var(--ct-cyan)" }}>
+                      {m.initials}
+                    </div>
+                  )}
+                  <h3 className="font-bold text-sm" style={{ color: "var(--ct-dark)" }}>{m.name}</h3>
+                  <p className="text-xs text-[#6b7280]">{m.role}</p>
+                  {m.phone && (
+                    <a href={`tel:${m.phone.replace(/\s/g, "")}`}
+                       className="text-xs mt-1" style={{ color: "var(--ct-cyan)" }}>
+                      {m.phone}
+                    </a>
+                  )}
                 </div>
               </FadeIn>
             ))}

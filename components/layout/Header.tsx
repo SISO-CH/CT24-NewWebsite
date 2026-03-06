@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import Logo from "@/components/ui/Logo";
 import LocaleSwitcher from "@/components/ui/LocaleSwitcher";
 import RecentlyViewedFlyout from "@/components/layout/RecentlyViewedFlyout";
+import WishlistFlyout from "@/components/layout/WishlistFlyout";
 import { trackEvent } from "@/lib/tracking";
 
 const navLinks = [
@@ -15,6 +16,7 @@ const navLinks = [
   { href: "/autos", label: "Autos" },
   { href: "/finanzierung", label: "Finanzierung" },
   { href: "/firmenkunden", label: "Firmenkunden" },
+  { href: "/haendler", label: "Für Händler" },
   { href: "/blog", label: "Blog" },
   { href: "/ueber-uns", label: "Über uns" },
   { href: "/kontakt", label: "Kontakt" },
@@ -58,6 +60,7 @@ export default function Header() {
           {/* Phone CTA (desktop) + Mobile toggle */}
           <div className="flex items-center justify-end gap-2">
             <div className="hidden lg:flex items-center gap-2">
+              <WishlistFlyout />
               <RecentlyViewedFlyout />
               <LocaleSwitcher />
               <a

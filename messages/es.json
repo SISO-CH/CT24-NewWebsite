@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "autos": "Coches",
+    "finanzierung": "Financiamiento",
+    "firmenkunden": "Clientes empresariales",
+    "ueberUns": "Sobre nosotros",
+    "kontakt": "Contacto",
+    "inzahlungnahme": "Entrega a cuenta"
+  },
+  "common": {
+    "anfragen": "Solicitar ahora",
+    "probefahrt": "Reservar prueba de manejo",
+    "zurueck": "Atrás",
+    "speichern": "Guardar",
+    "weiter": "Siguiente",
+    "abbrechen": "Cancelar",
+    "laden": "Cargando…",
+    "fehler": "Ha ocurrido un error. Por favor, inténtelo de nuevo.",
+    "erfolg": "Enviado con éxito!",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "Su coche soñado le espera.",
+    "subtitle": "Vehículos de ocasión verificados y coches nuevos — entrega en toda Suiza.",
+    "cta": "Descubrir todos los vehículos"
+  },
+  "vehicles": {
+    "vergleichen": "Comparar",
+    "imVergleich": "En comparación",
+    "reservieren": "Reservar ahora",
+    "reserviert": "Reservado",
+    "preisalarm": "Alerta de precio",
+    "preisalarmTitle": "Alerta de precio",
+    "preisalarmSubtitle": "Reciba una notificación cuando un vehículo adecuado esté disponible.",
+    "preisalarmEmail": "Su dirección de correo electrónico",
+    "preisalarmButton": "Activar alerta de precio",
+    "preisalarmSuccess": "Alerta de precio activada! Recibirá un correo de confirmación.",
+    "vergleichTitle": "Comparación de vehículos",
+    "vergleichLeer": "No se han seleccionado vehículos para comparar.",
+    "vergleichMax": "Máximo 3 vehículos comparables.",
+    "vergleichOeffnen": "Abrir comparación",
+    "vergleichEntfernen": "Eliminar",
+    "anfragenCTA": "Solicitar"
+  },
+  "comparison": {
+    "preis": "Precio de compra",
+    "baujahr": "Año de fabricación",
+    "km": "Kilometraje",
+    "kraftstoff": "Combustible",
+    "getriebe": "Transmisión",
+    "leistung": "Potencia",
+    "karosserie": "Carrocería",
+    "farbe": "Color",
+    "antrieb": "Tracción",
+    "tueren": "Puertas",
+    "sitze": "Asientos",
+    "energielabel": "Etiqueta energética"
+  },
+  "reservation": {
+    "title": "Reservar vehículo",
+    "subtitle": "Asegure este vehículo durante 48 horas — CHF 200 de tarifa de reserva (se descuenta en la compra).",
+    "button": "Reservar ahora — CHF 200",
+    "successTitle": "Reserva confirmada!",
+    "successText": "Su vehículo está reservado durante 48 horas. Nos pondremos en contacto pronto.",
+    "cancelledTitle": "Reserva cancelada",
+    "cancelledText": "Su reserva no se ha completado. No se ha cobrado ningún importe."
+  },
+  "tradein": {
+    "title": "Entregar vehículo a cuenta",
+    "subtitle": "Obtenga en 2 minutos una estimación gratuita e inmediata de su vehículo.",
+    "step1Title": "Datos del vehículo",
+    "kontrollschild": "Matrícula (p.ej. AG 12345)",
+    "km": "Kilometraje",
+    "zustand": "Estado",
+    "zustandSehrGut": "Muy bueno",
+    "zustandGut": "Bueno",
+    "zustandGebraucht": "Usado",
+    "step2Title": "Su estimación inmediata",
+    "schaetzungText": "Basándonos en datos actuales del mercado, estimamos su vehículo en:",
+    "verbindlichBewerten": "Solicitar valoración vinculante — CHF 20",
+    "step3Title": "Valoración vinculante",
+    "step3Text": "Por CHF 20 recibirá una oferta vinculante en un plazo de 24 horas.",
+    "successTitle": "Solicitud de valoración recibida!",
+    "successText": "Nos pondremos en contacto en 24 horas con una oferta vinculante por correo electrónico."
+  },
+  "contact": {
+    "probefahrtTitle": "Reservar prueba de manejo",
+    "probefahrtSubtitle": "Reserve su prueba de manejo gratuita directamente en línea."
+  },
+  "footer": {
+    "tagline": "Su especialista en vehículos de ocasión verificados en Suiza.",
+    "fahrzeuge": "Vehículos",
+    "unternehmen": "Empresa",
+    "kontakt": "Contacto",
+    "copyright": "Todos los derechos reservados.",
+    "madeIn": "Desarrollado con ❤️ en Suiza"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Vehículos de ocasión y nuevos en Suiza",
+    "homeDescription": "Vehículos de ocasión verificados y coches nuevos en Wohlen (Argovia). Entrega en toda Suiza, hasta 7 años de garantía."
+  }
+}

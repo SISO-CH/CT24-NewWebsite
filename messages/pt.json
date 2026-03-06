@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Início",
+    "autos": "Carros",
+    "finanzierung": "Financiamento",
+    "firmenkunden": "Clientes empresariais",
+    "ueberUns": "Sobre nós",
+    "kontakt": "Contacto",
+    "inzahlungnahme": "Retoma de veículo"
+  },
+  "common": {
+    "anfragen": "Solicitar agora",
+    "probefahrt": "Reservar test drive",
+    "zurueck": "Voltar",
+    "speichern": "Guardar",
+    "weiter": "Seguinte",
+    "abbrechen": "Cancelar",
+    "laden": "A carregar…",
+    "fehler": "Ocorreu um erro. Por favor, tente novamente.",
+    "erfolg": "Enviado com sucesso!",
+    "currency": "CHF"
+  },
+  "hero": {
+    "title": "O seu carro de sonho espera por si.",
+    "subtitle": "Veículos usados verificados e carros novos — entrega em toda a Suíça.",
+    "cta": "Descobrir todos os veículos"
+  },
+  "vehicles": {
+    "vergleichen": "Comparar",
+    "imVergleich": "Em comparação",
+    "reservieren": "Reservar agora",
+    "reserviert": "Reservado",
+    "preisalarm": "Alerta de preço",
+    "preisalarmTitle": "Alerta de preço",
+    "preisalarmSubtitle": "Seja notificado quando um veículo adequado estiver disponível.",
+    "preisalarmEmail": "O seu endereço de e-mail",
+    "preisalarmButton": "Ativar alerta de preço",
+    "preisalarmSuccess": "Alerta de preço ativado! Receberá um e-mail de confirmação.",
+    "vergleichTitle": "Comparação de veículos",
+    "vergleichLeer": "Nenhum veículo selecionado para comparação.",
+    "vergleichMax": "Máximo de 3 veículos para comparação.",
+    "vergleichOeffnen": "Abrir comparação",
+    "vergleichEntfernen": "Remover",
+    "anfragenCTA": "Solicitar"
+  },
+  "comparison": {
+    "preis": "Preço de compra",
+    "baujahr": "Ano de fabrico",
+    "km": "Quilometragem",
+    "kraftstoff": "Combustível",
+    "getriebe": "Transmissão",
+    "leistung": "Potência",
+    "karosserie": "Carroçaria",
+    "farbe": "Cor",
+    "antrieb": "Tração",
+    "tueren": "Portas",
+    "sitze": "Lugares",
+    "energielabel": "Etiqueta energética"
+  },
+  "reservation": {
+    "title": "Reservar veículo",
+    "subtitle": "Garanta este veículo durante 48 horas — CHF 200 de taxa de reserva (deduzida na compra).",
+    "button": "Reservar agora — CHF 200",
+    "successTitle": "Reserva confirmada!",
+    "successText": "O seu veículo está reservado durante 48 horas. Entraremos em contacto em breve.",
+    "cancelledTitle": "Reserva cancelada",
+    "cancelledText": "A sua reserva não foi concluída. Nenhum valor foi cobrado."
+  },
+  "tradein": {
+    "title": "Entregar veículo como retoma",
+    "subtitle": "Obtenha uma avaliação gratuita e imediata do seu veículo em 2 minutos.",
+    "step1Title": "Dados do veículo",
+    "kontrollschild": "Matrícula (p.ex. AG 12345)",
+    "km": "Quilometragem",
+    "zustand": "Estado",
+    "zustandSehrGut": "Muito bom",
+    "zustandGut": "Bom",
+    "zustandGebraucht": "Usado",
+    "step2Title": "A sua avaliação imediata",
+    "schaetzungText": "Com base nos dados atuais do mercado, avaliamos o seu veículo em:",
+    "verbindlichBewerten": "Solicitar avaliação vinculativa — CHF 20",
+    "step3Title": "Avaliação vinculativa",
+    "step3Text": "Por CHF 20 receberá uma oferta vinculativa no prazo de 24 horas.",
+    "successTitle": "Pedido de avaliação recebido!",
+    "successText": "Entraremos em contacto em 24 horas com uma oferta vinculativa por e-mail."
+  },
+  "contact": {
+    "probefahrtTitle": "Reservar test drive",
+    "probefahrtSubtitle": "Reserve o seu test drive gratuito diretamente online."
+  },
+  "footer": {
+    "tagline": "O seu especialista em veículos usados verificados na Suíça.",
+    "fahrzeuge": "Veículos",
+    "unternehmen": "Empresa",
+    "kontakt": "Contacto",
+    "copyright": "Todos os direitos reservados.",
+    "madeIn": "Desenvolvido com ❤️ na Suíça"
+  },
+  "meta": {
+    "homeTitle": "Car Trade24 GmbH – Veículos usados e novos na Suíça",
+    "homeDescription": "Veículos usados verificados e carros novos em Wohlen (Argóvia). Entrega em toda a Suíça, até 7 anos de garantia."
+  }
+}

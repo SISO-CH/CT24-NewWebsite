@@ -86,6 +86,7 @@ interface AS24Listing {
   certificationNumber?:  string;
   tuned?:                boolean;
   versionId?:            number;
+  createdAt?:            string;           // ISO date when listing was created
 }
 
 // ─── Mappings ─────────────────────────────────────────────────────────────────
@@ -184,6 +185,10 @@ function mapAS24ToVehicle(listing: AS24Listing, index: number): Vehicle {
     seats:        listing.seats ?? undefined,
     drivetrain:   DRIVETRAIN_MAP[listing.driveType ?? ""] ?? undefined,
     condition:    CONDITION_MAP[listing.conditionType ?? ""] ?? undefined,
+    createdAt:    listing.createdAt ?? undefined,
+    previousPrice: listing.listPrice && listing.listPrice > (listing.price ?? 0)
+                     ? listing.listPrice
+                     : undefined,
   };
 }
 
