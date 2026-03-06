@@ -48,6 +48,8 @@ export interface Vehicle {
   // --- Scarcity / Social Proof ---
   createdAt?: string;
   previousPrice?: number;
+  // --- Preorder ---
+  preorder?: boolean;
   // --- Phase 3 fields ---
   imageUrl360?:   string;
   videoUrl?:      string;

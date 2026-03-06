@@ -1,6 +1,7 @@
 // app/[locale]/haendler/page.tsx
 import type { Metadata } from "next";
-import { Car, Tag, Truck, UserCheck, ShieldCheck, Zap } from "lucide-react";
+import Link from "next/link";
+import { Car, Tag, Truck, UserCheck, ShieldCheck, Zap, Calculator } from "lucide-react";
 import FadeIn from "@/components/ui/FadeIn";
 import HaendlerForm from "@/components/haendler/HaendlerForm";
 
@@ -239,6 +240,42 @@ export default function HaendlerPage() {
               </FadeIn>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── CO2-Rechner CTA ── */}
+      <section className="py-12 bg-ct-light">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/co2-rechner"
+            className="flex items-center gap-5 p-6 rounded-xl bg-white border border-[#e5e7eb]
+                       shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-md transition-shadow duration-200 group"
+          >
+            <div
+              className="w-12 h-12 flex items-center justify-center rounded-lg shrink-0"
+              style={{ backgroundColor: "var(--ct-light)" }}
+            >
+              <Calculator size={22} style={{ color: "var(--ct-cyan)" }} />
+            </div>
+            <div className="flex-1">
+              <h3
+                className="font-bold text-base mb-1 group-hover:text-[var(--ct-cyan)] transition-colors"
+                style={{ color: "var(--ct-dark)" }}
+              >
+                CO2-Flottenstrafe berechnen
+              </h3>
+              <p className="text-[#6b7280] text-sm leading-relaxed">
+                Sehen Sie, wie Sie durch emissionsarme Fahrzeuge aus unserem Bestand
+                die ASTRA CO2-Sanktion reduzieren und bares Geld sparen.
+              </p>
+            </div>
+            <span
+              className="hidden sm:block text-sm font-semibold shrink-0"
+              style={{ color: "var(--ct-cyan)" }}
+            >
+              Zum Rechner &rarr;
+            </span>
+          </Link>
         </div>
       </section>
 

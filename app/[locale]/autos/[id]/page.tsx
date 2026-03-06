@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { fetchVehicles, fetchVehicleDetail } from "@/lib/as24";
+import { fetchPreorderVehicles } from "@/lib/preorder-vehicles";
 import { generateVehicleMeta } from "@/lib/ai";
 import {
   ArrowLeft,
@@ -35,6 +36,7 @@ import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
 import VehicleDetailTabs from "@/components/vehicles/VehicleDetailTabs";
 import WishlistHeart from "@/components/vehicles/WishlistHeart";
 import ViewCounter from "@/components/vehicles/ViewCounter";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 export const revalidate = 3600;
 
@@ -51,7 +53,8 @@ function safeJsonLd(obj: unknown): string {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const vehicles = await fetchVehicles();
+  const [active, preorder] = await Promise.all([fetchVehicles(), fetchPreorderVehicles()]);
+  const vehicles = [...active, ...preorder];
   const v = vehicles.find((v) => v.id === Number(id));
   if (!v) return { title: "Fahrzeug nicht gefunden" };
 
@@ -77,10 +80,12 @@ export default async function VehicleDetailPage({ params }: Props) {
     } catch { return null; }
   }
 
-  const [vehicles, reservedData] = await Promise.all([
+  const [activeVehicles, preorderVehicles, reservedData] = await Promise.all([
     fetchVehicles(),
+    fetchPreorderVehicles(),
     getReservedData(),
   ]);
+  const vehicles = [...activeVehicles, ...preorderVehicles];
   const baseVehicle = vehicles.find((v) => v.id === Number(id));
   if (!baseVehicle) notFound();
 
@@ -155,6 +160,14 @@ export default async function VehicleDetailPage({ params }: Props) {
       {/* Header */}
       <section className="pt-24 pb-6 bg-ct-light border-b border-[#e5e7eb] overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <BreadcrumbSchema
+            crumbs={[
+              { name: "Home", href: "/" },
+              { name: "Fahrzeuge", href: "/autos" },
+              { name: `${vehicle.make} ${vehicle.model}`, href: `/autos/${id}` },
+            ]}
+            className="pb-2 -mx-4 px-0"
+          />
           <Link
             href="/autos"
             className="inline-flex items-center gap-1.5 text-sm text-[#6b7280] hover:text-ct-cyan transition-colors mb-4"
@@ -332,68 +345,98 @@ export default async function VehicleDetailPage({ params }: Props) {
                   </div>
 
                   <div className="space-y-2.5 mb-5">
-                    {/* Primary CTA */}
-                    <InquiryTrigger
-                      vehicleLabel={vehicleLabel}
-                      vehiclePrice={vehicle.price}
-                    />
-
-                    {/* Secondary: Probefahrt + WhatsApp side by side */}
-                    <div className="grid grid-cols-2 gap-2">
-                      <TestDriveTrigger vehicleLabel={vehicleLabel} vehiclePrice={vehicle.price} />
-                      <a
-                        href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567"}?text=${encodeURIComponent(
-                          `Guten Tag, ich interessiere mich für den ${vehicleLabel} (CHF ${formatCHF(vehicle.price)}).`
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-1.5 py-3 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-                        style={{ backgroundColor: "#25D366" }}
-                      >
-                        <MessageCircle size={14} /> WhatsApp
-                      </a>
-                    </div>
-
-                    {/* Reserve */}
-                    {isReserved ? (
-                      <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#f3f4f6] text-[#9ca3af] text-sm font-semibold">
-                        <Lock size={14} /> Aktuell reserviert
-                      </div>
+                    {vehicle.preorder ? (
+                      <>
+                        {/* Preorder: single CTA — Interesse anmelden */}
+                        <div className="rounded-xl bg-orange-50 border border-orange-200 p-4 mb-2">
+                          <p className="text-sm font-semibold text-orange-700 mb-1">
+                            Demnächst verfügbar
+                          </p>
+                          <p className="text-xs text-orange-600">
+                            Dieses Fahrzeug ist noch nicht vor Ort — melden Sie Ihr Interesse an, um als Erste/r informiert zu werden.
+                          </p>
+                        </div>
+                        <Link
+                          href={`/kontakt?betreff=${encodeURIComponent(`Interesse: ${vehicleLabel}`)}`}
+                          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+                          style={{ backgroundColor: "var(--ct-cyan)" }}
+                        >
+                          <MessageCircle size={14} />
+                          Interesse anmelden
+                        </Link>
+                        <a
+                          href="tel:+41566185544"
+                          className="flex items-center justify-center gap-1.5 w-full py-2 text-sm text-[#9ca3af] hover:text-ct-cyan transition-colors"
+                        >
+                          <Phone size={13} /> +41 56 618 55 44
+                        </a>
+                      </>
                     ) : (
-                      <ReserveButton vehicleId={vehicle.id} vehicleLabel={vehicleLabel} locale={locale} />
+                      <>
+                        {/* Primary CTA */}
+                        <InquiryTrigger
+                          vehicleLabel={vehicleLabel}
+                          vehiclePrice={vehicle.price}
+                        />
+
+                        {/* Secondary: Probefahrt + WhatsApp side by side */}
+                        <div className="grid grid-cols-2 gap-2">
+                          <TestDriveTrigger vehicleLabel={vehicleLabel} vehiclePrice={vehicle.price} />
+                          <a
+                            href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "41791234567"}?text=${encodeURIComponent(
+                              `Guten Tag, ich interessiere mich für den ${vehicleLabel} (CHF ${formatCHF(vehicle.price)}).`
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-1.5 py-3 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+                            style={{ backgroundColor: "#25D366" }}
+                          >
+                            <MessageCircle size={14} /> WhatsApp
+                          </a>
+                        </div>
+
+                        {/* Reserve */}
+                        {isReserved ? (
+                          <div className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#f3f4f6] text-[#9ca3af] text-sm font-semibold">
+                            <Lock size={14} /> Aktuell reserviert
+                          </div>
+                        ) : (
+                          <ReserveButton vehicleId={vehicle.id} vehicleLabel={vehicleLabel} locale={locale} />
+                        )}
+
+                        {/* Inzahlungnahme */}
+                        <TradeInTrigger
+                          targetVehicleLabel={`${vehicle.make} ${vehicle.model}`}
+                          targetVehicleId={vehicle.id}
+                        />
+
+                        {/* PDF Angebot */}
+                        <OfferPDFButton vehicle={vehicle} />
+
+                        {/* Cardossier link if available */}
+                        {vehicle.cardossierUrl && (
+                          <a
+                            href={vehicle.cardossierUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl
+                                       border border-[#e5e7eb] text-sm font-semibold text-ct-dark
+                                       hover:border-ct-cyan hover:text-ct-cyan transition-colors"
+                          >
+                            <ExternalLink size={14} />
+                            Cardossier ansehen
+                          </a>
+                        )}
+
+                        {/* Phone as text link */}
+                        <a
+                          href="tel:+41566185544"
+                          className="flex items-center justify-center gap-1.5 w-full py-2 text-sm text-[#9ca3af] hover:text-ct-cyan transition-colors"
+                        >
+                          <Phone size={13} /> +41 56 618 55 44
+                        </a>
+                      </>
                     )}
-
-                    {/* Inzahlungnahme */}
-                    <TradeInTrigger
-                      targetVehicleLabel={`${vehicle.make} ${vehicle.model}`}
-                      targetVehicleId={vehicle.id}
-                    />
-
-                    {/* PDF Angebot */}
-                    <OfferPDFButton vehicle={vehicle} />
-
-                    {/* Cardossier link if available */}
-                    {vehicle.cardossierUrl && (
-                      <a
-                        href={vehicle.cardossierUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl
-                                   border border-[#e5e7eb] text-sm font-semibold text-ct-dark
-                                   hover:border-ct-cyan hover:text-ct-cyan transition-colors"
-                      >
-                        <ExternalLink size={14} />
-                        Cardossier ansehen
-                      </a>
-                    )}
-
-                    {/* Phone as text link */}
-                    <a
-                      href="tel:+41566185544"
-                      className="flex items-center justify-center gap-1.5 w-full py-2 text-sm text-[#9ca3af] hover:text-ct-cyan transition-colors"
-                    >
-                      <Phone size={13} /> +41 56 618 55 44
-                    </a>
                   </div>
 
                   {/* Leasingrechner-Widget — collapsible */}

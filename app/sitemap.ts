@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { fetchVehicles } from "@/lib/as24";
 import { getAllPosts } from "@/lib/blog";
+import { getSoldVehicles } from "@/lib/sold-vehicles";
+import { locations } from "@/lib/locations";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://cartrade24.ch";
@@ -20,18 +22,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/news`,         lastModified: now, changeFrequency: "weekly",  priority: 0.5 },
     { url: `${base}/agb`,          lastModified: now, changeFrequency: "yearly",  priority: 0.2 },
     { url: `${base}/datenschutz`,  lastModified: now, changeFrequency: "yearly",  priority: 0.2 },
+    { url: `${base}/co2-rechner`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/voice`,       lastModified: now, changeFrequency: "monthly", priority: 0.4 },
   ];
-
-  const vehiclePromise = fetchVehicles()
-    .then((vehicles) =>
-      vehicles.map((v) => ({
-        url: `${base}/autos/${v.id}`,
-        lastModified: now,
-        changeFrequency: "daily" as const,
-        priority: 0.8,
-      })),
-    )
-    .catch(() => [] as MetadataRoute.Sitemap);
 
   const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((p) => ({
     url: `${base}/blog/${p.slug}`,
@@ -40,7 +33,41 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const vehicleRoutes = await vehiclePromise;
+  const [vehicleRoutes, archiveRoutes] = await Promise.all([
+    fetchVehicles()
+      .then((vehicles) =>
+        vehicles.map((v) => ({
+          url: `${base}/autos/${v.id}`,
+          lastModified: now,
+          changeFrequency: "daily" as const,
+          priority: 0.8,
+        })),
+      )
+      .catch(() => [] as MetadataRoute.Sitemap),
+    getSoldVehicles()
+      .then((sold) => [
+        {
+          url: `${base}/fahrzeug-archiv`,
+          lastModified: now,
+          changeFrequency: "weekly" as const,
+          priority: 0.6,
+        },
+        ...sold.map((v) => ({
+          url: `${base}/fahrzeug-archiv/${v.id}`,
+          lastModified: new Date(v.archivedAt),
+          changeFrequency: "monthly" as const,
+          priority: 0.4,
+        })),
+      ])
+      .catch(() => [] as MetadataRoute.Sitemap),
+  ]);
 
-  return [...staticRoutes, ...vehicleRoutes, ...blogRoutes];
+  const locationRoutes: MetadataRoute.Sitemap = locations.map((l) => ({
+    url: `${base}/autos-in-${l.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...vehicleRoutes, ...blogRoutes, ...archiveRoutes, ...locationRoutes];
 }

@@ -11,7 +11,7 @@ import GTMScript from "@/components/analytics/GTMScript";
 import MatelsoScript from "@/components/analytics/MatelsoScript";
 import ClarityScript from "@/components/analytics/ClarityScript";
 import MobileCTABar from "@/components/ui/MobileCTABar";
-import ChatWidget from "@/components/ui/ChatWidget";
+import VoiceAgent from "@/components/voice/VoiceAgent";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -89,7 +89,7 @@ export default async function LocaleLayout({
           <Footer />
           <CookieBanner />
           <MobileCTABar />
-          <ChatWidget />
+          <VoiceAgent />
         </NextIntlClientProvider>
       </body>
     </html>

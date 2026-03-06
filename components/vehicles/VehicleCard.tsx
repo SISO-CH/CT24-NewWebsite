@@ -54,14 +54,21 @@ export default function VehicleCard({ vehicle, className = "", reserved = false 
           {reserved ? "Reserviert" : condition.label}
         </span>
 
+        {/* Preorder badge (top left, below condition) */}
+        {vehicle.preorder && (
+          <span className="absolute top-10 left-3 z-10 bg-orange-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm">
+            Demnächst verfügbar
+          </span>
+        )}
+
         {/* Scarcity badge (top left, below condition) */}
-        {isNew && (
+        {!vehicle.preorder && isNew && (
           <span className="absolute top-10 left-3 px-2 py-0.5 text-[10px] rounded-full text-white font-bold shadow-sm"
                 style={{ backgroundColor: "var(--ct-green)" }}>
             Neu eingetroffen
           </span>
         )}
-        {isReduced && !isNew && (
+        {!vehicle.preorder && isReduced && !isNew && (
           <span className="absolute top-10 left-3 px-2 py-0.5 text-[10px] rounded-full text-white font-bold shadow-sm"
                 style={{ backgroundColor: "var(--ct-magenta)" }}>
             Preisreduziert
