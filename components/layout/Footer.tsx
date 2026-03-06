@@ -123,6 +123,7 @@ export default function Footer() {
               <FooterLink href="/home-delivery">Home Delivery</FooterLink>
               <FooterLink href="/zulassungsservice">Zulassungsservice</FooterLink>
               <FooterLink href="/fahrzeug-sourcing">Fahrzeug-Sourcing</FooterLink>
+              <FooterLink href="/fahrzeug-archiv">Fahrzeug-Archiv</FooterLink>
             </ul>
           </div>
 
