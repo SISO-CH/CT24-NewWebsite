@@ -14,20 +14,17 @@ export const metadata: Metadata = {
 export default async function Co2RechnerPage() {
   const vehicles = await fetchVehicles();
 
-  /* Filter vehicles with valid CO2 data, sort ascending */
+  /* Intelligente Filterung: Elektro-Fahrzeuge = 0 g/km, auch ohne AS24-CO2-Wert */
   const lowEmissionVehicles = vehicles
-    .filter((v) => v.co2 != null && v.co2 > 0)
+    .map((v) => ({
+      ...v,
+      co2: v.fuel === "Elektro" ? 0 : (v.co2 ?? null),
+    }))
+    .filter((v) => v.co2 != null && v.co2 <= 95)
     .sort((a, b) => (a.co2 ?? 999) - (b.co2 ?? 999));
 
   return (
     <>
-      <BreadcrumbSchema
-        crumbs={[
-          { name: "Home", href: "/" },
-          { name: "CO2-Rechner", href: "/co2-rechner" },
-        ]}
-      />
-
       {/* ── Hero ── */}
       <section
         className="pt-24 pb-14"
@@ -36,6 +33,13 @@ export default async function Co2RechnerPage() {
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <BreadcrumbSchema
+            crumbs={[
+              { name: "Home", href: "/" },
+              { name: "CO2-Rechner", href: "/co2-rechner" },
+            ]}
+            className="pb-2 -mx-4 px-0"
+          />
           <p
             className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-2"
             style={{ color: "var(--ct-cyan)" }}

@@ -102,9 +102,13 @@ export default async function LocationPage({ params }: Props) {
   if (!location) notFound();
 
   const content = getLocationContent(city);
-  if (!content) notFound();
 
-  const { intro, faqs } = parseFaq(content.body);
+  const { intro, faqs } = content
+    ? parseFaq(content.body)
+    : {
+        intro: `Geprüfte Occasionen und Neuwagen nahe ${location.name}. Car Trade24 in Wohlen AG — Ihr Autohändler im Freiamt.`,
+        faqs: [] as FaqItem[],
+      };
 
   const vehicles = await fetchVehicles().catch(() => []);
   const displayVehicles = vehicles.slice(0, 12);
@@ -170,13 +174,13 @@ export default async function LocationPage({ params }: Props) {
         />
       )}
 
-      <main className="max-w-7xl mx-auto px-4 py-12">
+      <main className="max-w-7xl mx-auto px-4 pt-24 pb-12">
         {/* ── H1 ── */}
         <h1
           className="text-3xl md:text-4xl font-bold mb-6"
           style={{ color: "var(--ct-dark)" }}
         >
-          {content.h1}
+          {content?.h1 ?? `Occasion kaufen in ${location.name}`}
         </h1>
 
         {/* ── Intro text ── */}

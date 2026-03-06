@@ -298,62 +298,94 @@ export default function Co2Calculator({ lowEmissionVehicles }: Props) {
           </div>
 
           <p className="text-sm text-[#6b7280] leading-relaxed">
-            Ersetzen Sie die emissionsstarksten Fahrzeuge Ihrer Flotte durch
-            effiziente Modelle aus unserem Lager:
+            Durch den Einkauf emissionsarmer Fahrzeuge senken Sie Ihren Flottendurchschnitt
+            und reduzieren die CO2-Sanktion erheblich. Hier {lowEmissionVehicles.length >= 3 ? "drei" : "unsere"} Empfehlungen:
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {lowEmissionVehicles.slice(0, 3).map((v) => (
-              <Link
-                key={v.id}
-                href={`/autos/${v.id}`}
-                className="group rounded-lg border border-[#e5e7eb] overflow-hidden
-                           hover:shadow-md transition-shadow duration-200"
-              >
-                <div className="relative aspect-[16/10] bg-[#f4f6f8]">
-                  <Image
-                    src={v.image}
-                    alt={`${v.make} ${v.model}`}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 640px) 100vw, 33vw"
-                  />
-                  {v.co2 != null && (
-                    <span
-                      className="absolute top-2 right-2 px-2 py-0.5 rounded text-xs font-bold text-white"
-                      style={{ backgroundColor: "var(--ct-green)" }}
-                    >
-                      {v.co2} g/km
-                    </span>
+          {/* Vehicle recommendation cards with impact */}
+          <div className="space-y-3">
+            {lowEmissionVehicles.slice(0, 3).map((v, idx) => {
+              // Calculate impact of adding this single vehicle
+              const currentFleet: FleetVehicle[] =
+                mode === "simple"
+                  ? Array.from({ length: count }, (_, i) => ({ label: `Fahrzeug ${i + 1}`, co2: avgCo2 }))
+                  : [...detailVehicles];
+              const withNew = [...currentFleet, { label: `${v.make} ${v.model}`, co2: v.co2 ?? 0 }];
+              const newResult = calculateFleetPenalty(withNew);
+              const savingsIfAdded = result.totalPenalty - newResult.totalPenalty;
+
+              const hasImage = v.image && v.image.startsWith("http");
+
+              return (
+                <Link
+                  key={v.id}
+                  href={`/autos/${v.id}`}
+                  className="flex items-center gap-4 rounded-lg border border-[#e5e7eb] p-4 hover:shadow-md transition-shadow"
+                >
+                  {hasImage && (
+                    <div className="relative w-20 h-16 rounded-lg overflow-hidden bg-[#f4f6f8] shrink-0">
+                      <Image
+                        src={v.image}
+                        alt={`${v.make} ${v.model}`}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </div>
                   )}
-                </div>
-                <div className="p-3">
-                  <p
-                    className="font-bold text-sm truncate"
-                    style={{ color: "var(--ct-dark)" }}
-                  >
-                    {v.make} {v.model}
-                  </p>
-                  <p className="text-sm" style={{ color: "var(--ct-cyan)" }}>
-                    CHF {formatCHF(v.price)}
-                  </p>
-                </div>
-              </Link>
-            ))}
+                  {!hasImage && (
+                    <div className="w-20 h-16 rounded-lg bg-[#f4f6f8] shrink-0 flex items-center justify-center">
+                      <Leaf size={20} style={{ color: "var(--ct-green)" }} />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-sm truncate" style={{ color: "var(--ct-dark)" }}>
+                      {v.make} {v.model} {v.variant ?? ""}
+                    </p>
+                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[#6b7280] mt-0.5">
+                      <span>{v.co2 === 0 ? "Elektro (0 g/km)" : `${v.co2} g/km CO2`}</span>
+                      <span>CHF {formatCHF(v.price)}</span>
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    {savingsIfAdded > 0 ? (
+                      <>
+                        <p className="text-sm font-bold" style={{ color: "var(--ct-green)" }}>
+                          &minus; CHF {formatCHF(savingsIfAdded)}
+                        </p>
+                        <p className="text-[10px] text-[#9ca3af]">Straf-Reduktion</p>
+                      </>
+                    ) : (
+                      <p className="text-xs text-[#9ca3af]">Kein Effekt</p>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
+          {/* Before / After summary */}
           {optimized && (
-            <div
-              className="rounded-lg p-4"
-              style={{ backgroundColor: "#f0fdf4", border: "1px solid #bbf7d0" }}
-            >
-              <p className="text-sm font-semibold" style={{ color: "var(--ct-green)" }}>
-                Potenzielle Ersparnis: CHF {formatCHF(optimized.savings)}
-              </p>
-              <p className="text-xs text-[#6b7280] mt-1">
-                Neuer Flotten-Durchschnitt: {optimized.result.fleetAverage} g/km
-                &rarr; Strafe: CHF {formatCHF(optimized.result.totalPenalty)}
-              </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="rounded-lg p-4 border border-red-200 bg-red-50">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-red-400 mb-1">Aktuell</p>
+                <p className="text-lg font-bold text-red-600">CHF {formatCHF(result.totalPenalty)}</p>
+                <p className="text-xs text-[#6b7280]">
+                  {result.fleetAverage} g/km &middot; {result.vehicleCount} Fzg.
+                </p>
+              </div>
+              <div className="rounded-lg p-4 border border-green-200 bg-green-50">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-green-500 mb-1">
+                  Nach Optimierung
+                </p>
+                <p className="text-lg font-bold" style={{ color: "var(--ct-green)" }}>
+                  CHF {formatCHF(optimized.result.totalPenalty)}
+                </p>
+                <p className="text-xs text-[#6b7280]">
+                  {optimized.result.fleetAverage} g/km &middot; Ersparnis:{" "}
+                  <strong className="text-green-600">CHF {formatCHF(optimized.savings)}</strong>
+                </p>
+              </div>
             </div>
           )}
 

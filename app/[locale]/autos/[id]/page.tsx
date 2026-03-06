@@ -16,7 +16,6 @@ import {
   MessageCircle,
   Lock,
   Cog,
-  Mic,
 } from "lucide-react";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
@@ -124,14 +123,6 @@ export default async function VehicleDetailPage({ params }: Props) {
 
   return (
     <>
-      <BreadcrumbSchema
-        crumbs={[
-          { name: "Home", href: "/" },
-          { name: "Fahrzeuge", href: "/autos" },
-          { name: `${vehicle.make} ${vehicle.model}`, href: `/autos/${id}` },
-        ]}
-      />
-
       {/* JSON-LD Structured Data — sicher via safeJsonLd() */}
       <script
         type="application/ld+json"
@@ -169,6 +160,14 @@ export default async function VehicleDetailPage({ params }: Props) {
       {/* Header */}
       <section className="pt-24 pb-6 bg-ct-light border-b border-[#e5e7eb] overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <BreadcrumbSchema
+            crumbs={[
+              { name: "Home", href: "/" },
+              { name: "Fahrzeuge", href: "/autos" },
+              { name: `${vehicle.make} ${vehicle.model}`, href: `/autos/${id}` },
+            ]}
+            className="pb-2 -mx-4 px-0"
+          />
           <Link
             href="/autos"
             className="inline-flex items-center gap-1.5 text-sm text-[#6b7280] hover:text-ct-cyan transition-colors mb-4"
@@ -428,17 +427,6 @@ export default async function VehicleDetailPage({ params }: Props) {
                             Cardossier ansehen
                           </a>
                         )}
-
-                        {/* Sprachassistent */}
-                        <Link
-                          href={`/voice?vehicle=${vehicle.id}`}
-                          className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl
-                                     border border-[#e5e7eb] text-sm font-semibold text-ct-dark
-                                     hover:bg-ct-light transition-colors"
-                        >
-                          <Mic size={14} />
-                          Sprachassistent
-                        </Link>
 
                         {/* Phone as text link */}
                         <a

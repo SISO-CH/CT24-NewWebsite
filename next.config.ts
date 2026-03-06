@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      { source: "/autos-in-:city", destination: "/standort/:city" },
+      { source: "/:locale/autos-in-:city", destination: "/:locale/standort/:city" },
+    ];
+  },
   async redirects() {
     return [
       { source: "/informationen", destination: "/ueber-uns", permanent: true },

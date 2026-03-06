@@ -5,6 +5,7 @@
 const memoryStore = new Map<string, unknown>();
 
 async function getKv(): Promise<import("@vercel/kv").VercelKV | null> {
+  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) return null;
   try {
     const mod = await import("@vercel/kv");
     return mod.kv;
