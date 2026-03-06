@@ -370,7 +370,7 @@ export default async function VehicleDetailPage({ params }: Props) {
                     />
 
                     {/* PDF Angebot */}
-                    <OfferPDFButton vehicle={vehicle} leasingRate={vehicle.leasingPrice > 0 ? vehicle.leasingPrice : undefined} />
+                    <OfferPDFButton vehicle={vehicle} />
 
                     {/* Cardossier link if available */}
                     {vehicle.cardossierUrl && (

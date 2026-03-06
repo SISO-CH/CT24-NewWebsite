@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { formatCHF, calcMonthlyRate } from "@/lib/utils";
+
+export const LEASING_CHANGE_EVENT = "ct24_leasing_changed";
 
 interface LeasingCalculatorProps {
   /** If provided, price slider is hidden and this value is used */
@@ -32,6 +34,16 @@ export default function LeasingCalculator({ fixedPrice, showLink = false }: Leas
     () => calcMonthlyRate(fixedPrice ?? price, down, months, residual),
     [fixedPrice, price, down, months, residual]
   );
+
+  // Broadcast leasing details for PDF generation
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.dispatchEvent(
+      new CustomEvent(LEASING_CHANGE_EVENT, {
+        detail: { rate: Math.round(rate), down, months, residual, km },
+      })
+    );
+  }, [rate, down, months, residual, km]);
 
   return (
     <div className="space-y-5">

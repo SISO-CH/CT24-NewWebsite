@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FileDown } from "lucide-react";
+import { LEASING_CHANGE_EVENT } from "@/components/ui/LeasingCalculator";
 
 interface VehicleData {
   id: number;
@@ -15,33 +16,45 @@ interface VehicleData {
   color?: string;
   price: number;
   images?: string[];
-  leasingPrice?: number;
+}
+
+interface LeasingDetails {
+  rate: number;
+  down: number;
+  months: number;
+  residual: number;
+  km: number;
 }
 
 interface Props {
   vehicle: VehicleData;
-  leasingRate?: number;
 }
 
-function loadImageAsDataUrl(src: string): Promise<string> {
+async function fetchImageAsDataUrl(src: string): Promise<string> {
+  // Use server-side proxy to avoid CORS
+  const proxyUrl = `/api/image-proxy?url=${encodeURIComponent(src)}`;
+  const res = await fetch(proxyUrl);
+  if (!res.ok) throw new Error("image proxy failed");
+  const blob = await res.blob();
   return new Promise((resolve, reject) => {
-    const img = new window.Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      const ctx = canvas.getContext("2d");
-      ctx?.drawImage(img, 0, 0);
-      resolve(canvas.toDataURL("image/jpeg", 0.85));
-    };
-    img.onerror = reject;
-    img.src = src;
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
   });
 }
 
-export default function OfferPDFButton({ vehicle, leasingRate }: Props) {
+export default function OfferPDFButton({ vehicle }: Props) {
   const [loading, setLoading] = useState(false);
+  const leasingRef = useRef<LeasingDetails | null>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      leasingRef.current = (e as CustomEvent).detail;
+    };
+    window.addEventListener(LEASING_CHANGE_EVENT, handler);
+    return () => window.removeEventListener(LEASING_CHANGE_EVENT, handler);
+  }, []);
 
   async function generatePDF() {
     setLoading(true);
@@ -75,10 +88,10 @@ export default function OfferPDFButton({ vehicle, leasingRate }: Props) {
 
       let yPos = 52;
 
-      // Vehicle image (via canvas to handle CORS)
+      // Vehicle image (via server proxy to bypass CORS)
       if (vehicle.images?.[0]) {
         try {
-          const dataUrl = await loadImageAsDataUrl(vehicle.images[0]);
+          const dataUrl = await fetchImageAsDataUrl(vehicle.images[0]);
           const imgW = w - 30;
           const imgH = imgW * 0.75;
           doc.addImage(dataUrl, "JPEG", 15, yPos, imgW, imgH);
@@ -127,19 +140,22 @@ export default function OfferPDFButton({ vehicle, leasingRate }: Props) {
       doc.setTextColor(107, 114, 128);
       doc.text("Preis inkl. 8.1% MwSt. | Preisänderungen vorbehalten", 15, yPos);
 
-      // Leasing
-      const displayRate = leasingRate ?? vehicle.leasingPrice;
-      if (displayRate && displayRate > 0) {
+      // Leasing (from calculator if user adjusted, otherwise default)
+      const leasing = leasingRef.current;
+      if (leasing && leasing.rate > 0) {
         yPos += 8;
         doc.setFontSize(11);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(228, 0, 125); // ct-magenta
-        doc.text(`Leasing ab CHF ${displayRate.toLocaleString("de-CH")}.-/Mt.`, 15, yPos);
+        doc.text(`Leasing ab CHF ${leasing.rate.toLocaleString("de-CH")}.-/Mt.`, 15, yPos);
         yPos += 5;
         doc.setFontSize(7);
         doc.setFont("helvetica", "normal");
         doc.setTextColor(107, 114, 128);
-        doc.text("inkl. MwSt., vorbehaltlich Bonitätsprüfung", 15, yPos);
+        doc.text(
+          `3.9% p.a., ${leasing.down}% Anzahlung, ${leasing.residual}% Restwert, ${leasing.months} Mt., ${leasing.km.toLocaleString("de-CH")} km/J. | inkl. MwSt.`,
+          15, yPos
+        );
       }
 
       // Validity
