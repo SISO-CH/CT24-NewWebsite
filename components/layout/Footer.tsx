@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/ui/Logo";
+import { locations } from "@/lib/locations";
 
 /* ── Helper: column header label ──────────────────────────── */
 function ColLabel({ children }: { children: React.ReactNode }) {
@@ -186,6 +187,23 @@ export default function Footer() {
                 Sa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;09:00–16:00
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* ── Standorte ── */}
+        <div className="mt-8 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+          <ColLabel>Standorte</ColLabel>
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+            {locations.map((l) => (
+              <Link
+                key={l.slug}
+                href={`/autos-in-${l.slug}`}
+                className="text-[#d1d5db] hover:text-[#00a0e3] transition-colors duration-200"
+                style={{ fontSize: "0.875rem" }}
+              >
+                {l.name}
+              </Link>
+            ))}
           </div>
         </div>
 

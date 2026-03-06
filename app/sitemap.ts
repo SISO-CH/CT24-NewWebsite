@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { fetchVehicles } from "@/lib/as24";
 import { getAllPosts } from "@/lib/blog";
 import { getSoldVehicles } from "@/lib/sold-vehicles";
+import { locations } from "@/lib/locations";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://cartrade24.ch";
@@ -62,5 +63,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const archiveRoutes = await archivePromise;
 
-  return [...staticRoutes, ...vehicleRoutes, ...blogRoutes, ...archiveRoutes];
+  const locationRoutes: MetadataRoute.Sitemap = locations.map((l) => ({
+    url: `${base}/autos-in-${l.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...vehicleRoutes, ...blogRoutes, ...archiveRoutes, ...locationRoutes];
 }
