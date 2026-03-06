@@ -28,6 +28,7 @@ import InquiryTrigger from "@/components/vehicles/InquiryTrigger";
 import LeasingCalculator from "@/components/ui/LeasingCalculator";
 import PriceAlertForm from "@/components/ui/PriceAlertForm";
 import ReserveButton from "@/components/vehicles/ReserveButton";
+import OfferPDFButton from "@/components/vehicles/OfferPDFButton";
 import PriceComparison from "@/components/vehicles/PriceComparison";
 import TrackVehicleView from "@/components/vehicles/TrackVehicleView";
 import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
@@ -352,6 +353,9 @@ export default async function VehicleDetailPage({ params }: Props) {
                     ) : (
                       <ReserveButton vehicleId={vehicle.id} vehicleLabel={vehicleLabel} locale={locale} />
                     )}
+
+                    {/* PDF Angebot */}
+                    <OfferPDFButton vehicle={vehicle} />
 
                     {/* Cardossier link if available */}
                     {vehicle.cardossierUrl && (
