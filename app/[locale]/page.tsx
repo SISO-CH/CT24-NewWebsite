@@ -8,6 +8,7 @@ import { TEAM } from "@/lib/team";
 import VehicleCard from "@/components/vehicles/VehicleCard";
 import FadeIn from "@/components/ui/FadeIn";
 import HeroSearch from "@/components/home/HeroSearch";
+import LocalBusinessSchema from "@/components/seo/LocalBusinessSchema";
 
 
 const HERO_IMAGE =
@@ -736,6 +737,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <LocalBusinessSchema />
     </>
   );
 }

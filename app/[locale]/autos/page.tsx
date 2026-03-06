@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { fetchVehicles } from "@/lib/as24";
 import { fetchPreorderVehicles } from "@/lib/preorder-vehicles";
 import AutosContent from "@/components/vehicles/AutosContent";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 export const metadata: Metadata = {
   title: "Fahrzeugübersicht",
@@ -32,6 +33,12 @@ export default async function AutosPage({
 
   return (
     <>
+      <BreadcrumbSchema
+        crumbs={[
+          { name: "Home", href: "/" },
+          { name: "Fahrzeuge", href: "/autos" },
+        ]}
+      />
       <section className="pt-24 pb-10 bg-ct-light border-b border-[#e5e7eb]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] mb-2 text-ct-cyan">

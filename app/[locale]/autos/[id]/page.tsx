@@ -36,6 +36,7 @@ import SimilarVehicles  from "@/components/vehicles/SimilarVehicles";
 import VehicleDetailTabs from "@/components/vehicles/VehicleDetailTabs";
 import WishlistHeart from "@/components/vehicles/WishlistHeart";
 import ViewCounter from "@/components/vehicles/ViewCounter";
+import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 export const revalidate = 3600;
 
@@ -122,6 +123,14 @@ export default async function VehicleDetailPage({ params }: Props) {
 
   return (
     <>
+      <BreadcrumbSchema
+        crumbs={[
+          { name: "Home", href: "/" },
+          { name: "Fahrzeuge", href: "/autos" },
+          { name: `${vehicle.make} ${vehicle.model}`, href: `/autos/${id}` },
+        ]}
+      />
+
       {/* JSON-LD Structured Data — sicher via safeJsonLd() */}
       <script
         type="application/ld+json"
