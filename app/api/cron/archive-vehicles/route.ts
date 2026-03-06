@@ -1,34 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchVehicles } from "@/lib/as24";
+import { kvGet, kvSet } from "@/lib/kv";
 import type { Vehicle } from "@/lib/vehicles";
-
-// ── KV abstraction (Vercel KV → in-memory fallback) ─────────────────────────
-
-const memoryStore = new Map<string, unknown>();
-
-async function getKv() {
-  try {
-    const mod = await import("@vercel/kv");
-    return mod.kv;
-  } catch {
-    return null;
-  }
-}
-
-async function kvGet<T>(key: string): Promise<T | null> {
-  const kv = await getKv();
-  if (kv) return kv.get<T>(key);
-  return (memoryStore.get(key) as T) ?? null;
-}
-
-async function kvSet(key: string, value: unknown): Promise<void> {
-  const kv = await getKv();
-  if (kv) {
-    await kv.set(key, value);
-  } else {
-    memoryStore.set(key, value);
-  }
-}
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
 

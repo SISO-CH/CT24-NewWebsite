@@ -174,7 +174,15 @@ export default function VoiceAgent({ vehicleContext }: Props) {
     }
   }, [status, stopRecording, processAudio]);
 
-  const MicIcon = status === "listening" ? MicOff : status === "speaking" ? Volume2 : status === "thinking" ? Loader2 : Mic;
+  function getMicIcon() {
+    switch (status) {
+      case "listening": return MicOff;
+      case "speaking":  return Volume2;
+      case "thinking":  return Loader2;
+      default:          return Mic;
+    }
+  }
+  const MicIcon = getMicIcon();
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col" style={{ backgroundColor: "var(--ct-dark, #1b1b1b)" }}>

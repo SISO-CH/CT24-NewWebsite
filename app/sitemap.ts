@@ -26,17 +26,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/voice`,       lastModified: now, changeFrequency: "monthly", priority: 0.4 },
   ];
 
-  const vehiclePromise = fetchVehicles()
-    .then((vehicles) =>
-      vehicles.map((v) => ({
-        url: `${base}/autos/${v.id}`,
-        lastModified: now,
-        changeFrequency: "daily" as const,
-        priority: 0.8,
-      })),
-    )
-    .catch(() => [] as MetadataRoute.Sitemap);
-
   const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((p) => ({
     url: `${base}/blog/${p.slug}`,
     lastModified: new Date(p.date),
@@ -44,26 +33,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const vehicleRoutes = await vehiclePromise;
-
-  const archivePromise = getSoldVehicles()
-    .then((sold) => [
-      {
-        url: `${base}/fahrzeug-archiv`,
-        lastModified: now,
-        changeFrequency: "weekly" as const,
-        priority: 0.6,
-      },
-      ...sold.map((v) => ({
-        url: `${base}/fahrzeug-archiv/${v.id}`,
-        lastModified: new Date(v.archivedAt),
-        changeFrequency: "monthly" as const,
-        priority: 0.4,
-      })),
-    ])
-    .catch(() => [] as MetadataRoute.Sitemap);
-
-  const archiveRoutes = await archivePromise;
+  const [vehicleRoutes, archiveRoutes] = await Promise.all([
+    fetchVehicles()
+      .then((vehicles) =>
+        vehicles.map((v) => ({
+          url: `${base}/autos/${v.id}`,
+          lastModified: now,
+          changeFrequency: "daily" as const,
+          priority: 0.8,
+        })),
+      )
+      .catch(() => [] as MetadataRoute.Sitemap),
+    getSoldVehicles()
+      .then((sold) => [
+        {
+          url: `${base}/fahrzeug-archiv`,
+          lastModified: now,
+          changeFrequency: "weekly" as const,
+          priority: 0.6,
+        },
+        ...sold.map((v) => ({
+          url: `${base}/fahrzeug-archiv/${v.id}`,
+          lastModified: new Date(v.archivedAt),
+          changeFrequency: "monthly" as const,
+          priority: 0.4,
+        })),
+      ])
+      .catch(() => [] as MetadataRoute.Sitemap),
+  ]);
 
   const locationRoutes: MetadataRoute.Sitemap = locations.map((l) => ({
     url: `${base}/autos-in-${l.slug}`,

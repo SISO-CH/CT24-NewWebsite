@@ -1,4 +1,4 @@
-import type React from "react";
+import type { ReactElement } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Check, Star, MapPin, Phone, Mail, Car, Truck, FileText, Search } from "lucide-react";
@@ -471,7 +471,7 @@ export default async function HomePage() {
               { href: "/home-delivery",     Icon: Truck,    title: "Home Delivery",     desc: "Lieferung zu Ihnen" },
               { href: "/zulassungsservice", Icon: FileText, title: "Zulassungsservice", desc: "Wir erledigen alles" },
               { href: "/fahrzeug-sourcing", Icon: Search,   title: "Fahrzeug-Sourcing", desc: "Wir beschaffen Ihr Wunschauto" },
-            ] as { href: string; Icon: (props: { size?: number; className?: string }) => React.ReactElement | null; title: string; desc: string }[]).map(({ href, Icon, title, desc }) => (
+            ] as { href: string; Icon: (props: { size?: number; className?: string }) => ReactElement | null; title: string; desc: string }[]).map(({ href, Icon, title, desc }) => (
               <Link key={href} href={href}
                 className="flex flex-col items-center text-center p-6 rounded-2xl bg-ct-light
                            border border-[#e5e7eb] hover:border-ct-cyan hover:shadow-md transition-all group"

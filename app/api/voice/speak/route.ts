@@ -1,21 +1,21 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const VOICE_ID = "21m00Tcm4TlvDq8ikWAM"; // Rachel
 
 export async function POST(req: NextRequest) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   if (!apiKey) {
-    return new Response(
-      JSON.stringify({ error: "Sprachsynthese nicht verfügbar" }),
-      { status: 503, headers: { "Content-Type": "application/json" } },
+    return NextResponse.json(
+      { error: "Sprachsynthese nicht verfuegbar" },
+      { status: 503 },
     );
   }
 
   const { text } = (await req.json()) as { text?: string };
   if (!text || typeof text !== "string") {
-    return new Response(
-      JSON.stringify({ error: "Kein Text angegeben" }),
-      { status: 400, headers: { "Content-Type": "application/json" } },
+    return NextResponse.json(
+      { error: "Kein Text angegeben" },
+      { status: 400 },
     );
   }
 
@@ -37,9 +37,9 @@ export async function POST(req: NextRequest) {
 
   if (!res.ok) {
     const detail = await res.text().catch(() => "");
-    return new Response(
-      JSON.stringify({ error: "Sprachsynthese fehlgeschlagen", detail }),
-      { status: 502, headers: { "Content-Type": "application/json" } },
+    return NextResponse.json(
+      { error: "Sprachsynthese fehlgeschlagen", detail },
+      { status: 502 },
     );
   }
 

@@ -1,20 +1,20 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   if (!apiKey) {
-    return new Response(
-      JSON.stringify({ error: "Spracherkennung nicht verfügbar" }),
-      { status: 503, headers: { "Content-Type": "application/json" } },
+    return NextResponse.json(
+      { error: "Spracherkennung nicht verfuegbar" },
+      { status: 503 },
     );
   }
 
   const formData = await req.formData();
   const audio = formData.get("audio");
   if (!audio || !(audio instanceof Blob)) {
-    return new Response(
-      JSON.stringify({ error: "Kein Audio empfangen" }),
-      { status: 400, headers: { "Content-Type": "application/json" } },
+    return NextResponse.json(
+      { error: "Kein Audio empfangen" },
+      { status: 400 },
     );
   }
 
@@ -31,15 +31,12 @@ export async function POST(req: NextRequest) {
 
   if (!res.ok) {
     const detail = await res.text().catch(() => "");
-    return new Response(
-      JSON.stringify({ error: "Transkription fehlgeschlagen", detail }),
-      { status: 502, headers: { "Content-Type": "application/json" } },
+    return NextResponse.json(
+      { error: "Transkription fehlgeschlagen", detail },
+      { status: 502 },
     );
   }
 
   const data = (await res.json()) as { text?: string };
-  return new Response(
-    JSON.stringify({ text: data.text ?? "" }),
-    { status: 200, headers: { "Content-Type": "application/json" } },
-  );
+  return NextResponse.json({ text: data.text ?? "" });
 }

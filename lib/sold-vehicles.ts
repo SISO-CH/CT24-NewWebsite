@@ -1,77 +1,28 @@
 import type { Vehicle } from "@/lib/vehicles";
+import { kvGet, kvScan, kvMget } from "@/lib/kv";
 
 export interface ArchivedVehicle extends Vehicle {
   archivedAt: string;
   status: "sold";
 }
 
-// ── KV abstraction (Vercel KV → in-memory fallback) ─────────────────────────
-
-const memoryStore = new Map<string, unknown>();
-
-async function getKv() {
-  try {
-    const mod = await import("@vercel/kv");
-    return mod.kv;
-  } catch {
-    return null;
-  }
+function sortByArchivedDesc(a: ArchivedVehicle, b: ArchivedVehicle): number {
+  return new Date(b.archivedAt).getTime() - new Date(a.archivedAt).getTime();
 }
 
-// ── Public API ───────────────────────────────────────────────────────────────
-
 export async function getSoldVehicles(): Promise<ArchivedVehicle[]> {
-  const kv = await getKv();
+  const keys = await kvScan("archive:*");
+  if (keys.length === 0) return [];
 
-  if (kv) {
-    // Scan for all archive:* keys
-    const keys: string[] = [];
-    let done = false;
-    let scanCursor = 0;
-    while (!done) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const [next, batch]: [any, string[]] = await kv.scan(scanCursor, {
-        match: "archive:*",
-        count: 100,
-      });
-      keys.push(...batch);
-      scanCursor = Number(next);
-      if (scanCursor === 0) done = true;
-    }
-
-    if (keys.length === 0) return [];
-
-    const values = await kv.mget<ArchivedVehicle[]>(...keys);
-    const vehicles = values.filter(Boolean) as ArchivedVehicle[];
-
-    // Sort by archivedAt descending (newest first)
-    return vehicles.sort(
-      (a, b) =>
-        new Date(b.archivedAt).getTime() - new Date(a.archivedAt).getTime(),
-    );
-  }
-
-  // In-memory fallback
-  const vehicles: ArchivedVehicle[] = [];
-  for (const [key, value] of memoryStore.entries()) {
-    if (key.startsWith("archive:")) {
-      vehicles.push(value as ArchivedVehicle);
-    }
-  }
-  return vehicles.sort(
-    (a, b) =>
-      new Date(b.archivedAt).getTime() - new Date(a.archivedAt).getTime(),
+  const values = await kvMget<ArchivedVehicle>(...keys);
+  const vehicles = values.filter(
+    (v): v is ArchivedVehicle => v !== null,
   );
+  return vehicles.sort(sortByArchivedDesc);
 }
 
 export async function getSoldVehicle(
   id: string,
 ): Promise<ArchivedVehicle | null> {
-  const kv = await getKv();
-
-  if (kv) {
-    return kv.get<ArchivedVehicle>(`archive:${id}`);
-  }
-
-  return (memoryStore.get(`archive:${id}`) as ArchivedVehicle) ?? null;
+  return kvGet<ArchivedVehicle>(`archive:${id}`);
 }
